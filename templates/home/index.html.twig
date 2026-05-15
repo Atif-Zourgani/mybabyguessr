@@ -8,8 +8,12 @@
 {% block body %}
 
 {# ── Hero ─────────────────────────────────────────────────────── #}
-<section aria-labelledby="hero-title" class="bg-cream py-24 lg:py-32 px-4 sm:px-6">
+<section aria-labelledby="hero-title" class="bg-cream pt-8 pb-24 lg:pt-10 lg:pb-32 px-4 sm:px-6">
     <div class="max-w-3xl mx-auto text-center">
+
+        <img src="{{ asset('images/logo-mybabyguessr.png') }}"
+             alt="MyBabyGuessr"
+             class="h-36 w-auto mx-auto mb-6">
 
         <p class="text-brand font-bold text-sm uppercase tracking-widest mb-5">
             {{ 'home.hero.subtitle'|trans }}
