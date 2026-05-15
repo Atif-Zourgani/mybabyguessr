@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /*/dashboard
+Disallow: /*/profile
+
+Sitemap: https://mybabyguessr.com/sitemap.xml

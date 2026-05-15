@@ -1,0 +1,46 @@
+<header class="bg-cream border-b border-line" role="banner">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+
+        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
+           aria-label="MyBabyGuessr — {{ app.request.locale == 'fr' ? 'Accueil' : 'Home' }}"
+           class="shrink-0"
+           style="text-decoration:none">
+            <img src="{{ asset('images/logo-mybabyguessr-wide.png') }}"
+                 alt="MyBabyGuessr"
+                 width="1536" height="1024"
+                 class="h-36 w-auto">
+        </a>
+
+        <div class="flex items-center gap-4">
+
+            {% if app.user %}
+                <span class="hidden sm:block text-sm text-muted font-bold">
+                    {{ app.user.firstName }}
+                </span>
+                <a href="{{ path('app_logout', {'_locale': app.request.locale}) }}"
+                   class="btn btn-secondary !py-2 !px-4 !text-sm">
+                    {{ 'login.logout'|trans }}
+                </a>
+            {% endif %}
+
+            {% if app.request.attributes.has('_route') %}
+                {% set _route = app.request.attributes.get('_route') %}
+                <nav aria-label="{{ app.request.locale == 'fr' ? 'Langue' : 'Language' }}"
+                     class="flex items-center gap-1 text-sm font-bold">
+                    <a href="{{ url(_route, {'_locale': 'fr'}) }}"
+                       hreflang="fr"
+                       {% if app.request.locale == 'fr' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
+                        FR
+                    </a>
+                    <span class="text-line" aria-hidden="true">|</span>
+                    <a href="{{ url(_route, {'_locale': 'en'}) }}"
+                       hreflang="en"
+                       {% if app.request.locale == 'en' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
+                        EN
+                    </a>
+                </nav>
+            {% endif %}
+
+        </div>
+    </div>
+</header>

@@ -81,3 +81,7 @@ flash:
 nav:
     lang_fr: Français
     lang_en: English
+
+footer:
+    privacy: Politique de confidentialité
+    terms: Conditions d'utilisation

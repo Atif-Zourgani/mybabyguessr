@@ -5,6 +5,19 @@
 {% block og_title %}{{ 'home.hero.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block og_description %}{{ 'home.hero.description'|trans }}{% endblock %}
 
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MyBabyGuessr",
+  "url": "{{ app.request.schemeAndHttpHost }}",
+  "description": "{{ 'home.hero.description'|trans|e('js') }}",
+  "inLanguage": "{{ app.request.locale == 'fr' ? 'fr-FR' : 'en-GB' }}"
+}
+</script>
+{% endblock %}
+
 {% block body %}
 
 {# ── Hero ─────────────────────────────────────────────────────── #}
@@ -13,6 +26,8 @@
 
         <img src="{{ asset('images/logo-mybabyguessr.png') }}"
              alt="MyBabyGuessr"
+             width="1024" height="1024"
+             fetchpriority="high"
              class="h-36 w-auto mx-auto mb-6">
 
         <p class="text-brand font-bold text-sm uppercase tracking-widest mb-5">
