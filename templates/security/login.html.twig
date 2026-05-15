@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'login.title'|trans }} — MyBabyGuessr{% endblock %}
+
+{% block body %}
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            {{ 'login.logged_in_as'|trans({'%email%': app.user.userIdentifier}) }},
+            <a href="{{ logout_path() }}">{{ 'login.logout'|trans }}</a>
+        </div>
+    {% endif %}
+
+    <h1>{{ 'login.title'|trans }}</h1>
+
+    <label for="inputEmail">{{ 'login.email'|trans }}</label>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+
+    <label for="inputPassword">{{ 'login.password'|trans }}</label>
+    <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+    <a href="{{ path('app_forgot_password_request', {'_locale': app.request.locale}) }}">{{ 'login.forgot_password'|trans }}</a>
+
+    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+    <div>
+        <label>
+            <input type="checkbox" name="_remember_me"> {{ 'login.remember_me'|trans }}
+        </label>
+    </div>
+
+    <button type="submit">{{ 'login.submit'|trans }}</button>
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'reset.check_email.title'|trans }} — MyBabyGuessr{% endblock %}
+
+{% block body %}
+    <h1>{{ 'reset.check_email.title'|trans }}</h1>
+    <p>{{ 'reset.check_email.message'|trans({'%delay%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle')}) }}</p>
+    <p>
+        {{ 'reset.check_email.no_email'|trans }}
+        <a href="{{ path('app_forgot_password_request', {'_locale': app.request.locale}) }}">{{ 'reset.check_email.try_again'|trans }}</a>
+    </p>
+{% endblock %}

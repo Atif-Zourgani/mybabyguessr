@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}MyBabyGuessr{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
         {% endblock %}
@@ -10,15 +10,27 @@
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
-
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
     </head>
     <body>
+        {% if app.request.attributes.has('_route') %}
+            {% set current_route = app.request.attributes.get('_route') %}
+            <nav>
+                <a href="{{ path(current_route, {'_locale': 'fr'}) }}" {% if app.request.locale == 'fr' %}aria-current="true"{% endif %}>
+                    {{ 'nav.lang_fr'|trans }}
+                </a>
+                <a href="{{ path(current_route, {'_locale': 'en'}) }}" {% if app.request.locale == 'en' %}aria-current="true"{% endif %}>
+                    {{ 'nav.lang_en'|trans }}
+                </a>
+            </nav>
+        {% endif %}
+
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">{{ message|trans }}</div>
+        {% endfor %}
+        {% for message in app.flashes('verify_email_error') %}
+            <div class="flash-error">{{ message }}</div>
+        {% endfor %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

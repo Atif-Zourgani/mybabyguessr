@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'register.title'|trans }} — MyBabyGuessr{% endblock %}
+
+{% block body %}
+    <h1>{{ 'register.title'|trans }}</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.firstName, { label: 'register.first_name'|trans }) }}
+        {{ form_row(registrationForm.lastName, { label: 'register.last_name'|trans }) }}
+        {{ form_row(registrationForm.email, { label: 'register.email'|trans }) }}
+        {{ form_row(registrationForm.plainPassword, { label: 'register.password'|trans }) }}
+        {{ form_row(registrationForm.agreeTerms, { label: 'register.agree_terms'|trans }) }}
+
+        <button type="submit">{{ 'register.submit'|trans }}</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}

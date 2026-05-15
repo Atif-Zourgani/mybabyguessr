@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'reset.request.title'|trans }} — MyBabyGuessr{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="flash-error">{{ flash_error }}</div>
+    {% endfor %}
+
+    <h1>{{ 'reset.request.title'|trans }}</h1>
+
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email, { label: 'login.email'|trans }) }}
+        <small>{{ 'reset.request.hint'|trans }}</small>
+        <button type="submit">{{ 'reset.request.submit'|trans }}</button>
+    {{ form_end(requestForm) }}
+{% endblock %}

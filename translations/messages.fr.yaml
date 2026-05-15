@@ -1,0 +1,50 @@
+login:
+    title: Connexion
+    email: Email
+    password: Mot de passe
+    remember_me: Se souvenir de moi
+    submit: Se connecter
+    logged_in_as: "Connecté en tant que %email%"
+    logout: Déconnexion
+    forgot_password: Mot de passe oublié ?
+
+register:
+    title: Créer un compte
+    first_name: Prénom
+    last_name: Nom
+    email: Email
+    password: Mot de passe
+    agree_terms: "J'accepte les conditions d'utilisation"
+    submit: S'inscrire
+
+dashboard:
+    title: Tableau de bord
+    welcome: Bienvenue !
+
+check_email:
+    title: Vérifiez votre email
+    message: "Un email de confirmation vous a été envoyé. Cliquez sur le lien pour activer votre compte."
+    spam: "Vous ne le trouvez pas ? Pensez à vérifier vos spams."
+
+reset:
+    request:
+        title: Mot de passe oublié
+        hint: "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe."
+        submit: Envoyer le lien
+    check_email:
+        title: Vérifiez votre email
+        message: "Un email contenant un lien de réinitialisation vous a été envoyé. Ce lien expire dans %delay%."
+        no_email: "Vous n'avez pas reçu l'email ?"
+        try_again: Réessayer
+    new_password:
+        title: Nouveau mot de passe
+        label: Nouveau mot de passe
+        submit: Confirmer
+
+flash:
+    email_verified: "Votre adresse email a bien été confirmée. Vous pouvez maintenant vous connecter."
+    password_reset: "Votre mot de passe a bien été réinitialisé. Vous pouvez maintenant vous connecter."
+
+nav:
+    lang_fr: Français
+    lang_en: English
