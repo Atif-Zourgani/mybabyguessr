@@ -170,6 +170,19 @@
         font-weight: 600;
     }
 
+    /* Pill — catégorie devinable */
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.875rem;
+        border-radius: 9999px;
+        border: 1.5px solid var(--color-brand);
+        color: var(--color-brand);
+        font-size: 0.8125rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
     /* Badge langue actif */
     .lang-active {
         background-color: var(--color-brand);

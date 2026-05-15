@@ -56,11 +56,16 @@ dashboard:
     games:
         title: "Mes parties"
         btn_create: "Créer une partie"
-        empty_title: "Lancez votre première partie !"
-        empty_desc: "En quelques secondes, créez un jeu et partagez un lien avec vos proches. Laissez-les deviner le prénom, la date ou le sexe de votre bébé."
+        empty_title: "Lancez votre premier jeu de pronostics !"
+        empty_desc: "Choisissez ce que vos proches doivent deviner, partagez un lien et regardez les pronostics affluer."
         btn_create_first: "Créer ma première partie"
 
 games:
+    pill:
+        gender: "Sexe du bébé"
+        name: "Prénom"
+        date: "Date de naissance"
+        weight: "Poids de naissance"
     new:
         title: "Nouvelle partie"
         back: "Retour au tableau de bord"

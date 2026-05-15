@@ -56,11 +56,16 @@ dashboard:
     games:
         title: "My games"
         btn_create: "Create a game"
-        empty_title: "Launch your first game!"
-        empty_desc: "In seconds, create a game and share a link with your loved ones. Let them guess your baby's name, due date or gender."
+        empty_title: "Launch your first prediction game!"
+        empty_desc: "Choose what your loved ones must guess, share a link and watch the predictions roll in."
         btn_create_first: "Create my first game"
 
 games:
+    pill:
+        gender: "Baby's gender"
+        name: "First name"
+        date: "Due date"
+        weight: "Birth weight"
     new:
         title: "New game"
         back: "Back to dashboard"

@@ -19,34 +19,31 @@
     {# ── Mes parties ──────────────────────────────────────── #}
     <section aria-labelledby="games-title">
 
-        <div class="flex items-center justify-between mb-6">
-            <h2 id="games-title" class="text-2xl">
-                {{ 'dashboard.games.title'|trans }}
-            </h2>
-            <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
-               class="btn btn-secondary !py-2 !px-5 !text-sm">
-                + {{ 'dashboard.games.btn_create'|trans }}
-            </a>
-        </div>
+        <p class="text-xs font-bold text-muted uppercase tracking-widest mb-5">
+            {{ 'dashboard.games.title'|trans }}
+        </p>
 
-        {# État vide — aucune partie créée #}
-        <div class="card text-center" style="padding: 4rem 2rem;">
+        {# État vide #}
+        <div class="rounded-2xl border-2 border-dashed text-center py-16 px-8"
+             style="border-color: var(--color-line);">
 
-            <div class="w-20 h-20 rounded-full border-2 border-dashed flex items-center justify-center mx-auto mb-6"
-                 style="border-color: var(--color-brand); background-color: var(--color-cream);">
-                <span class="text-3xl font-black" style="color: var(--color-brand)">?</span>
-            </div>
-
-            <h3 class="text-xl mb-3">
+            <h2 id="games-title" class="text-2xl sm:text-3xl mb-4">
                 {{ 'dashboard.games.empty_title'|trans }}
-            </h3>
+            </h2>
 
-            <p class="text-muted max-w-sm mx-auto mb-8 leading-relaxed">
+            <p class="text-muted max-w-md mx-auto mb-8 leading-relaxed">
                 {{ 'dashboard.games.empty_desc'|trans }}
             </p>
 
+            <div class="flex flex-wrap justify-center gap-2 mb-10">
+                <span class="pill">{{ 'games.pill.gender'|trans }}</span>
+                <span class="pill">{{ 'games.pill.name'|trans }}</span>
+                <span class="pill">{{ 'games.pill.date'|trans }}</span>
+                <span class="pill">{{ 'games.pill.weight'|trans }}</span>
+            </div>
+
             <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
-               class="btn btn-primary px-8">
+               class="btn btn-primary px-10">
                 {{ 'dashboard.games.btn_create_first'|trans }}
             </a>
 
