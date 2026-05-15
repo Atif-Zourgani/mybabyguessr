@@ -1,0 +1,5 @@
+error.agree_terms: "Vous devez accepter les conditions d'utilisation."
+error.email.unique: "Un compte existe déjà avec cette adresse email."
+error.password.mismatch: "Les deux mots de passe ne correspondent pas."
+error.password.uppercase: "Le mot de passe doit contenir au moins une majuscule."
+error.password.special: "Le mot de passe doit contenir au moins un caractère spécial."

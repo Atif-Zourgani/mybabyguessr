@@ -1,3 +1,35 @@
+home:
+    hero:
+        title: "Le jeu de pronostics pour futurs parents"
+        subtitle: "Devine. Partage. Révèle."
+        description: "Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé. Sans compte requis pour jouer."
+        cta_register: "Créer mon compte"
+        cta_login: "Se connecter"
+    how:
+        title: "Comment ça marche ?"
+        step1_title: "Créez votre jeu"
+        step1_desc: "Inscrivez-vous et lancez votre jeu en quelques secondes."
+        step2_title: "Invitez vos proches"
+        step2_desc: "Partagez un lien unique par SMS, email ou réseaux sociaux. Aucun compte requis pour participer."
+        step3_title: "Révélez les résultats"
+        step3_desc: "Découvrez qui a fait les meilleurs pronostics et révélez enfin la surprise à tous."
+    features:
+        title: "Ce qui vous attend"
+        subtitle: "MyBabyGuessr, c'est bien plus qu'un simple sondage."
+        feature1_title: "Pronostics personnalisés"
+        feature1_desc: "Prénom, sexe, date de naissance, poids, heure… Choisissez ce que vos invités devinent."
+        feature2_title: "Partage en un lien"
+        feature2_desc: "Aucune installation. Un lien unique à partager par SMS, email ou réseaux sociaux."
+        feature3_title: "Tableau des scores"
+        feature3_desc: "Suivez les pronostics en temps réel et découvrez qui a le mieux deviné."
+        feature4_title: "Français & English"
+        feature4_desc: "L'application s'adapte automatiquement à la langue de vos invités."
+        feature5_title: "100% gratuit"
+        feature5_desc: "Créez et partagez votre jeu sans débourser un centime. Aucune carte bancaire requise."
+    cta:
+        title: "Prêts à commencer ?"
+        button: "Créer mon compte gratuitement"
+
 login:
     title: Connexion
     email: Email
@@ -39,6 +71,7 @@ reset:
     new_password:
         title: Nouveau mot de passe
         label: Nouveau mot de passe
+        repeat: Répéter le mot de passe
         submit: Confirmer
 
 flash:

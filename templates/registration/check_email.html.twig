@@ -1,9 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'check_email.title'|trans }} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'check_email.title'|trans }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-    <h1>{{ 'check_email.title'|trans }}</h1>
-    <p>{{ 'check_email.message'|trans }}</p>
-    <p>{{ 'check_email.spam'|trans }}</p>
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-12">
+    <div class="card w-full max-w-md text-center">
+
+        <div class="text-5xl mb-6" aria-hidden="true">📬</div>
+
+        <h1 class="text-2xl mb-4">{{ 'check_email.title'|trans }}</h1>
+        <p class="text-muted mb-2">{{ 'check_email.message'|trans }}</p>
+        <p class="text-sm text-muted">{{ 'check_email.spam'|trans }}</p>
+
+        <a href="{{ path('app_login', {'_locale': app.request.locale}) }}"
+           class="btn btn-secondary mt-8 inline-flex">
+            {{ 'login.title'|trans }}
+        </a>
+
+    </div>
+</section>
 {% endblock %}

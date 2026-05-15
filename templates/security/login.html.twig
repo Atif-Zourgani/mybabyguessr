@@ -1,37 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'login.title'|trans }} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'login.title'|trans }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-12">
+    <div class="card w-full max-w-md">
 
-    {% if app.user %}
-        <div class="mb-3">
-            {{ 'login.logged_in_as'|trans({'%email%': app.user.userIdentifier}) }},
-            <a href="{{ logout_path() }}">{{ 'login.logout'|trans }}</a>
-        </div>
-    {% endif %}
+        {# Titre #}
+        <h1 class="text-2xl text-center mb-8" style="color: var(--color-ink)">
+            {{ 'login.title'|trans }}
+        </h1>
 
-    <h1>{{ 'login.title'|trans }}</h1>
+        {# Erreur d'authentification #}
+        {% if error %}
+            <div class="flash-error mb-6" role="alert">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-    <label for="inputEmail">{{ 'login.email'|trans }}</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+        {# Déjà connecté #}
+        {% if app.user %}
+            <div class="flash-success mb-6">
+                {{ 'login.logged_in_as'|trans({'%email%': app.user.userIdentifier}) }}
+                — <a href="{{ path('app_logout', {'_locale': app.request.locale}) }}">{{ 'login.logout'|trans }}</a>
+            </div>
+        {% endif %}
 
-    <label for="inputPassword">{{ 'login.password'|trans }}</label>
-    <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
-    <a href="{{ path('app_forgot_password_request', {'_locale': app.request.locale}) }}">{{ 'login.forgot_password'|trans }}</a>
+        <form method="post" novalidate>
 
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+            {# Email #}
+            <div class="mb-5">
+                <label for="inputEmail" class="form-label">{{ 'login.email'|trans }}</label>
+                <input type="email"
+                       id="inputEmail"
+                       name="email"
+                       value="{{ last_username }}"
+                       class="form-input"
+                       autocomplete="email"
+                       required
+                       autofocus
+                       aria-required="true">
+            </div>
 
-    <div>
-        <label>
-            <input type="checkbox" name="_remember_me"> {{ 'login.remember_me'|trans }}
-        </label>
+            {# Mot de passe #}
+            <div class="mb-2">
+                <label for="inputPassword" class="form-label">{{ 'login.password'|trans }}</label>
+                <input type="password"
+                       id="inputPassword"
+                       name="password"
+                       class="form-input"
+                       autocomplete="current-password"
+                       required
+                       aria-required="true">
+            </div>
+
+            {# Mot de passe oublié #}
+            <div class="text-right mb-5">
+                <a href="{{ path('app_forgot_password_request', {'_locale': app.request.locale}) }}"
+                   class="text-sm">
+                    {{ 'login.forgot_password'|trans }}
+                </a>
+            </div>
+
+            <input type="hidden" name="_csrf_token"
+                   data-controller="csrf-protection"
+                   value="{{ csrf_token('authenticate') }}">
+
+            {# Se souvenir de moi #}
+            <div class="flex items-center gap-2 mb-6">
+                <input type="checkbox"
+                       id="rememberMe"
+                       name="_remember_me"
+                       class="w-4 h-4 cursor-pointer rounded"
+                       style="accent-color: var(--color-brand)">
+                <label for="rememberMe" class="text-sm text-muted cursor-pointer">
+                    {{ 'login.remember_me'|trans }}
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">
+                {{ 'login.submit'|trans }}
+            </button>
+        </form>
+
+        {# Lien inscription #}
+        <p class="text-center text-sm text-muted mt-6">
+            {{ app.request.locale == 'fr' ? 'Pas encore de compte ?' : 'No account yet?' }}
+            <a href="{{ path('app_register', {'_locale': app.request.locale}) }}">
+                {{ 'register.title'|trans }}
+            </a>
+        </p>
+
     </div>
-
-    <button type="submit">{{ 'login.submit'|trans }}</button>
-</form>
+</section>
 {% endblock %}

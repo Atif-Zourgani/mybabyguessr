@@ -1,0 +1,56 @@
+{%- block form_row -%}
+    <div class="mb-5">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock -%}
+
+{%- block form_label -%}
+    {%- if label is not same as false -%}
+        <label {% if not compound %}for="{{ id }}"{% endif %} class="form-label">
+            {%- if translation_domain is same as false -%}
+                {{- label -}}
+            {%- else -%}
+                {{- label|trans({}, translation_domain) -}}
+            {%- endif -%}
+            {%- if required -%}<span aria-hidden="true" class="text-red-500 ml-0.5">*</span>{%- endif -%}
+        </label>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type != 'hidden' -%}
+        {%- set attr = attr|merge({class: ('form-input ' ~ (attr.class|default(''))) | trim}) -%}
+    {%- endif -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }}
+        {%- if value is not empty %} value="{{ value }}"{% endif -%}>
+{%- endblock -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="mt-1 space-y-0.5" role="alert">
+            {%- for error in errors -%}
+                <li class="text-sm text-red-600">{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block checkbox_row -%}
+    <div class="mb-5">
+        <div class="flex items-start gap-3">
+            {{- form_widget(form) -}}
+            {{- form_label(form) -}}
+        </div>
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock -%}
+
+{%- block checkbox_widget -%}
+    {%- set attr = attr|merge({class: ('w-4 h-4 mt-0.5 cursor-pointer rounded accent-brand ' ~ (attr.class|default(''))) | trim}) -%}
+    <input type="checkbox" {{ block('widget_attributes') }}
+        {%- if value is defined %} value="{{ value }}"{% endif %}
+        {%- if checked %} checked="checked"{% endif -%}>
+{%- endblock -%}

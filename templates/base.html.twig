@@ -1,36 +1,127 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}MyBabyGuessr{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% if app.request.attributes.has('_route') %}
-            {% set current_route = app.request.attributes.get('_route') %}
-            <nav>
-                <a href="{{ path(current_route, {'_locale': 'fr'}) }}" {% if app.request.locale == 'fr' %}aria-current="true"{% endif %}>
-                    {{ 'nav.lang_fr'|trans }}
-                </a>
-                <a href="{{ path(current_route, {'_locale': 'en'}) }}" {% if app.request.locale == 'en' %}aria-current="true"{% endif %}>
-                    {{ 'nav.lang_en'|trans }}
-                </a>
-            </nav>
-        {% endif %}
+    {# ── SEO ──────────────────────────────────────────────── #}
+    <title>{% block title %}MyBabyGuessr{% endblock %} — MyBabyGuessr</title>
+    <meta name="description" content="{% block meta_description %}{{ app.request.locale == 'fr' ? 'MyBabyGuessr — le jeu de pronostics pour futurs parents. Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé.' : 'MyBabyGuessr — the prediction game for future parents. Invite your loved ones to guess your baby\'s name, due date, weight and gender.' }}{% endblock %}">
+    <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
 
-        {% for message in app.flashes('success') %}
-            <div class="flash-success">{{ message|trans }}</div>
-        {% endfor %}
-        {% for message in app.flashes('verify_email_error') %}
-            <div class="flash-error">{{ message }}</div>
-        {% endfor %}
+    {# ── Canonical & hreflang ─────────────────────────────── #}
+    <link rel="canonical" href="{{ app.request.uri }}">
+    {% if app.request.attributes.has('_route') %}
+        {% set _route = app.request.attributes.get('_route') %}
+        <link rel="alternate" hreflang="fr"        href="{{ url(_route, {'_locale': 'fr'}) }}">
+        <link rel="alternate" hreflang="en"        href="{{ url(_route, {'_locale': 'en'}) }}">
+        <link rel="alternate" hreflang="x-default" href="{{ url(_route, {'_locale': 'fr'}) }}">
+    {% endif %}
 
+    {# ── Open Graph ───────────────────────────────────────── #}
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       content="{% block og_title %}MyBabyGuessr{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ app.request.locale == 'fr' ? 'Le jeu de pronostics pour futurs parents. Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé.' : 'The prediction game for future parents. Invite your loved ones to guess your baby\'s name, due date, weight and gender.' }}{% endblock %}">
+    <meta property="og:image"       content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
+    <meta property="og:locale"      content="{{ app.request.locale == 'fr' ? 'fr_FR' : 'en_GB' }}">
+    <meta property="og:site_name"   content="MyBabyGuessr">
+
+    {# ── Police Nunito (à auto-héberger avant mise en prod) ── #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    {# ── Assets ───────────────────────────────────────────── #}
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="min-h-screen flex flex-col">
+
+    {# ── Skip link accessibilité ──────────────────────────── #}
+    <a class="skip-link" href="#main-content">
+        {{ app.request.locale == 'fr' ? 'Aller au contenu principal' : 'Skip to main content' }}
+    </a>
+
+    {# ── Header ───────────────────────────────────────────── #}
+    <header class="bg-cream border-b border-line" role="banner">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+
+            {# Logo #}
+            <a href="{{ path('app_home', {'_locale': app.request.locale}) }}" aria-label="MyBabyGuessr — Accueil" class="shrink-0" style="text-decoration:none">
+                <img src="{{ asset('images/logo-mybabyguessr.png') }}"
+                     alt="MyBabyGuessr"
+                     class="h-20 w-auto">
+            </a>
+
+            <div class="flex items-center gap-4">
+
+                {# Nav utilisateur connecté #}
+                {% if app.user %}
+                    <span class="hidden sm:block text-sm text-muted font-bold">
+                        {{ app.user.firstName }}
+                    </span>
+                    <a href="{{ path('app_logout', {'_locale': app.request.locale}) }}"
+                       class="btn btn-secondary !py-2 !px-4 !text-sm">
+                        {{ 'login.logout'|trans }}
+                    </a>
+                {% endif %}
+
+                {# Switcher de langue #}
+                {% if app.request.attributes.has('_route') %}
+                    {% set _route = app.request.attributes.get('_route') %}
+                    <nav aria-label="{{ app.request.locale == 'fr' ? 'Langue' : 'Language' }}" class="flex items-center gap-1 text-sm font-bold">
+                        <a href="{{ url(_route, {'_locale': 'fr'}) }}"
+                           hreflang="fr"
+                           {% if app.request.locale == 'fr' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
+                            FR
+                        </a>
+                        <span class="text-line" aria-hidden="true">|</span>
+                        <a href="{{ url(_route, {'_locale': 'en'}) }}"
+                           hreflang="en"
+                           {% if app.request.locale == 'en' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
+                            EN
+                        </a>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {# ── Flash messages ───────────────────────────────────── #}
+    {% set _flashes = app.flashes(['success', 'verify_email_error', 'reset_password_error']) %}
+    {% if _flashes.success is defined and _flashes.success|length %}
+        <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="polite">
+            {% for msg in _flashes.success %}
+                <div class="flash-success">{{ msg|trans }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if _flashes.verify_email_error is defined and _flashes.verify_email_error|length %}
+        <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="assertive">
+            {% for msg in _flashes.verify_email_error %}
+                <div class="flash-error">{{ msg }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if _flashes.reset_password_error is defined and _flashes.reset_password_error|length %}
+        <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="assertive">
+            {% for msg in _flashes.reset_password_error %}
+                <div class="flash-error">{{ msg }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# ── Contenu principal ────────────────────────────────── #}
+    <main id="main-content" tabindex="-1" class="flex-1">
         {% block body %}{% endblock %}
-    </body>
+    </main>
+
+    {# ── Footer ───────────────────────────────────────────── #}
+    <footer class="mt-auto py-8 text-center text-sm text-muted border-t border-line" role="contentinfo">
+        <p>© {{ "now"|date("Y") }} MyBabyGuessr &mdash; Devine. Partage. Révèle.</p>
+    </footer>
+
+</body>
 </html>

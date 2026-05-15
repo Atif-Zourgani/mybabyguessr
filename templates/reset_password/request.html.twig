@@ -1,17 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'reset.request.title'|trans }} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'reset.request.title'|trans }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('reset_password_error') %}
-        <div class="flash-error">{{ flash_error }}</div>
-    {% endfor %}
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-12">
+    <div class="card w-full max-w-md">
 
-    <h1>{{ 'reset.request.title'|trans }}</h1>
+        <h1 class="text-2xl mb-2">{{ 'reset.request.title'|trans }}</h1>
+        <p class="text-sm text-muted mb-8">{{ 'reset.request.hint'|trans }}</p>
 
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email, { label: 'login.email'|trans }) }}
-        <small>{{ 'reset.request.hint'|trans }}</small>
-        <button type="submit">{{ 'reset.request.submit'|trans }}</button>
-    {{ form_end(requestForm) }}
+        {{ form_start(requestForm) }}
+            {{ form_row(requestForm.email, {label: 'login.email'|trans}) }}
+            <button type="submit" class="btn btn-primary w-full mt-2">
+                {{ 'reset.request.submit'|trans }}
+            </button>
+        {{ form_end(requestForm) }}
+
+        <p class="text-center text-sm text-muted mt-6">
+            <a href="{{ path('app_login', {'_locale': app.request.locale}) }}">
+                ← {{ 'login.title'|trans }}
+            </a>
+        </p>
+
+    </div>
+</section>
 {% endblock %}

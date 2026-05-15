@@ -1,7 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'dashboard.title'|trans }} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'dashboard.title'|trans }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block og_title %}{{ 'dashboard.title'|trans }} — MyBabyGuessr{% endblock %}
 
 {% block body %}
-    <h1>{{ 'dashboard.welcome'|trans }}</h1>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+
+    <h1 class="text-3xl mb-2">
+        {{ 'dashboard.welcome'|trans }},
+        <span style="color: var(--color-brand)">{{ app.user.firstName }}</span>
+    </h1>
+    <p class="text-muted mb-10">
+        {{ app.request.locale == 'fr'
+            ? 'Que voulez-vous faire aujourd\'hui ?'
+            : 'What would you like to do today?' }}
+    </p>
+
+    {# Placeholder — les fonctionnalités arrivent ici #}
+    <div class="card text-center py-16">
+        <p class="text-muted text-lg">
+            {{ app.request.locale == 'fr'
+                ? '🎉 Votre espace est prêt. Les fonctionnalités arrivent bientôt !'
+                : '🎉 Your space is ready. Features coming soon!' }}
+        </p>
+    </div>
+
+</div>
 {% endblock %}

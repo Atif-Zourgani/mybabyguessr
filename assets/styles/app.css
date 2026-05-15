@@ -1,3 +1,189 @@
-body {
-    background-color: skyblue;
+@import "tailwindcss";
+
+/* ─── Variables de design ─────────────────────────────── */
+@theme {
+    --color-cream:  #F8F3EE;
+    --color-brand:  #C4714A;
+    --color-accent: #7A4E3B;
+    --color-ink:    #2C1F15;
+    --color-muted:  #7A6A5F;
+    --color-line:   #D9CFC9;
+
+    --font-sans: 'Nunito', sans-serif;
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1.25rem;
+}
+
+/* ─── Base ────────────────────────────────────────────── */
+@layer base {
+    html {
+        font-family: var(--font-sans);
+        background-color: var(--color-cream);
+        color: var(--color-ink);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        color: var(--color-ink);
+    }
+
+    a {
+        color: var(--color-brand);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+    a:hover { color: var(--color-accent); }
+
+    /* Skip link — accessibilité */
+    .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 1rem;
+        background: var(--color-brand);
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-sm);
+        font-weight: 700;
+        z-index: 9999;
+        transition: top 0.15s;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* Focus visible — accessibilité */
+    :focus-visible {
+        outline: 3px solid var(--color-brand);
+        outline-offset: 3px;
+        border-radius: var(--radius-sm);
+    }
+}
+
+/* ─── Composants ──────────────────────────────────────── */
+@layer components {
+
+    /* Boutons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.75rem 1.75rem;
+        border-radius: var(--radius-md);
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.2s, color 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+        background-color: var(--color-brand);
+        color: #fff;
+    }
+    .btn-primary:hover {
+        background-color: var(--color-accent);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        color: var(--color-brand);
+        border: 2px solid var(--color-brand);
+    }
+    .btn-secondary:hover {
+        background-color: var(--color-brand);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    /* Formulaires */
+    .form-label {
+        display: block;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: var(--color-accent);
+        margin-bottom: 0.375rem;
+        letter-spacing: 0.02em;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid var(--color-line);
+        border-radius: var(--radius-md);
+        background-color: #fff;
+        color: var(--color-ink);
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: var(--color-brand);
+        box-shadow: 0 0 0 3px rgba(196, 113, 74, 0.2);
+    }
+
+    /* Carte */
+    .card {
+        background-color: #fff;
+        border-radius: var(--radius-lg);
+        padding: 2.5rem 2rem;
+        box-shadow: 0 4px 24px rgba(44, 31, 21, 0.08);
+    }
+
+    /* Séparateur de texte */
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: var(--color-muted);
+        font-size: 0.875rem;
+    }
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background-color: var(--color-line);
+    }
+
+    /* Flash messages */
+    .flash-success {
+        background-color: #EFF7F2;
+        color: #276749;
+        border: 1px solid #B7DFC8;
+        border-radius: var(--radius-md);
+        padding: 0.875rem 1.25rem;
+        font-weight: 600;
+    }
+    .flash-error {
+        background-color: #FEF2F2;
+        color: #B91C1C;
+        border: 1px solid #FECACA;
+        border-radius: var(--radius-md);
+        padding: 0.875rem 1.25rem;
+        font-weight: 600;
+    }
+
+    /* Badge langue actif */
+    .lang-active {
+        background-color: var(--color-brand);
+        color: #fff;
+        border-radius: var(--radius-sm);
+        padding: 0.125rem 0.5rem;
+        text-decoration: none;
+        font-weight: 700;
+    }
+    .lang-inactive {
+        color: var(--color-muted);
+        padding: 0.125rem 0.5rem;
+        text-decoration: none;
+        transition: color 0.15s;
+    }
+    .lang-inactive:hover { color: var(--color-brand); }
 }

@@ -1,3 +1,35 @@
+home:
+    hero:
+        title: "The prediction game for future parents"
+        subtitle: "Guess. Share. Reveal."
+        description: "Invite your loved ones to guess your baby's name, due date, weight and gender. No account needed to play."
+        cta_register: "Create my account"
+        cta_login: "Sign in"
+    how:
+        title: "How it works"
+        step1_title: "Create your game"
+        step1_desc: "Sign up and launch your game in seconds."
+        step2_title: "Invite your loved ones"
+        step2_desc: "Share a unique link by text, email or social media. No account needed to play."
+        step3_title: "Reveal the results"
+        step3_desc: "Find out who made the best predictions and finally reveal the surprise to everyone."
+    features:
+        title: "What's waiting for you"
+        subtitle: "MyBabyGuessr is much more than a simple poll."
+        feature1_title: "Personalized predictions"
+        feature1_desc: "Name, gender, due date, weight, time… Choose what your guests guess."
+        feature2_title: "Share with one link"
+        feature2_desc: "No installation needed. One unique link to share by text, email or social media."
+        feature3_title: "Leaderboard"
+        feature3_desc: "Follow predictions in real time and find out who guessed best."
+        feature4_title: "French & English"
+        feature4_desc: "The app automatically adapts to your guests' language."
+        feature5_title: "100% free"
+        feature5_desc: "Create and share your game without spending a penny. No credit card required."
+    cta:
+        title: "Ready to start?"
+        button: "Create my free account"
+
 login:
     title: Sign in
     email: Email
@@ -39,6 +71,7 @@ reset:
     new_password:
         title: New password
         label: New password
+        repeat: Repeat password
         submit: Confirm
 
 flash:

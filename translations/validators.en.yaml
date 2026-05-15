@@ -1,0 +1,5 @@
+error.agree_terms: "You must agree to our terms of use."
+error.email.unique: "An account with this email already exists."
+error.password.mismatch: "The two password fields must match."
+error.password.uppercase: "The password must contain at least one uppercase letter."
+error.password.special: "The password must contain at least one special character."

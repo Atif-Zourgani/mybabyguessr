@@ -1,12 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'reset.check_email.title'|trans }} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'reset.check_email.title'|trans }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-    <h1>{{ 'reset.check_email.title'|trans }}</h1>
-    <p>{{ 'reset.check_email.message'|trans({'%delay%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle')}) }}</p>
-    <p>
-        {{ 'reset.check_email.no_email'|trans }}
-        <a href="{{ path('app_forgot_password_request', {'_locale': app.request.locale}) }}">{{ 'reset.check_email.try_again'|trans }}</a>
-    </p>
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-12">
+    <div class="card w-full max-w-md text-center">
+
+        <div class="text-5xl mb-6" aria-hidden="true">📩</div>
+
+        <h1 class="text-2xl mb-4">{{ 'reset.check_email.title'|trans }}</h1>
+        <p class="text-muted mb-6">
+            {{ 'reset.check_email.message'|trans({
+                '%delay%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle')
+            }) }}
+        </p>
+        <p class="text-sm text-muted">
+            {{ 'reset.check_email.no_email'|trans }}
+            <a href="{{ path('app_forgot_password_request', {'_locale': app.request.locale}) }}">
+                {{ 'reset.check_email.try_again'|trans }}
+            </a>
+        </p>
+
+    </div>
+</section>
 {% endblock %}
