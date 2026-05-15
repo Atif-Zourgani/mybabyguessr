@@ -5,47 +5,56 @@
 {% block og_title %}{{ 'dashboard.title'|trans }} — MyBabyGuessr{% endblock %}
 
 {% block body %}
-<div class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
 
     {# ── Bienvenue ────────────────────────────────────────── #}
-    <div class="mb-12">
-        <h1 class="text-3xl mb-1">
+    <div class="mb-10 sm:mb-14">
+        <h1 class="text-3xl sm:text-4xl mb-1">
             {{ 'dashboard.welcome'|trans }},
             <span class="text-brand">{{ app.user.firstName }}</span> !
         </h1>
-        <p class="text-muted">{{ 'dashboard.subtitle'|trans }}</p>
+        <p class="text-muted text-lg">{{ 'dashboard.subtitle'|trans }}</p>
     </div>
 
     {# ── Mes parties ──────────────────────────────────────── #}
     <section aria-labelledby="games-title">
 
-        <p class="text-xs font-bold text-muted uppercase tracking-widest mb-5">
-            {{ 'dashboard.games.title'|trans }}
-        </p>
+        <div class="card-panel">
 
-        {# État vide #}
-        <div class="rounded-2xl border-2 border-dashed text-center py-16 px-8"
-             style="border-color: var(--color-line);">
-
-            <h2 id="games-title" class="text-2xl sm:text-3xl mb-4">
-                {{ 'dashboard.games.empty_title'|trans }}
-            </h2>
-
-            <p class="text-muted max-w-md mx-auto mb-8 leading-relaxed">
-                {{ 'dashboard.games.empty_desc'|trans }}
-            </p>
-
-            <div class="flex flex-wrap justify-center gap-2 mb-10">
-                <span class="pill">{{ 'games.pill.gender'|trans }}</span>
-                <span class="pill">{{ 'games.pill.name'|trans }}</span>
-                <span class="pill">{{ 'games.pill.date'|trans }}</span>
-                <span class="pill">{{ 'games.pill.weight'|trans }}</span>
+            {# En-tête de section #}
+            <div class="flex items-center gap-3 px-6 sm:px-8 py-5"
+                 style="border-bottom: 1px solid var(--color-line);">
+                <div class="w-1 h-5 rounded-full shrink-0"
+                     style="background-color: var(--color-brand);"></div>
+                <h2 id="games-title" class="text-base font-bold text-ink">
+                    {{ 'dashboard.games.title'|trans }}
+                </h2>
             </div>
 
-            <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
-               class="btn btn-primary px-10">
-                {{ 'dashboard.games.btn_create_first'|trans }}
-            </a>
+            {# État vide #}
+            <div class="text-center px-6 sm:px-16 py-14 sm:py-20">
+
+                <h3 class="text-2xl sm:text-3xl mb-4">
+                    {{ 'dashboard.games.empty_title'|trans }}
+                </h3>
+
+                <p class="text-muted max-w-md mx-auto mb-8 leading-relaxed">
+                    {{ 'dashboard.games.empty_desc'|trans }}
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-10">
+                    <span class="pill">{{ 'games.pill.gender'|trans }}</span>
+                    <span class="pill">{{ 'games.pill.name'|trans }}</span>
+                    <span class="pill">{{ 'games.pill.date'|trans }}</span>
+                    <span class="pill">{{ 'games.pill.weight'|trans }}</span>
+                </div>
+
+                <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
+                   class="btn btn-primary w-full sm:w-auto px-10">
+                    {{ 'dashboard.games.btn_create_first'|trans }}
+                </a>
+
+            </div>
 
         </div>
 

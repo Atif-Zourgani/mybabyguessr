@@ -170,6 +170,14 @@
         font-weight: 600;
     }
 
+    /* Carte sans padding interne (padding géré par les enfants) */
+    .card-panel {
+        background-color: #fff;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 4px 24px rgba(44, 31, 21, 0.08);
+        overflow: hidden;
+    }
+
     /* Pill — catégorie devinable */
     .pill {
         display: inline-flex;
