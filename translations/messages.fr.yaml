@@ -66,6 +66,7 @@ games:
         name: "Prénom"
         date: "Date de naissance"
         weight: "Poids de naissance"
+        height: "Taille de naissance"
     new:
         title: "Nouvelle partie"
         back: "Retour au tableau de bord"

@@ -66,6 +66,7 @@ games:
         name: "First name"
         date: "Due date"
         weight: "Birth weight"
+        height: "Birth length"
     new:
         title: "New game"
         back: "Back to dashboard"
