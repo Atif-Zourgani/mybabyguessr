@@ -51,8 +51,8 @@ register:
 
 dashboard:
     title: Dashboard
-    welcome: Welcome
-    subtitle: "What would you like to do today?"
+    welcome: Hello
+    subtitle: "Everyone wants to know. Time to build the suspense."
     games:
         title: "My games"
         btn_create: "Create a game"

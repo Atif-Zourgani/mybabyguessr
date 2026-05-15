@@ -51,8 +51,8 @@ register:
 
 dashboard:
     title: Tableau de bord
-    welcome: Bienvenue
-    subtitle: "Que voulez-vous faire aujourd'hui ?"
+    welcome: Bonjour
+    subtitle: "Tout le monde veut savoir. À vous de créer le suspense."
     games:
         title: "Mes parties"
         btn_create: "Créer une partie"
