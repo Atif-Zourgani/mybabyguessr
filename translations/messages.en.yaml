@@ -51,7 +51,21 @@ register:
 
 dashboard:
     title: Dashboard
-    welcome: Welcome!
+    welcome: Welcome
+    subtitle: "What would you like to do today?"
+    games:
+        title: "My games"
+        btn_create: "Create a game"
+        empty_title: "Launch your first game!"
+        empty_desc: "In seconds, create a game and share a link with your loved ones. Let them guess your baby's name, due date or gender."
+        btn_create_first: "Create my first game"
+
+games:
+    new:
+        title: "New game"
+        back: "Back to dashboard"
+        coming_soon: "The creation form is coming soon."
+
 
 check_email:
     title: Check your email

@@ -51,7 +51,21 @@ register:
 
 dashboard:
     title: Tableau de bord
-    welcome: Bienvenue !
+    welcome: Bienvenue
+    subtitle: "Que voulez-vous faire aujourd'hui ?"
+    games:
+        title: "Mes parties"
+        btn_create: "Créer une partie"
+        empty_title: "Lancez votre première partie !"
+        empty_desc: "En quelques secondes, créez un jeu et partagez un lien avec vos proches. Laissez-les deviner le prénom, la date ou le sexe de votre bébé."
+        btn_create_first: "Créer ma première partie"
+
+games:
+    new:
+        title: "Nouvelle partie"
+        back: "Retour au tableau de bord"
+        coming_soon: "Le formulaire de création arrive bientôt."
+
 
 check_email:
     title: Vérifiez votre email
