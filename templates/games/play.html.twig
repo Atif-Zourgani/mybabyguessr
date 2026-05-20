@@ -1,7 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ game.displayTitle }} — MyBabyGuessr{% endblock %}
-{% block meta_description %}{{ game.displayTitle }}{% endblock %}
+{% set _invite_title = app.request.locale == 'fr'
+    ? game.user.firstName ~ ' vous invite à jouer !'
+    : game.user.firstName ~ ' invites you to play!' %}
+{% set _invite_desc = app.request.locale == 'fr'
+    ? game.displayTitle ~ ' — Participez et faites vos pronostics sur l\'arrivée du bébé !'
+    : game.displayTitle ~ ' — Join in and make your predictions about the baby\'s arrival!' %}
+
+{% block title %}{{ _invite_title }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block meta_description %}{{ _invite_desc }}{% endblock %}
+{% block og_title %}{{ _invite_title }} — MyBabyGuessr{% endblock %}
+{% block og_description %}{{ _invite_desc }}{% endblock %}
+
+{% block og_image %}
+{% set _img_url = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
+<meta property="og:image" content="{{ _img_url }}">
+{% if game.image %}
+<meta property="og:image:alt" content="{{ game.displayTitle }}">
+{% else %}
+<meta property="og:image:width"  content="1024">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:alt"    content="MyBabyGuessr">
+{% endif %}
+{% endblock %}
+
+{% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
+{% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
 
 {% block body %}
 <div class="max-w-xl mx-auto px-4 sm:px-6 py-12 text-center">

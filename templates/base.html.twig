@@ -35,19 +35,21 @@
     <meta property="og:description"      content="{% block og_description %}{{ app.request.locale == 'fr'
         ? 'Le jeu de pronostics pour futurs parents. Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé.'
         : 'The prediction game for future parents. Invite your loved ones to guess your baby\'s name, due date, weight and gender.' }}{% endblock %}">
-    <meta property="og:image"            content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
-    <meta property="og:image:width"      content="1024">
-    <meta property="og:image:height"     content="1024">
-    <meta property="og:image:alt"        content="MyBabyGuessr">
+    {% block og_image %}
+    <meta property="og:image"        content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
+    <meta property="og:image:width"  content="1024">
+    <meta property="og:image:height" content="1024">
+    <meta property="og:image:alt"    content="MyBabyGuessr">
+    {% endblock %}
     <meta property="og:locale"           content="{{ _og_locale }}">
     <meta property="og:locale:alternate" content="{{ _og_locale_alt }}">
     <meta property="og:site_name"        content="MyBabyGuessr">
 
     {# ── Twitter Card ─────────────────────────────────────── #}
-    <meta name="twitter:card"        content="summary">
+    <meta name="twitter:card"        content="{% block twitter_card %}summary{% endblock %}">
     <meta name="twitter:title"       content="{{ block('og_title') }}">
     <meta name="twitter:description" content="{{ block('og_description') }}">
-    <meta name="twitter:image"       content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
+    <meta name="twitter:image"       content="{% block twitter_image %}{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}">
 
     {# ── JSON-LD : Organisation (toutes pages) ────────────── #}
     <script type="application/ld+json">
