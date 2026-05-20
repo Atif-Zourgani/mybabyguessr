@@ -11,7 +11,9 @@
 <div class="max-w-xl mx-auto px-4 sm:px-6 py-12"
      id="share-page"
      data-share-url="{{ shareUrl }}"
-     data-share-title="{{ game.displayTitle|e('html_attr') }}">
+     data-share-title="{{ game.displayTitle|e('html_attr') }}"
+     data-copy-label="{{ 'games.share.btn_copy'|trans|e('html_attr') }}"
+     data-copied-label="{{ 'games.share.btn_copied'|trans|e('html_attr') }}">
 
     {# ── En-tête succès ───────────────────────────── #}
     <div class="text-center mb-8">
@@ -45,21 +47,34 @@
         <p class="text-xl font-bold" style="color: var(--color-ink)">{{ game.displayTitle }}</p>
     </div>
 
-    {# ── Lien à partager ──────────────────────────── #}
-    <div class="card mb-6">
+    {# ── Lien + bouton copier ─────────────────────── #}
+    <div class="card mb-4">
         <p class="text-xs font-bold uppercase tracking-widest mb-2"
            style="color: var(--color-muted)">{{ 'games.share.link_label'|trans }}</p>
-        <p class="text-sm break-all px-3 py-2.5 rounded-lg"
-           style="background-color: var(--color-cream); color: var(--color-ink); font-family: monospace">
-            {{ shareUrl }}
-        </p>
+        <div class="flex items-center gap-2">
+            <input id="share-url-input"
+                   type="text"
+                   readonly
+                   value="{{ shareUrl }}"
+                   class="flex-1 text-sm px-3 py-2.5 rounded-lg border-0 outline-none"
+                   style="background-color: var(--color-cream); color: var(--color-ink); font-family: monospace; min-width: 0">
+            <button id="copy-link-btn"
+                    type="button"
+                    class="btn btn-primary shrink-0 text-sm px-4 py-2.5"
+                    aria-label="{{ 'games.share.btn_copy'|trans }}">
+                <svg id="copy-icon" class="w-4 h-4 inline-block mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                </svg>
+                <span id="copy-label">{{ 'games.share.btn_copy'|trans }}</span>
+            </button>
+        </div>
     </div>
 
-    {# ── Bouton natif (mobile — affiché par JS si navigator.share disponible) ── #}
+    {# ── Bouton natif mobile (caché par défaut, affiché par JS) ── #}
     <div id="mobile-share" class="hidden mb-4">
-        <button id="native-share-btn"
-                class="btn btn-primary w-full text-base py-3.5"
-                style="gap: 0.5rem">
+        <button id="native-share-btn" class="btn btn-primary w-full text-base py-3.5">
             <svg class="w-5 h-5 inline-block mr-2 shrink-0" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -70,21 +85,8 @@
         </button>
     </div>
 
-    {# ── Boutons desktop (affichés par JS si navigator.share indisponible) ── #}
-    <div id="desktop-share" class="hidden flex-col gap-3 mb-4">
-
-        {# Copier le lien #}
-        <button id="copy-link-btn"
-                class="btn btn-primary w-full"
-                data-copy="{{ 'games.share.btn_copy'|trans|e('html_attr') }}"
-                data-copied="{{ 'games.share.btn_copied'|trans|e('html_attr') }}">
-            <svg class="w-4 h-4 inline-block mr-2 shrink-0" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-            </svg>
-            <span id="copy-label">{{ 'games.share.btn_copy'|trans }}</span>
-        </button>
+    {# ── Boutons desktop (visibles par défaut) ───────────────────── #}
+    <div id="desktop-share" class="flex flex-col gap-3 mb-4">
 
         <div class="grid grid-cols-3 gap-3">
 
@@ -121,8 +123,8 @@
 
         </div>
 
-        {# Afficher le QR code #}
-        <button id="open-qr-btn" class="btn btn-secondary w-full" style="opacity: 0.75">
+        {# QR code #}
+        <button id="open-qr-btn" type="button" class="btn btn-secondary w-full">
             <svg class="w-4 h-4 inline-block mr-2 shrink-0" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -155,9 +157,9 @@
         <p class="text-sm mb-5 leading-relaxed" style="color: var(--color-muted)">
             {{ 'games.share.qr_desc'|trans }}
         </p>
-        <img id="qr-image" src="" alt="QR code" class="mx-auto block mb-6 rounded-xl"
-             style="width: 200px; height: 200px;">
-        <button id="qr-close" class="btn btn-secondary w-full">
+        <img id="qr-image" src="" alt="QR code" width="200" height="200"
+             class="mx-auto block mb-6 rounded-xl">
+        <button id="qr-close" type="button" class="btn btn-secondary w-full">
             {{ 'games.share.qr_close'|trans }}
         </button>
     </div>

@@ -73,53 +73,55 @@ const sharePage = document.getElementById('share-page');
 if (sharePage) {
     const shareUrl   = sharePage.dataset.shareUrl;
     const shareTitle = sharePage.dataset.shareTitle;
-
-    const mobileShare  = document.getElementById('mobile-share');
-    const desktopShare = document.getElementById('desktop-share');
-    const qrModal      = document.getElementById('qr-modal');
-    const qrImage      = document.getElementById('qr-image');
+    const copyLabel  = document.getElementById('copy-label');
+    const qrModal    = document.getElementById('qr-modal');
+    const qrImage    = document.getElementById('qr-image');
 
     const openModal  = () => qrModal.classList.remove('hidden');
     const closeModal = () => qrModal.classList.add('hidden');
 
+    // Bouton copier — clipboard API avec fallback select
+    document.getElementById('copy-link-btn').addEventListener('click', () => {
+        const input = document.getElementById('share-url-input');
+        const originalLabel = sharePage.dataset.copyLabel;
+        const copiedLabel   = sharePage.dataset.copiedLabel;
+
+        const showCopied = () => {
+            copyLabel.textContent = copiedLabel;
+            setTimeout(() => { copyLabel.textContent = originalLabel; }, 2000);
+        };
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(shareUrl).then(showCopied).catch(() => {
+                input.select();
+                document.execCommand('copy');
+                showCopied();
+            });
+        } else {
+            input.select();
+            document.execCommand('copy');
+            showCopied();
+        }
+    });
+
+    // Si navigator.share disponible (mobile) : remplace les boutons desktop par le bouton natif
     if (navigator.share) {
-        // Mobile : share sheet native
+        document.getElementById('desktop-share').style.display = 'none';
+        const mobileShare = document.getElementById('mobile-share');
         mobileShare.classList.remove('hidden');
         document.getElementById('native-share-btn').addEventListener('click', async () => {
             try {
                 await navigator.share({ title: shareTitle, url: shareUrl });
-            } catch (_) {
-                // annulation utilisateur, on ignore
-            }
-        });
-    } else {
-        // Desktop : boutons explicites + QR modal auto-ouvert
-        desktopShare.classList.remove('hidden');
-        desktopShare.style.display = 'flex';
-
-        // Copier le lien
-        const copyBtn   = document.getElementById('copy-link-btn');
-        const copyLabel = document.getElementById('copy-label');
-        copyBtn.addEventListener('click', async () => {
-            await navigator.clipboard.writeText(shareUrl);
-            copyLabel.textContent = copyBtn.dataset.copied;
-            setTimeout(() => { copyLabel.textContent = copyBtn.dataset.copy; }, 2000);
-        });
-
-        // Générer le QR code
-        QRCode.toDataURL(shareUrl, { width: 200, margin: 2, color: { dark: '#1a1a1a' } })
-            .then(dataUrl => { qrImage.src = dataUrl; })
-            .catch(() => {});
-
-        // Auto-ouvrir la modal
-        openModal();
-
-        document.getElementById('qr-close').addEventListener('click', closeModal);
-        document.getElementById('open-qr-btn').addEventListener('click', openModal);
-
-        // Fermer en cliquant sur l'overlay
-        qrModal.addEventListener('click', (e) => {
-            if (e.target === qrModal) closeModal();
+            } catch (_) {}
         });
     }
+
+    // QR code — généré une fois, modal sur bouton
+    QRCode.toDataURL(shareUrl, { width: 200, margin: 2, color: { dark: '#1a1a1a' } })
+        .then(dataUrl => { qrImage.src = dataUrl; })
+        .catch(() => {});
+
+    document.getElementById('open-qr-btn').addEventListener('click', openModal);
+    document.getElementById('qr-close').addEventListener('click', closeModal);
+    qrModal.addEventListener('click', (e) => { if (e.target === qrModal) closeModal(); });
 }
