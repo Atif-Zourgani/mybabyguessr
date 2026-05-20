@@ -25,4 +25,13 @@ return [
     '@hotwired/turbo' => [
         'version' => '8.0.23',
     ],
+    'alpinejs' => [
+        'version' => '3.15.12',
+    ],
+    'qrcode' => [
+        'version' => '1.5.4',
+    ],
+    'dijkstrajs' => [
+        'version' => '1.0.3',
+    ],
 ];

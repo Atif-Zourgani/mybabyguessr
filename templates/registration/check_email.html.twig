@@ -7,14 +7,33 @@
 <section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-12">
     <div class="card w-full max-w-md text-center">
 
-        <div class="text-5xl mb-6" aria-hidden="true">📬</div>
+        <div class="flex justify-center mb-6">
+            <img src="{{ asset('images/logo-mybabyguessr.png') }}"
+                 alt="MyBabyGuessr"
+                 width="1024" height="1024"
+                 fetchpriority="high"
+                 class="h-20 w-auto">
+        </div>
+
+        <div class="flex justify-center mb-6">
+            <div class="flex items-center justify-center w-14 h-14 rounded-2xl"
+                 style="background-color: rgba(196,113,74,.12);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                     stroke="var(--color-brand)" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+            </div>
+        </div>
 
         <h1 class="text-2xl mb-4">{{ 'check_email.title'|trans }}</h1>
         <p class="text-muted mb-2">{{ 'check_email.message'|trans }}</p>
         <p class="text-sm text-muted">{{ 'check_email.spam'|trans }}</p>
 
         <a href="{{ path('app_login', {'_locale': app.request.locale}) }}"
-           class="btn btn-secondary mt-8 inline-flex">
+           class="btn btn-secondary mt-8">
             {{ 'login.title'|trans }}
         </a>
 

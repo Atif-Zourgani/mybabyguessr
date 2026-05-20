@@ -2,7 +2,7 @@ home:
     hero:
         title: "Le jeu de pronostics pour futurs parents"
         subtitle: "Devine. Partage. Révèle."
-        description: "Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé. Sans compte requis pour jouer."
+        description: "Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé. Créez le suspense et révélez la surprise quand vous le souhaitez."
         cta_register: "Créer mon compte"
         cta_login: "Se connecter"
     how:
@@ -17,7 +17,7 @@ home:
         title: "Ce qui vous attend"
         subtitle: "MyBabyGuessr, c'est bien plus qu'un simple sondage."
         feature1_title: "Pronostics personnalisés"
-        feature1_desc: "Prénom, sexe, date de naissance, poids, heure… Choisissez ce que vos invités devinent."
+        feature1_desc: "Prénom, sexe, date, poids… Choisissez ce que vos invités devinent — tout en une fois, ou étape par étape au fil de la grossesse."
         feature2_title: "Partage en un lien"
         feature2_desc: "Aucune installation. Un lien unique à partager par SMS, email ou réseaux sociaux."
         feature3_title: "Tableau des scores"
@@ -39,6 +39,7 @@ login:
     logged_in_as: "Connecté en tant que %email%"
     logout: Déconnexion
     forgot_password: Mot de passe oublié ?
+    no_account: "Pas encore de compte ?"
 
 register:
     title: Créer un compte
@@ -48,29 +49,112 @@ register:
     password: Mot de passe
     agree_terms: "J'accepte les conditions d'utilisation"
     submit: S'inscrire
+    already_account: "Déjà un compte ?"
 
 dashboard:
     title: Tableau de bord
     welcome: Bonjour
     subtitle: "Tout le monde veut savoir. À vous de créer le suspense."
     games:
-        title: "Mes parties"
-        btn_create: "Créer une partie"
-        empty_title: "Lancez votre premier jeu de pronostics !"
-        empty_desc: "Choisissez ce que vos proches doivent deviner, partagez un lien et regardez les pronostics affluer."
-        btn_create_first: "Créer ma première partie"
+        title: "Mes Baby Guessr"
+        btn_create: "Nouveau Baby Guessr"
+        empty_title: "Pas encore de Baby Guessr."
+        empty_desc: "Prénom, sexe, date… Choisissez vos questions, partagez le lien et laissez vos proches deviner."
+        empty_hint: "Un seul Baby Guessr pour tout, ou un par étape — c'est vous qui choisissez."
+        btn_create_first: "Démarrer mon Baby Guessr"
+
+play:
+    coming_soon: "La page de jeu sera bientôt disponible — revenez vite !"
 
 games:
+    btn_view: "Voir"
+    show:
+        created_at: "Créé le"
+        answers_coming: "Les réponses arrivent bientôt"
+        answers_desc: "Cette section affichera les pronostics et les résultats après la révélation."
+    status:
+        open: "En cours"
+        closed: "Fermé"
+        revealed: "Révélé"
     pill:
         gender: "Sexe du bébé"
         name: "Prénom"
         date: "Date de naissance"
         weight: "Poids de naissance"
         height: "Taille de naissance"
+    card:
+        gender_label: "Sexe du bébé"
+        gender_q: "Garçon, fille… ou surprise ?"
+        name_label: "Prénom"
+        name_q: "Quel sera son prénom ?"
+        date_label: "Date de naissance"
+        date_q: "Quand arrivera bébé ?"
+        weight_label: "Poids de naissance"
+        weight_q: "Combien pèsera-t-il ?"
+        height_label: "Taille de naissance"
+        height_q: "Quelle sera sa taille ?"
     new:
-        title: "Nouvelle partie"
+        title: "Nouveau Baby Guessr"
         back: "Retour au tableau de bord"
-        coming_soon: "Le formulaire de création arrive bientôt."
+        step_label: "Étape"
+        step1:
+            title: "Qu'est-ce qu'on fait deviner ?"
+            subtitle: "Sélectionnez au moins une catégorie pour continuer."
+            gender_title: "Sexe du bébé"
+            gender_desc: "Tout le monde a son intuition — garçon ou fille ?"
+            name_title: "Prénom"
+            name_desc: "Ils ont sûrement déjà un prénom en tête pour votre bébé."
+            date_title: "Date de naissance"
+            date_desc: "Ils parient sur le jour J."
+            weight_title: "Poids de naissance"
+            weight_desc: "Combien de grammes ? À eux de deviner."
+            height_title: "Taille de naissance"
+            height_desc: "En centimètres, ils parient combien ?"
+        step2:
+            title: "La date prévue d'accouchement"
+            subtitle: "Cette date sera communiquée aux joueurs comme point de départ pour leurs pronostics. La naissance tombe rarement pile le jour prévu — c'est tout le jeu !"
+            label: "Date prévue d'accouchement (facultatif)"
+        step3:
+            title: "Comment joue-t-on avec le prénom ?"
+            subtitle: "Le vrai prénom reste secret dans les deux cas. La différence, c'est comment vos proches vont deviner."
+            free_title: "Chacun propose le prénom qu'il imagine"
+            free_desc: "Les joueurs tapent librement leur proposition — un seul essai chacun. Vous révèlerez le vrai prénom quand vous le souhaiterez, ou quand vous l'aurez choisi."
+            hints_title: "Les joueurs devinent en 3 essais avec des indices"
+            hints_desc: "Les joueurs ont 3 tentatives. Après chaque proposition, ils reçoivent un indice — plus court, plus long, même initiale… — pour les rapprocher du vrai prénom. Le vrai reste secret jusqu'à ce que vous choisissiez de le leur révéler."
+            name_label: "Le vrai prénom"
+            name_placeholder: "Emma, Lucas, Chloé…"
+            name_hint: "Il restera secret — on s'en sert uniquement pour générer les indices."
+        step4:
+            title: "Préparez votre invitation"
+            subtitle: "Vos proches recevront un lien. Donnez-leur envie de jouer dès la première seconde — un titre et une photo suffisent."
+            title_label: "Titre de l'invitation"
+            title_placeholder: "Bébé Dupont, Notre p'tit mystère…"
+            title_help: "Par défaut : \"Baby %name%\" — ce titre sera visible par tous vos invités"
+            image_label: "Photo de couverture (optionnel)"
+            image_help: "Elle s'affichera en haut de la page de vos invités. JPG, PNG ou WebP · max 2 Mo"
+        btn_next: "Suivant"
+        btn_prev: "Précédent"
+        btn_create: "Créer mon Baby Guessr"
+        error_category: "Sélectionnez au moins une catégorie pour continuer."
+        success: "Votre Baby Guessr est prêt ! Partagez le lien avec vos proches."
+    share:
+        title: "C'est parti !"
+        subtitle: "Partagez le lien avec vos proches — ils n'ont besoin d'aucun compte pour participer."
+        link_label: "Lien à partager"
+        btn_share: "Partager le lien"
+        btn_copy: "Copier le lien"
+        btn_copied: "Copié !"
+        btn_whatsapp: "WhatsApp"
+        btn_email: "Email"
+        btn_facebook: "Facebook"
+        btn_dashboard: "Aller à mon tableau de bord"
+        qr_title: "Partagez en un tap"
+        qr_desc: "Scannez ce code avec l'appareil photo de votre téléphone pour partager encore plus facilement depuis votre mobile."
+        qr_close: "Fermer"
+        qr_open: "Afficher le QR code"
+        whatsapp_text: "Participez à mon Baby Guessr ! Faites vos pronostics sur l'arrivée de notre bébé 👶"
+        email_subject: "Participez à mon Baby Guessr !"
+        email_body: "Bonjour,\n\nJe vous invite à participer à mon Baby Guessr et faire vos pronostics sur l'arrivée de notre bébé !\n\nCliquez sur le lien pour jouer :"
 
 
 check_email:

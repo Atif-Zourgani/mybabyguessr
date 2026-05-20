@@ -1,9 +1,17 @@
-{% set _flashes = app.flashes(['success', 'verify_email_error', 'reset_password_error']) %}
+{% set _flashes = app.flashes(['success', 'error', 'verify_email_error', 'reset_password_error']) %}
 
 {% if _flashes.success is defined and _flashes.success|length %}
     <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="polite">
         {% for msg in _flashes.success %}
             <div class="flash-success">{{ msg|trans }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if _flashes.error is defined and _flashes.error|length %}
+    <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="assertive">
+        {% for msg in _flashes.error %}
+            <div class="flash-error">{{ msg|trans }}</div>
         {% endfor %}
     </div>
 {% endif %}

@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ game.displayTitle }} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+
+    <a href="{{ path('app_dashboard', {'_locale': app.request.locale}) }}"
+       class="inline-flex items-center gap-1 text-sm font-bold hover:text-brand mb-8"
+       style="color: var(--color-muted); text-decoration:none">
+        &larr; {{ 'games.new.back'|trans }}
+    </a>
+
+    {# ── En-tête ────────────────────────────────────────── #}
+    <div class="card-panel mb-6">
+
+        {# Bannière image pleine largeur #}
+        {% if game.image %}
+            <div style="height: 11rem; overflow: hidden;">
+                <img src="{{ asset(game.image) }}"
+                     alt=""
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            </div>
+        {% endif %}
+
+        {# Titre + date + statut #}
+        <div class="flex items-start justify-between gap-4 px-5 sm:px-7 py-5"
+             style="border-bottom: 1px solid var(--color-line);">
+
+            {# Icône placeholder si pas d'image #}
+            {% if not game.image %}
+                <div class="shrink-0 flex items-center justify-center rounded-xl mr-2"
+                     style="width: 3rem; height: 3rem; background-color: rgba(196,113,74,0.10);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M20 12V22H4V12" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 7H2V12H22V7Z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 22V7" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            {% endif %}
+
+            <div class="flex-1 min-w-0">
+                <h1 class="text-2xl font-bold leading-tight">{{ game.displayTitle }}</h1>
+                <p class="text-sm mt-1" style="color: var(--color-muted)">
+                    {{ 'games.show.created_at'|trans }} {{ game.createdAt|date('d/m/Y') }}
+                </p>
+            </div>
+
+            {% set statusStyles = {
+                'open':     'background-color: rgba(196,113,74,0.12); color: var(--color-brand)',
+                'closed':   'background-color: #f3f4f6; color: #6b7280',
+                'revealed': 'background-color: rgba(39,103,73,0.10); color: #276749'
+            } %}
+            <span class="shrink-0 text-sm font-bold px-3 py-1.5 rounded-full"
+                  style="{{ statusStyles[game.status.value] }}">
+                {{ ('games.status.' ~ game.status.value)|trans }}
+            </span>
+        </div>
+
+        {# Catégories #}
+        <div class="px-5 sm:px-7 py-4 flex flex-wrap gap-2">
+            {% if game.isGuessGender() %}<span class="pill">{{ 'games.pill.gender'|trans }}</span>{% endif %}
+            {% if game.isGuessName() %}  <span class="pill">{{ 'games.pill.name'|trans }}</span>{% endif %}
+            {% if game.isGuessDate() %}  <span class="pill">{{ 'games.pill.date'|trans }}</span>{% endif %}
+            {% if game.isGuessWeight() %}<span class="pill">{{ 'games.pill.weight'|trans }}</span>{% endif %}
+            {% if game.isGuessHeight() %}<span class="pill">{{ 'games.pill.height'|trans }}</span>{% endif %}
+        </div>
+    </div>
+
+    {# ── Réponses (à venir) ─────────────────────────────── #}
+    <div class="card text-center py-14" style="color: var(--color-muted)">
+        <svg class="mx-auto mb-4 opacity-40" width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <p class="font-bold mb-1" style="color: var(--color-ink)">{{ 'games.show.answers_coming'|trans }}</p>
+        <p class="text-sm">{{ 'games.show.answers_desc'|trans }}</p>
+    </div>
+
+</div>
+{% endblock %}

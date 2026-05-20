@@ -7,6 +7,14 @@
 <section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-12">
     <div class="card w-full max-w-md">
 
+        <div class="flex justify-center mb-6">
+            <img src="{{ asset('images/logo-mybabyguessr.png') }}"
+                 alt="MyBabyGuessr"
+                 width="1024" height="1024"
+                 fetchpriority="high"
+                 class="h-20 w-auto">
+        </div>
+
         <h1 class="text-2xl mb-2">{{ 'reset.request.title'|trans }}</h1>
         <p class="text-sm text-muted mb-8">{{ 'reset.request.hint'|trans }}</p>
 
@@ -19,7 +27,7 @@
 
         <p class="text-center text-sm text-muted mt-6">
             <a href="{{ path('app_login', {'_locale': app.request.locale}) }}">
-                ← {{ 'login.title'|trans }}
+                &larr; {{ 'login.title'|trans }}
             </a>
         </p>
 

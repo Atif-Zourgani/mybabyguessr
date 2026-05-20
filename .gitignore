@@ -36,3 +36,5 @@ Thumbs.db
 # Logs
 *.log
 ###< projet ###
+public/uploads/games/*
+!public/uploads/games/.gitkeep

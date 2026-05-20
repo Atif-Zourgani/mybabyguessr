@@ -11,11 +11,13 @@
         <div class="flex justify-center mb-6">
             <img src="{{ asset('images/logo-mybabyguessr.png') }}"
                  alt="MyBabyGuessr"
+                 width="1024" height="1024"
+                 fetchpriority="high"
                  class="h-28 w-auto">
         </div>
 
         {# Titre #}
-        <h1 class="text-2xl text-center mb-8" style="color: var(--color-ink)">
+        <h1 class="text-2xl text-center mb-8">
             {{ 'login.title'|trans }}
         </h1>
 
@@ -93,7 +95,7 @@
 
         {# Lien inscription #}
         <p class="text-center text-sm text-muted mt-6">
-            {{ app.request.locale == 'fr' ? 'Pas encore de compte ?' : 'No account yet?' }}
+            {{ 'login.no_account'|trans }}
             <a href="{{ path('app_register', {'_locale': app.request.locale}) }}">
                 {{ 'register.title'|trans }}
             </a>

@@ -19,10 +19,11 @@
     {# ── Canonical & hreflang ─────────────────────────────── #}
     <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
     {% if app.request.attributes.has('_route') %}
-        {% set _route = app.request.attributes.get('_route') %}
-        <link rel="alternate" hreflang="fr"        href="{{ url(_route, {'_locale': 'fr'}) }}">
-        <link rel="alternate" hreflang="en"        href="{{ url(_route, {'_locale': 'en'}) }}">
-        <link rel="alternate" hreflang="x-default" href="{{ url(_route, {'_locale': 'fr'}) }}">
+        {% set _route  = app.request.attributes.get('_route') %}
+        {% set _params = app.request.attributes.get('_route_params') %}
+        <link rel="alternate" hreflang="fr"        href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}">
+        <link rel="alternate" hreflang="en"        href="{{ url(_route, _params|merge({'_locale': 'en'})) }}">
+        <link rel="alternate" hreflang="x-default" href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}">
     {% endif %}
 
     {# ── Open Graph ───────────────────────────────────────── #}

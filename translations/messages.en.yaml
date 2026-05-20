@@ -2,7 +2,7 @@ home:
     hero:
         title: "The prediction game for future parents"
         subtitle: "Guess. Share. Reveal."
-        description: "Invite your loved ones to guess your baby's name, due date, weight and gender. No account needed to play."
+        description: "Invite your loved ones to guess your baby's name, due date, weight and gender. Build the suspense and reveal the surprise whenever you're ready."
         cta_register: "Create my account"
         cta_login: "Sign in"
     how:
@@ -17,7 +17,7 @@ home:
         title: "What's waiting for you"
         subtitle: "MyBabyGuessr is much more than a simple poll."
         feature1_title: "Personalized predictions"
-        feature1_desc: "Name, gender, due date, weight, time… Choose what your guests guess."
+        feature1_desc: "Name, gender, due date, weight… Choose what your guests guess — all at once, or step by step as the pregnancy unfolds."
         feature2_title: "Share with one link"
         feature2_desc: "No installation needed. One unique link to share by text, email or social media."
         feature3_title: "Leaderboard"
@@ -39,6 +39,7 @@ login:
     logged_in_as: "Logged in as %email%"
     logout: Logout
     forgot_password: Forgot your password?
+    no_account: "No account yet?"
 
 register:
     title: Create an account
@@ -48,29 +49,112 @@ register:
     password: Password
     agree_terms: I agree to the terms of use
     submit: Register
+    already_account: "Already have an account?"
 
 dashboard:
     title: Dashboard
     welcome: Hello
     subtitle: "Everyone wants to know. Time to build the suspense."
     games:
-        title: "My games"
-        btn_create: "Create a game"
-        empty_title: "Launch your first prediction game!"
-        empty_desc: "Choose what your loved ones must guess, share a link and watch the predictions roll in."
-        btn_create_first: "Create my first game"
+        title: "My Baby Guessr"
+        btn_create: "New Baby Guessr"
+        empty_title: "No Baby Guessr yet."
+        empty_desc: "Name, gender, due date… Pick your questions, share the link and let your loved ones guess."
+        empty_hint: "One Baby Guessr for everything, or one per stage — it's up to you."
+        btn_create_first: "Start my Baby Guessr"
+
+play:
+    coming_soon: "The game page is coming soon — check back shortly!"
 
 games:
+    btn_view: "View"
+    show:
+        created_at: "Created on"
+        answers_coming: "Answers coming soon"
+        answers_desc: "This section will display predictions and results after the reveal."
+    status:
+        open: "Open"
+        closed: "Closed"
+        revealed: "Revealed"
     pill:
         gender: "Baby's gender"
         name: "First name"
         date: "Due date"
         weight: "Birth weight"
         height: "Birth length"
+    card:
+        gender_label: "Baby's gender"
+        gender_q: "Boy, girl… or surprise?"
+        name_label: "First name"
+        name_q: "What will their name be?"
+        date_label: "Due date"
+        date_q: "When will baby arrive?"
+        weight_label: "Birth weight"
+        weight_q: "How much will they weigh?"
+        height_label: "Birth length"
+        height_q: "How tall will they be?"
     new:
-        title: "New game"
+        title: "New Baby Guessr"
         back: "Back to dashboard"
-        coming_soon: "The creation form is coming soon."
+        step_label: "Step"
+        step1:
+            title: "What should everyone guess?"
+            subtitle: "Select at least one category to continue."
+            gender_title: "Baby's gender"
+            gender_desc: "Everyone has a hunch — boy or girl?"
+            name_title: "First name"
+            name_desc: "They probably already have a name in mind for your baby."
+            date_title: "Due date"
+            date_desc: "They bet on the big day."
+            weight_title: "Birth weight"
+            weight_desc: "How many grams? Let them guess."
+            height_title: "Birth length"
+            height_desc: "How many centimetres? Their guess."
+        step2:
+            title: "The expected due date"
+            subtitle: "This date will be shared with players as a starting point for their guesses. Babies rarely arrive exactly on time — that's the fun part!"
+            label: "Expected due date (optional)"
+        step3:
+            title: "How will guests guess the name?"
+            subtitle: "The real name stays secret either way. The difference is how your guests will make their guess."
+            free_title: "Everyone suggests the name they think it is"
+            free_desc: "Guests freely type their guess — one shot each. You reveal the real name whenever you're ready, or once you've chosen one."
+            hints_title: "Guests guess in 3 tries with clues"
+            hints_desc: "Guests get 3 attempts. After each guess, they receive a clue — shorter, longer, same first letter… — to help them get closer. The real name stays secret until you choose to reveal it."
+            name_label: "The real name"
+            name_placeholder: "Emma, Liam, Charlotte…"
+            name_hint: "It stays secret — we only use it to generate the clues."
+        step4:
+            title: "Prepare your invitation"
+            subtitle: "Your loved ones will receive a link. Make them want to play from the very first second — a title and a photo are all it takes."
+            title_label: "Invitation title"
+            title_placeholder: "Baby Johnson, Our little mystery…"
+            title_help: "Default: \"Baby %name%\" — this title will be visible to all your guests"
+            image_label: "Cover photo (optional)"
+            image_help: "It will appear at the top of your guests' page. JPG, PNG or WebP · max 2 MB"
+        btn_next: "Next"
+        btn_prev: "Back"
+        btn_create: "Create my Baby Guessr"
+        error_category: "Select at least one category to continue."
+        success: "Your Baby Guessr is ready! Share the link with your loved ones."
+    share:
+        title: "You're all set!"
+        subtitle: "Share the link with your loved ones — no account needed to play."
+        link_label: "Link to share"
+        btn_share: "Share the link"
+        btn_copy: "Copy link"
+        btn_copied: "Copied!"
+        btn_whatsapp: "WhatsApp"
+        btn_email: "Email"
+        btn_facebook: "Facebook"
+        btn_dashboard: "Go to my dashboard"
+        qr_title: "Share in one tap"
+        qr_desc: "Scan this code with your phone's camera to share even more easily from mobile."
+        qr_close: "Close"
+        qr_open: "Show QR code"
+        whatsapp_text: "Join my Baby Guessr! Make your predictions about our baby's arrival 👶"
+        email_subject: "Join my Baby Guessr!"
+        email_body: "Hi,\n\nI invite you to join my Baby Guessr and make your predictions about our baby's arrival!\n\nClick the link to play:"
 
 
 check_email:

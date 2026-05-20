@@ -11,6 +11,8 @@
         <div class="flex justify-center mb-6">
             <img src="{{ asset('images/logo-mybabyguessr.png') }}"
                  alt="MyBabyGuessr"
+                 width="1024" height="1024"
+                 fetchpriority="high"
                  class="h-28 w-auto">
         </div>
 
@@ -36,7 +38,7 @@
         {{ form_end(registrationForm) }}
 
         <p class="text-center text-sm text-muted mt-6">
-            {{ app.request.locale == 'fr' ? 'Déjà un compte ?' : 'Already have an account?' }}
+            {{ 'register.already_account'|trans }}
             <a href="{{ path('app_login', {'_locale': app.request.locale}) }}">
                 {{ 'login.title'|trans }}
             </a>
