@@ -131,7 +131,7 @@ games:
             title_placeholder: "Baby Johnson, Our little mystery…"
             title_help: "Default: \"Baby %name%\" — this title will be visible to all your guests"
             image_label: "Cover photo (optional)"
-            image_help: "It will appear at the top of your guests' page. JPG, PNG or WebP · max 2 MB"
+            image_help: "It will appear at the top of your guests' page. JPG, PNG or WebP · max 5 MB"
         btn_next: "Next"
         btn_prev: "Back"
         btn_create: "Create my Baby Guessr"
