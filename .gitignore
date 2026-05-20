@@ -5,7 +5,10 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/var/
+/var/*
+!/var/tailwind/
+/var/tailwind/*
+!/var/tailwind/app.built.css
 /vendor/
 ###< symfony/framework-bundle ###
 
