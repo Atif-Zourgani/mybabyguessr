@@ -123,17 +123,34 @@
 
         </div>
 
-        {# QR code #}
-        <button id="open-qr-btn" type="button" class="btn btn-secondary w-full">
-            <svg class="w-4 h-4 inline-block mr-2 shrink-0" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-                <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
-            </svg>
-            {{ 'games.share.qr_open'|trans }}
-        </button>
-
     </div>
+
+    {# ── QR code accordéon ───────────────────────────── #}
+    <details class="card mb-4">
+        <summary class="flex items-center gap-3 cursor-pointer list-none py-1 select-none"
+                 style="color: var(--color-ink)">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg shrink-0"
+                  style="background-color: rgba(196,113,74,0.12)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                     stroke="var(--color-brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+                </svg>
+            </span>
+            <span>
+                <span class="font-semibold text-sm block">{{ 'games.share.qr_open'|trans }}</span>
+                <span class="text-xs" style="color: var(--color-muted)">{{ 'games.share.qr_summary'|trans }}</span>
+            </span>
+        </summary>
+        <div class="mt-4 text-center">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ shareUrl|url_encode }}&color=1a1a1a&bgcolor=F8F3EE&margin=10"
+                 alt="QR Code — {{ game.displayTitle|e('html_attr') }}"
+                 width="200" height="200"
+                 class="mx-auto block rounded-xl mb-3"
+                 loading="lazy">
+            <p class="text-xs" style="color: var(--color-muted)">{{ 'games.share.qr_desc'|trans }}</p>
+        </div>
+    </details>
 
     {# ── Retour dashboard ──────────────────────────── #}
     <div class="text-center mt-8">
@@ -146,23 +163,5 @@
 
 </div>
 
-{# ── QR Code Modal ──────────────────────────────────── #}
-<div id="qr-modal"
-     class="hidden fixed inset-0 z-50 flex items-center justify-center px-4"
-     style="background-color: rgba(0,0,0,0.55)">
-    <div class="bg-white rounded-2xl p-8 text-center max-w-xs w-full shadow-2xl">
-        <h3 class="text-xl font-bold mb-2" style="color: var(--color-ink)">
-            {{ 'games.share.qr_title'|trans }}
-        </h3>
-        <p class="text-sm mb-5 leading-relaxed" style="color: var(--color-muted)">
-            {{ 'games.share.qr_desc'|trans }}
-        </p>
-        <img id="qr-image" src="" alt="QR code" width="200" height="200"
-             class="mx-auto block mb-6 rounded-xl">
-        <button id="qr-close" type="button" class="btn btn-secondary w-full">
-            {{ 'games.share.qr_close'|trans }}
-        </button>
-    </div>
-</div>
 
 {% endblock %}

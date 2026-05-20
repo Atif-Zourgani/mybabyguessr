@@ -1,7 +1,6 @@
 import './stimulus_bootstrap.js';
 import './styles/app.css';
 import Alpine from 'alpinejs';
-import QRCode from 'qrcode';
 
 Alpine.data('gameForm', () => ({
     step: 'categories',
@@ -74,12 +73,6 @@ if (sharePage) {
     const shareUrl   = sharePage.dataset.shareUrl;
     const shareTitle = sharePage.dataset.shareTitle;
     const copyLabel  = document.getElementById('copy-label');
-    const qrModal    = document.getElementById('qr-modal');
-    const qrImage    = document.getElementById('qr-image');
-
-    const openModal  = () => qrModal.classList.remove('hidden');
-    const closeModal = () => qrModal.classList.add('hidden');
-
     // Bouton copier — clipboard API avec fallback select
     document.getElementById('copy-link-btn').addEventListener('click', () => {
         const input = document.getElementById('share-url-input');
@@ -116,19 +109,4 @@ if (sharePage) {
         });
     }
 
-    // Modal QR — listeners en premier, génération ensuite
-    let qrGenerated = false;
-    const generateQr = () => {
-        if (qrGenerated) return;
-        qrGenerated = true;
-        try {
-            QRCode.toDataURL(shareUrl, { width: 200, margin: 2, color: { dark: '#1a1a1a' } })
-                .then(dataUrl => { qrImage.src = dataUrl; })
-                .catch(() => {});
-        } catch (_) {}
-    };
-
-    document.getElementById('open-qr-btn').addEventListener('click', () => { generateQr(); openModal(); });
-    document.getElementById('qr-close').addEventListener('click', closeModal);
-    qrModal.addEventListener('click', (e) => { if (e.target === qrModal) closeModal(); });
 }
