@@ -73,9 +73,8 @@ if (sharePage) {
     const shareUrl   = sharePage.dataset.shareUrl;
     const shareTitle = sharePage.dataset.shareTitle;
     const copyLabel  = document.getElementById('copy-label');
-    // Bouton copier — clipboard API avec fallback select
+    // Bouton copier
     document.getElementById('copy-link-btn').addEventListener('click', () => {
-        const input = document.getElementById('share-url-input');
         const originalLabel = sharePage.dataset.copyLabel;
         const copiedLabel   = sharePage.dataset.copiedLabel;
 
@@ -84,16 +83,21 @@ if (sharePage) {
             setTimeout(() => { copyLabel.textContent = originalLabel; }, 2000);
         };
 
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(shareUrl).then(showCopied).catch(() => {
-                input.select();
-                document.execCommand('copy');
-                showCopied();
-            });
+        const fallback = () => {
+            const ta = document.createElement('textarea');
+            ta.value = shareUrl;
+            ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try { document.execCommand('copy'); showCopied(); } catch (_) {}
+            document.body.removeChild(ta);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(showCopied).catch(fallback);
         } else {
-            input.select();
-            document.execCommand('copy');
-            showCopied();
+            fallback();
         }
     });
 
