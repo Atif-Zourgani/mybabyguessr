@@ -72,8 +72,8 @@
         </div>
     </div>
 
-    {# ── Bouton natif mobile (caché par défaut, affiché par JS) ── #}
-    <div id="mobile-share" class="hidden mb-4">
+    {# ── Bouton natif (Web Share API) — caché par défaut, JS le révèle si disponible ── #}
+    <div id="mobile-share" class="hidden mb-2">
         <button id="native-share-btn" class="btn btn-primary w-full text-base py-3.5">
             <svg class="w-5 h-5 inline-block mr-2 shrink-0" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -83,9 +83,10 @@
             </svg>
             {{ 'games.share.btn_share'|trans }}
         </button>
+        <p class="text-center text-xs mt-2 mb-3" style="color: var(--color-muted)">{{ 'games.share.or_via'|trans }}</p>
     </div>
 
-    {# ── Boutons desktop (visibles par défaut) ───────────────────── #}
+    {# ── Boutons directs (toujours visibles) ─────────────────────── #}
     <div id="desktop-share" class="flex flex-col gap-3 mb-4">
 
         <div class="grid grid-cols-3 gap-3">

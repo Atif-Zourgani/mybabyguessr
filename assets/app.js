@@ -101,11 +101,9 @@ if (sharePage) {
         }
     });
 
-    // Si navigator.share disponible (mobile) : remplace les boutons desktop par le bouton natif
+    // Bouton natif (Web Share API) — s'affiche en plus des boutons desktop si disponible
     if (navigator.share) {
-        document.getElementById('desktop-share').style.display = 'none';
-        const mobileShare = document.getElementById('mobile-share');
-        mobileShare.classList.remove('hidden');
+        document.getElementById('mobile-share').classList.remove('hidden');
         document.getElementById('native-share-btn').addEventListener('click', async () => {
             try {
                 await navigator.share({ title: shareTitle, url: shareUrl });

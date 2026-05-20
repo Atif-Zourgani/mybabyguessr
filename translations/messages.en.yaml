@@ -142,6 +142,7 @@ games:
         subtitle: "Share the link with your loved ones — no account needed to play."
         link_label: "Link to share"
         btn_share: "Share the link"
+        or_via: "Or directly via:"
         btn_copy: "Copy link"
         btn_copied: "Copied!"
         btn_whatsapp: "WhatsApp"
