@@ -8,7 +8,7 @@
 {% set waMessage = 'games.share.whatsapp_text'|trans ~ "\n\n" ~ shareUrl %}
 {% set emailBody  = 'games.share.email_body'|trans  ~ "\n\n" ~ shareUrl %}
 
-<div class="max-w-xl mx-auto px-4 sm:px-6 py-12"
+<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12"
      id="share-page"
      data-share-url="{{ shareUrl }}"
      data-share-title="{{ game.displayTitle|e('html_attr') }}"
@@ -89,7 +89,7 @@
     {# ── Boutons directs (toujours visibles) ─────────────────────── #}
     <div id="desktop-share" class="flex flex-col gap-3 mb-4">
 
-        <div class="grid grid-cols-3 gap-3">
+        <div class="flex flex-col gap-3 sm:grid sm:grid-cols-3">
 
             {# WhatsApp #}
             <a href="https://wa.me/?text={{ waMessage|url_encode }}"

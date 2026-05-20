@@ -29,7 +29,7 @@
 {% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
 
 {% block body %}
-<div class="max-w-xl mx-auto px-4 sm:px-6 py-12 text-center">
+<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12 text-center">
 
     {% if game.image %}
     <div class="mx-auto mb-8 rounded-2xl overflow-hidden"

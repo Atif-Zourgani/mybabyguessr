@@ -32,9 +32,11 @@
                 </h2>
                 {% if games|length %}
                     <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
-                       class="btn btn-primary"
-                       style="font-size: 0.875rem; padding: 0.5rem 1.25rem;">
-                        + {{ 'dashboard.games.btn_create'|trans }}
+                       class="btn btn-primary shrink-0"
+                       style="font-size: 0.875rem; padding: 0.5rem 1rem;">
+                        <span aria-hidden="true">+</span>
+                        <span class="hidden sm:inline">{{ 'dashboard.games.btn_create'|trans }}</span>
+                        <span class="sr-only sm:hidden">{{ 'dashboard.games.btn_create'|trans }}</span>
                     </a>
                 {% endif %}
             </div>
