@@ -74,7 +74,7 @@ class GameController extends AbstractController
             }
 
             $imageFile = $request->files->get('imageFile');
-            if ($imageFile !== null) {
+            if ($imageFile !== null && $imageFile->isValid()) {
                 $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
                 if (
                     in_array($imageFile->getMimeType(), $allowedMimes, true)
