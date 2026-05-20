@@ -116,12 +116,19 @@ if (sharePage) {
         });
     }
 
-    // QR code — généré une fois, modal sur bouton
-    QRCode.toDataURL(shareUrl, { width: 200, margin: 2, color: { dark: '#1a1a1a' } })
-        .then(dataUrl => { qrImage.src = dataUrl; })
-        .catch(() => {});
+    // Modal QR — listeners en premier, génération ensuite
+    let qrGenerated = false;
+    const generateQr = () => {
+        if (qrGenerated) return;
+        qrGenerated = true;
+        try {
+            QRCode.toDataURL(shareUrl, { width: 200, margin: 2, color: { dark: '#1a1a1a' } })
+                .then(dataUrl => { qrImage.src = dataUrl; })
+                .catch(() => {});
+        } catch (_) {}
+    };
 
-    document.getElementById('open-qr-btn').addEventListener('click', openModal);
+    document.getElementById('open-qr-btn').addEventListener('click', () => { generateQr(); openModal(); });
     document.getElementById('qr-close').addEventListener('click', closeModal);
     qrModal.addEventListener('click', (e) => { if (e.target === qrModal) closeModal(); });
 }
