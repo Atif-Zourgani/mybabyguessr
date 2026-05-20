@@ -131,7 +131,7 @@ games:
             title_placeholder: "Bébé Dupont, Notre p'tit mystère…"
             title_help: "Par défaut : \"Baby %name%\" — ce titre sera visible par tous vos invités"
             image_label: "Photo de couverture (optionnel)"
-            image_help: "Elle s'affichera en haut de la page de vos invités. JPG, PNG ou WebP · max 5 Mo"
+            image_help: "Elle s'affichera en haut de la page de vos invités. JPG, PNG ou WebP · max 4 Mo"
         btn_next: "Suivant"
         btn_prev: "Précédent"
         btn_create: "Créer mon Baby Guessr"

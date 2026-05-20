@@ -82,7 +82,7 @@ class GameController extends AbstractController
                 $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
                 if (
                     in_array($imageFile->getMimeType(), $allowedMimes, true)
-                    && $imageFile->getSize() <= 5 * 1024 * 1024
+                    && $imageFile->getSize() <= 4 * 1024 * 1024
                 ) {
                     try {
                         $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/games';
