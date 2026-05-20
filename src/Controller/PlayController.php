@@ -9,8 +9,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PlayController extends AbstractController
 {
-    #[Route('/play/{token}', name: 'app_game_play', methods: ['GET'])]
-    public function play(string $token, GameRepository $gameRepository): Response
+    #[Route('/play/{slug}/{token}', name: 'app_game_play', methods: ['GET'])]
+    public function play(string $slug, string $token, GameRepository $gameRepository): Response
     {
         $game = $gameRepository->findOneByToken($token);
 

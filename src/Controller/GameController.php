@@ -11,13 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/games')]
 class GameController extends AbstractController
 {
     #[Route('/new', name: 'app_game_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('game_new', $request->request->get('_csrf_token'))) {
@@ -49,6 +50,9 @@ class GameController extends AbstractController
             if ($title !== '') {
                 $game->setTitle(mb_substr($title, 0, 100));
             }
+
+            $slugBase = $title !== '' ? $title : ('Baby ' . ($this->getUser()?->getLastName() ?? 'Guessr'));
+            $game->setSlug($slugger->slug($slugBase)->lower()->toString());
 
             if ($guessDate) {
                 $dueDateStr = trim($post['dueDate'] ?? '');

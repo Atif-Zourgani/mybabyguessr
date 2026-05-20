@@ -4,7 +4,7 @@
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-{% set shareUrl = url('app_game_play', {'_locale': app.request.locale, 'token': game.token}) %}
+{% set shareUrl = url('app_game_play', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) %}
 {% set waMessage = 'games.share.whatsapp_text'|trans ~ "\n\n" ~ shareUrl %}
 {% set emailBody  = 'games.share.email_body'|trans  ~ "\n\n" ~ shareUrl %}
 

@@ -25,6 +25,9 @@ class Game
     #[ORM\Column(length: 64, unique: true)]
     private string $token;
 
+    #[ORM\Column(length: 100)]
+    private string $slug = 'baby';
+
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $title = null;
 
@@ -84,7 +87,7 @@ class Game
 
     public function __construct()
     {
-        $this->token     = bin2hex(random_bytes(32));
+        $this->token     = bin2hex(random_bytes(16));
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
     }
@@ -117,6 +120,18 @@ class Game
     public function getToken(): string
     {
         return $this->token;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 
     public function getTitle(): ?string
