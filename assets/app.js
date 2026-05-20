@@ -68,12 +68,15 @@ window.Alpine = Alpine;
 Alpine.start();
 
 // ── Page de partage ──────────────────────────────────────────────
-const sharePage = document.getElementById('share-page');
-if (sharePage) {
+// turbo:load se déclenche à chaque navigation Turbo (et au chargement initial)
+document.addEventListener('turbo:load', () => {
+    const sharePage = document.getElementById('share-page');
+    if (!sharePage) return;
+
     const shareUrl   = sharePage.dataset.shareUrl;
     const shareTitle = sharePage.dataset.shareTitle;
     const copyLabel  = document.getElementById('copy-label');
-    // Bouton copier
+
     document.getElementById('copy-link-btn').addEventListener('click', () => {
         const originalLabel = sharePage.dataset.copyLabel;
         const copiedLabel   = sharePage.dataset.copiedLabel;
@@ -101,7 +104,6 @@ if (sharePage) {
         }
     });
 
-    // Bouton natif (Web Share API) — s'affiche en plus des boutons desktop si disponible
     if (navigator.share) {
         document.getElementById('mobile-share').classList.remove('hidden');
         document.getElementById('native-share-btn').addEventListener('click', async () => {
@@ -110,5 +112,4 @@ if (sharePage) {
             } catch (_) {}
         });
     }
-
-}
+});
