@@ -27,7 +27,7 @@
         <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color: var(--color-ink)">
             {{ 'games.share.title'|trans }}
         </h1>
-        <p class="text-base leading-relaxed max-w-sm mx-auto" style="color: var(--color-muted)">
+        <p class="text-base font-semibold leading-relaxed max-w-sm mx-auto" style="color: var(--color-ink)">
             {{ 'games.share.subtitle'|trans }}
         </p>
     </div>
@@ -125,16 +125,10 @@
 
     </div>
 
-    {# ── QR code ─────────────────────────────────────── #}
-    <div class="card mb-4 text-center">
-        <p class="font-semibold text-sm mb-1" style="color: var(--color-ink)">{{ 'games.share.qr_open'|trans }}</p>
-        <p class="text-xs mb-4 leading-relaxed" style="color: var(--color-muted)">{{ 'games.share.qr_desc'|trans }}</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ shareUrl|url_encode }}&color=1a1a1a&bgcolor=F8F3EE&margin=10"
-             alt="QR Code — {{ game.displayTitle|e('html_attr') }}"
-             width="200" height="200"
-             class="mx-auto block rounded-xl"
-             loading="lazy">
-    </div>
+    {# ── Rappel repartage ─────────────────────────────── #}
+    <p class="text-center text-sm mb-8" style="color: var(--color-muted)">
+        {{ 'games.share.reminder'|trans }}
+    </p>
 
     {# ── Retour dashboard ──────────────────────────── #}
     <div class="text-center mt-8">
