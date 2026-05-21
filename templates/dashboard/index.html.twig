@@ -172,28 +172,19 @@
 
                         </a>
 
-                        {# Catégories + actions — fond cream #}
+                        {# Footer — fond cream #}
                         <div style="background-color: var(--color-cream);">
 
-                            {# Pills #}
-                            <div class="px-4 pt-3 pb-2 flex flex-wrap gap-1.5">
-                                {% if game.isGuessGender() %}<span class="pill">{{ 'games.pill.gender'|trans }}</span>{% endif %}
-                                {% if game.isGuessName() %}  <span class="pill">{{ 'games.pill.name'|trans }}</span>{% endif %}
-                                {% if game.isGuessDate() %}  <span class="pill">{{ 'games.pill.date'|trans }}</span>{% endif %}
-                                {% if game.isGuessWeight() %}<span class="pill">{{ 'games.pill.weight'|trans }}</span>{% endif %}
-                                {% if game.isGuessHeight() %}<span class="pill">{{ 'games.pill.height'|trans }}</span>{% endif %}
-                            </div>
-
-                            {# Actions #}
-                            <div class="px-4 pb-4 pt-1 flex items-center gap-2">
+                            {# Actions pleine largeur #}
+                            <div class="grid grid-cols-2">
                                 <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"
-                                   class="btn btn-secondary shrink-0"
-                                   style="font-size: 0.8125rem; padding: 0.375rem 1rem;">
-                                    {{ 'games.btn_view'|trans }} &rarr;
+                                   class="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold transition-colors duration-150 hover:bg-[#ede6de]"
+                                   style="color: var(--color-ink); text-decoration: none; border-right: 1px solid var(--color-line)">
+                                    {{ 'games.btn_view'|trans }} →
                                 </a>
                                 <a href="{{ path('app_game_share', {'_locale': app.request.locale, 'token': game.token}) }}"
-                                   class="btn btn-primary shrink-0 flex items-center gap-1.5"
-                                   style="font-size: 0.8125rem; padding: 0.375rem 1rem;">
+                                   class="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold transition-colors duration-150 hover:bg-[#ede6de]"
+                                   style="color: var(--color-brand); text-decoration: none;">
                                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none"
                                          stroke="currentColor" stroke-width="2"
                                          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
