@@ -83,8 +83,9 @@ dashboard:
         step1_desc: "Sexe, prénom, date de naissance, poids ou taille — une ou plusieurs selon l'envie."
         step2_title: "Vous partagez un lien"
         step2_desc: "Vos proches jouent directement depuis leur téléphone, sans créer de compte."
-        step3_title: "Vous révélez la surprise"
-        step3_desc: "Les pronostics arrivent. Vous dévoilez les vraies réponses au moment de votre choix."
+        step3_title: "Vous profitez des pronostics"
+        step3_desc: "Visualisez toutes les réponses, comparez les avis et régalez-vous avec vos proches."
+        empty_reveal: "Et si vous le souhaitez : révélez les vraies réponses sur le site — ou gardez le suspense et annoncez-le en face à face. C'est vous qui décidez."
         btn_create_first: "Démarrer mon Baby Guessr"
 
 play:

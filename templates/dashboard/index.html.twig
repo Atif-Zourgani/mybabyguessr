@@ -94,6 +94,21 @@
                         {% endfor %}
                     </div>
 
+                    {# Reveal optionnel #}
+                    <div class="max-w-xs mx-auto flex items-start gap-3 mb-10 text-left px-4 py-3 rounded-xl"
+                         style="background-color: rgba(196,113,74,0.08);">
+                        <svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
+                             stroke="var(--color-brand)" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <p class="text-xs leading-relaxed" style="color: var(--color-muted)">
+                            {{ 'dashboard.games.empty_reveal'|trans }}
+                        </p>
+                    </div>
+
                     <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
                        class="btn btn-primary w-full sm:w-auto px-10">
                         {{ 'dashboard.games.btn_create_first'|trans }}

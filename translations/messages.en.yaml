@@ -83,8 +83,9 @@ dashboard:
         step1_desc: "Gender, name, due date, weight or length — one or several, as you like."
         step2_title: "You share a link"
         step2_desc: "Your loved ones play directly from their phone — no account needed."
-        step3_title: "You reveal the surprise"
-        step3_desc: "The guesses come in. You reveal the real answers whenever you're ready."
+        step3_title: "You enjoy the guesses"
+        step3_desc: "See all the answers, compare predictions, and have fun with your loved ones."
+        empty_reveal: "And if you want: reveal the real answers on the site — or keep the suspense and announce it in person. It's entirely up to you."
         btn_create_first: "Start my Baby Guessr"
 
 play:
