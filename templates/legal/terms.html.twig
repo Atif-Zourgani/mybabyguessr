@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'footer.terms'|trans }} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<section class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
+
+    <h1 class="text-3xl sm:text-4xl mb-8" style="color: var(--color-ink)">
+        {{ 'footer.terms'|trans }}
+    </h1>
+
+    <div class="card p-6 sm:p-10 prose" style="color: var(--color-muted); max-width: none;">
+
+        {# ── TODO : rédiger les vraies conditions d'utilisation ── #}
+        {# Sections à couvrir :                                      #}
+        {#   1. Présentation du service                              #}
+        {#   2. Accès et création de compte                          #}
+        {#   3. Utilisation autorisée / interdictions                #}
+        {#   4. Contenu utilisateur (images, titres)                 #}
+        {#   5. Responsabilités et limitations                       #}
+        {#   6. Disponibilité du service                             #}
+        {#   7. Modifications des CGU                                #}
+        {#   8. Droit applicable et juridiction                      #}
+
+        <p class="text-sm italic" style="color: var(--color-muted)">
+            {% if app.request.locale == 'fr' %}
+                Cette page est en cours de rédaction et sera disponible avant le lancement public.
+            {% else %}
+                This page is being written and will be available before the public launch.
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
+           class="btn btn-secondary">
+            {% if app.request.locale == 'fr' %}Retour à l'accueil{% else %}Back to home{% endif %}
+        </a>
+    </div>
+
+</section>
+{% endblock %}

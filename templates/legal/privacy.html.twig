@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'footer.privacy'|trans }} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<section class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
+
+    <h1 class="text-3xl sm:text-4xl mb-8" style="color: var(--color-ink)">
+        {{ 'footer.privacy'|trans }}
+    </h1>
+
+    <div class="card p-6 sm:p-10 prose" style="color: var(--color-muted); max-width: none;">
+
+        {# ── TODO : rédiger la vraie politique de confidentialité ── #}
+        {# Sections à couvrir :                                        #}
+        {#   1. Responsable du traitement                              #}
+        {#   2. Données collectées et finalités                        #}
+        {#   3. Durée de conservation                                  #}
+        {#   4. Partage des données (hébergeur, sous-traitants)        #}
+        {#   5. Droits RGPD (accès, rectification, suppression)        #}
+        {#   6. Cookies                                                #}
+        {#   7. Contact (adresse email)                                #}
+
+        <p class="text-sm italic" style="color: var(--color-muted)">
+            {% if app.request.locale == 'fr' %}
+                Cette page est en cours de rédaction et sera disponible avant le lancement public.
+            {% else %}
+                This page is being written and will be available before the public launch.
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
+           class="btn btn-secondary">
+            {% if app.request.locale == 'fr' %}Retour à l'accueil{% else %}Back to home{% endif %}
+        </a>
+    </div>
+
+</section>
+{% endblock %}

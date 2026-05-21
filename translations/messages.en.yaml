@@ -64,7 +64,9 @@ register:
     last_name: Last name
     email: Email
     password: Password
-    agree_terms: I agree to the terms of use
+    agree_terms: "I agree to the %cgu% and %privacy%"
+    terms_label: "terms of use"
+    privacy_label: "privacy policy"
     submit: Register
     already_account: "Already have an account?"
 
@@ -89,7 +91,25 @@ dashboard:
         btn_create_first: "Start my Baby Guessr"
 
 play:
-    coming_soon: "The game page is coming soon — check back shortly!"
+    invite_by: "%name% invites you to play!"
+    invite_desc: "Make your predictions about their baby's arrival — no account needed, takes seconds."
+    categories_intro: "You'll be guessing:"
+    due_date_hint: "Expected due date: %date% — babies rarely arrive exactly on time, that's the fun part!"
+    identify:
+        welcome_title: "You've been invited to play!"
+        welcome_context: "%name%'s Baby Guessr"
+        welcome_desc: "Make your predictions about their baby's arrival. You'll find out how right you were when the real answers are revealed."
+        title: "And what do they call you?"
+        subtitle: "The parents-to-be will see it was you who played."
+        name_label: "What do they call you?"
+        name_placeholder: "Mum, Pierre, Aunt Sylvie, Grandpa Roger…"
+        name_error: "Enter your name or nickname to continue."
+        name_duplicate: "That name is already playing! Nothing stops you from tweaking yours — «Mum 2», «Pierre the cousin»... we're here to have fun."
+        email_label: "Your email (optional)"
+        email_placeholder: "your@email.com"
+        email_hint: "To be notified when the real answers are revealed."
+        email_error: "This email address doesn't look valid."
+        submit: "Let's play!"
 
 games:
     btn_view: "View"

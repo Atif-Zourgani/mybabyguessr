@@ -6,6 +6,8 @@ use App\Enum\AnswerGender;
 use App\Enum\GameStatus;
 use App\Enum\NameMode;
 use App\Repository\GameRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -77,6 +79,12 @@ class Game
     #[ORM\Column(nullable: true)]
     private ?int $answerHeight = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $showGuesses = false;
+
+    #[ORM\OneToMany(targetEntity: Guess::class, mappedBy: 'game', orphanRemoval: true)]
+    private Collection $guesses;
+
     // ── Timestamps ────────────────────────────────────────────────
 
     #[ORM\Column]
@@ -90,6 +98,7 @@ class Game
         $this->token     = bin2hex(random_bytes(16));
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->guesses   = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -337,6 +346,23 @@ class Game
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function isShowGuesses(): bool
+    {
+        return $this->showGuesses;
+    }
+
+    public function setShowGuesses(bool $showGuesses): static
+    {
+        $this->showGuesses = $showGuesses;
+
+        return $this;
+    }
+
+    public function getGuesses(): Collection
+    {
+        return $this->guesses;
     }
 
     public function hasAtLeastOneCategory(): bool

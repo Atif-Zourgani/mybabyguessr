@@ -64,7 +64,9 @@ register:
     last_name: Nom
     email: Email
     password: Mot de passe
-    agree_terms: "J'accepte les conditions d'utilisation"
+    agree_terms: "J'accepte les %cgu% et la %privacy%"
+    terms_label: "conditions d'utilisation"
+    privacy_label: "politique de confidentialité"
     submit: S'inscrire
     already_account: "Déjà un compte ?"
 
@@ -89,7 +91,25 @@ dashboard:
         btn_create_first: "Démarrer mon Baby Guessr"
 
 play:
-    coming_soon: "La page de jeu sera bientôt disponible — revenez vite !"
+    invite_by: "%name% vous invite à jouer !"
+    invite_desc: "Faites vos pronostics sur l'arrivée de leur bébé — sans compte, en quelques secondes."
+    categories_intro: "Vous devinerez :"
+    due_date_hint: "Date prévue d'accouchement : %date% — les bébés arrivent rarement pile à l'heure, c'est tout le jeu !"
+    identify:
+        welcome_title: "Vous avez été invité à jouer !"
+        welcome_context: "Baby Guessr de %name%"
+        welcome_desc: "Faites vos pronostics sur l'arrivée de leur bébé. Vous saurez si vous aviez raison quand les vraies réponses seront révélées."
+        title: "Et vous, on vous appelle comment ?"
+        subtitle: "Les futurs parents verront que c'est vous qui avez joué."
+        name_label: "On vous appelle comment ?"
+        name_placeholder: "Maman, Pierre, la tata Sylvie, le papi Roger…"
+        name_error: "Entrez votre prénom ou petit nom pour continuer."
+        name_duplicate: "Ce nom participe déjà ! Rien ne vous empêche d'ajuster un peu — «Maman 2», «Pierre le cousin»... on est là pour s'amuser."
+        email_label: "Votre email (optionnel)"
+        email_placeholder: "votre@email.com"
+        email_hint: "Pour être prévenu quand les vraies réponses seront révélées."
+        email_error: "Cette adresse email ne semble pas valide."
+        submit: "Je joue !"
 
 games:
     btn_view: "Voir"

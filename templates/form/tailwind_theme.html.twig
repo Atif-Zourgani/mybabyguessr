@@ -10,9 +10,17 @@
     {%- if label is not same as false -%}
         <label {% if not compound %}for="{{ id }}"{% endif %} class="form-label">
             {%- if translation_domain is same as false -%}
-                {{- label -}}
+                {%- if label_html is defined and label_html is not same as false -%}
+                    {{- label|raw -}}
+                {%- else -%}
+                    {{- label -}}
+                {%- endif -%}
             {%- else -%}
-                {{- label|trans({}, translation_domain) -}}
+                {%- if label_html is defined and label_html is not same as false -%}
+                    {{- label|trans({}, translation_domain)|raw -}}
+                {%- else -%}
+                    {{- label|trans({}, translation_domain) -}}
+                {%- endif -%}
             {%- endif -%}
             {%- if required -%}<span aria-hidden="true" class="text-red-500 ml-0.5">*</span>{%- endif -%}
         </label>

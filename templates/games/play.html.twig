@@ -4,13 +4,13 @@
     ? game.user.firstName ~ ' vous invite à jouer !'
     : game.user.firstName ~ ' invites you to play!' %}
 {% set _invite_desc = app.request.locale == 'fr'
-    ? game.displayTitle ~ ' — Participez et faites vos pronostics sur l\'arrivée du bébé !'
-    : game.displayTitle ~ ' — Join in and make your predictions about the baby\'s arrival!' %}
+    ? game.displayTitle ~ ' — Faites vos pronostics sur l\'arrivée du bébé !'
+    : game.displayTitle ~ ' — Make your predictions about the baby\'s arrival!' %}
 
-{% block title %}{{ _invite_title }}{% endblock %}
+{% block title %}{{ _invite_title }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 {% block meta_description %}{{ _invite_desc }}{% endblock %}
-{% block og_title %}{{ _invite_title }} — MyBabyGuessr{% endblock %}
+{% block og_title %}{{ _invite_title }}{% endblock %}
 {% block og_description %}{{ _invite_desc }}{% endblock %}
 
 {% block og_image %}
@@ -29,24 +29,106 @@
 {% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
 
 {% block body %}
-<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12 text-center">
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12">
+<div class="card w-full max-w-md">
 
-    {% if game.image %}
-    <div class="mx-auto mb-8 rounded-2xl overflow-hidden"
-         style="max-width: 24rem; height: 14rem;">
-        <img src="{{ asset(game.image) }}"
-             alt="{{ game.displayTitle }}"
-             style="width: 100%; height: 100%; object-fit: cover; display: block;">
+    {# ── Logo ─────────────────────────────────────────────────── #}
+    <div class="flex justify-center mb-6">
+        <img src="{{ asset('images/logo-mybabyguessr.png') }}"
+             alt="MyBabyGuessr"
+             width="1024" height="1024"
+             fetchpriority="high"
+             class="h-16 w-auto">
     </div>
-    {% endif %}
 
-    <h1 class="text-3xl sm:text-4xl font-bold mb-4" style="color: var(--color-ink)">
-        {{ game.displayTitle }}
-    </h1>
+    {# ── Accueil ──────────────────────────────────────────────── #}
+    <div class="text-center mb-7">
+        <h1 class="text-2xl font-bold mb-1" style="color: var(--color-ink)">
+            {{ 'play.identify.welcome_title'|trans }}
+        </h1>
+        <p class="text-sm font-semibold mb-3" style="color: var(--color-brand)">
+            {{ 'play.identify.welcome_context'|trans({'%name%': game.user.firstName}) }}
+        </p>
+        <p class="text-sm leading-relaxed" style="color: var(--color-muted)">
+            {{ 'play.identify.welcome_desc'|trans }}
+        </p>
+    </div>
 
-    <p class="text-base leading-relaxed" style="color: var(--color-muted)">
-        {{ 'play.coming_soon'|trans }}
+    {# ── Séparateur ───────────────────────────────────────────── #}
+    <div class="mb-6" style="border-top: 1px solid var(--color-line);"></div>
+
+    {# ── Titre formulaire ─────────────────────────────────────── #}
+    <p class="text-base font-bold mb-1" style="color: var(--color-ink)">
+        {{ 'play.identify.title'|trans }}
+    </p>
+    <p class="text-sm mb-5" style="color: var(--color-muted)">
+        {{ 'play.identify.subtitle'|trans }}
     </p>
 
+    {# ── Formulaire ───────────────────────────────────────────── #}
+    <form method="post" novalidate>
+        <input type="hidden" name="_token" value="{{ csrf_token('play_identify') }}">
+        {% if nameExists %}
+        <input type="hidden" name="_skip_name_check" value="1">
+        {% endif %}
+
+        {# Prénom / surnom #}
+        <div class="mb-5">
+            <label for="player_name" class="form-label">
+                {{ 'play.identify.name_label'|trans }}
+                <span aria-hidden="true" class="text-red-500 ml-0.5">*</span>
+            </label>
+            <input type="text"
+                   id="player_name"
+                   name="player_name"
+                   class="form-input"
+                   value="{{ formData.player_name|e('html_attr') }}"
+                   placeholder="{{ 'play.identify.name_placeholder'|trans }}"
+                   maxlength="100"
+                   autocomplete="nickname"
+                   required>
+            {% if errors.name is defined %}
+            <p class="mt-1 text-sm text-red-600" role="alert">
+                {{ 'play.identify.name_error'|trans }}
+            </p>
+            {% elseif nameExists %}
+            <p class="mt-2 text-sm px-3 py-2 rounded-lg leading-relaxed" role="alert"
+               style="background-color: rgba(196,113,74,0.10); color: var(--color-brand)">
+                {{ 'play.identify.name_duplicate'|trans }}
+            </p>
+            {% endif %}
+        </div>
+
+        {# Email optionnel #}
+        <div class="mb-7">
+            <label for="player_email" class="form-label">
+                {{ 'play.identify.email_label'|trans }}
+            </label>
+            <input type="email"
+                   id="player_email"
+                   name="player_email"
+                   class="form-input"
+                   value="{{ formData.player_email|e('html_attr') }}"
+                   placeholder="{{ 'play.identify.email_placeholder'|trans }}"
+                   maxlength="255"
+                   autocomplete="email">
+            {% if errors.email is defined %}
+            <p class="mt-1 text-sm text-red-600" role="alert">
+                {{ 'play.identify.email_error'|trans }}
+            </p>
+            {% else %}
+            <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-muted)">
+                {{ 'play.identify.email_hint'|trans }}
+            </p>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">
+            {{ 'play.identify.submit'|trans }}
+        </button>
+
+    </form>
+
 </div>
+</section>
 {% endblock %}

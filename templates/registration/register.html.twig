@@ -29,7 +29,12 @@
 
             {{ form_row(registrationForm.email,       {label: 'register.email'|trans}) }}
             {{ form_row(registrationForm.plainPassword, {label: 'register.password'|trans}) }}
-            {{ form_row(registrationForm.agreeTerms,  {label: 'register.agree_terms'|trans}) }}
+            {% set terms_link = '<a href="' ~ path('app_terms', {'_locale': app.request.locale}) ~ '" class="underline hover:opacity-80" target="_blank" rel="noopener">' ~ 'register.terms_label'|trans ~ '</a>' %}
+            {% set privacy_link = '<a href="' ~ path('app_privacy', {'_locale': app.request.locale}) ~ '" class="underline hover:opacity-80" target="_blank" rel="noopener">' ~ 'register.privacy_label'|trans ~ '</a>' %}
+            {{ form_row(registrationForm.agreeTerms, {
+                label: 'register.agree_terms'|trans({'%cgu%': terms_link, '%privacy%': privacy_link}),
+                label_html: true
+            }) }}
 
             <button type="submit" class="btn btn-primary w-full mt-2">
                 {{ 'register.submit'|trans }}
