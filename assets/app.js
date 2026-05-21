@@ -11,6 +11,10 @@ Alpine.data('gameForm', () => ({
     guessHeight: false,
     nameMode: '',
     answerName: '',
+    showCategoryError: false,
+    showNameError: false,
+    submitting: false,
+    imagePreview: null,
 
     get stepSequence() {
         const s = ['categories'];
@@ -41,16 +45,25 @@ Alpine.data('gameForm', () => ({
     },
 
     next() {
-        if (!this.canProceed) return;
+        if (!this.canProceed) {
+            if (this.step === 'categories') this.showCategoryError = true;
+            if (this.step === 'name') this.showNameError = true;
+            return;
+        }
+        this.showCategoryError = false;
+        this.showNameError = false;
         if (!this.isLast) this.step = this.stepSequence[this.stepIndex + 1];
     },
 
     prev() {
+        this.showCategoryError = false;
+        this.showNameError = false;
         if (!this.isFirst) this.step = this.stepSequence[this.stepIndex - 1];
     },
 
     toggleCategory(cat) {
         this[cat] = !this[cat];
+        this.showCategoryError = false;
         if (cat === 'guessName' && !this.guessName) {
             this.nameMode = '';
             this.answerName = '';
@@ -59,9 +72,17 @@ Alpine.data('gameForm', () => ({
 
     selectNameMode(mode) {
         this.nameMode = mode;
+        this.showNameError = false;
         if (mode !== 'hints') this.answerName = '';
     },
-    // nameMode values: 'free' | 'hints'
+
+    handleImageChange(event) {
+        const file = event.target.files[0];
+        if (!file) { this.imagePreview = null; return; }
+        const reader = new FileReader();
+        reader.onload = (e) => { this.imagePreview = e.target.result; };
+        reader.readAsDataURL(file);
+    },
 }));
 
 window.Alpine = Alpine;

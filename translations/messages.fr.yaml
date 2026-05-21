@@ -155,6 +155,8 @@ games:
         btn_prev: "Précédent"
         btn_create: "Créer mon Baby Guessr"
         error_category: "Sélectionnez au moins une catégorie pour continuer."
+        error_name_mode: "Choisissez un mode pour le prénom pour continuer."
+        error_name_required: "Entrez le vrai prénom pour générer les indices."
         success: "Votre Baby Guessr est prêt ! Partagez le lien avec vos proches."
     share:
         title: "C'est parti !"
