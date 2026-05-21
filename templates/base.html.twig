@@ -10,10 +10,10 @@
     <link rel="apple-touch-icon" href="{{ asset('images/logo-mybabyguessr.png') }}">
 
     {# ── SEO ──────────────────────────────────────────────── #}
-    <title>{% block title %}MyBabyGuessr{% endblock %} — MyBabyGuessr</title>
+    <title>{% block title %}MyBabyGuessr{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{{ app.request.locale == 'fr'
-        ? 'MyBabyGuessr — le jeu de pronostics pour futurs parents. Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé.'
-        : 'MyBabyGuessr — the prediction game for future parents. Invite your loved ones to guess your baby\'s name, due date, weight and gender.' }}{% endblock %}">
+        ? 'Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.'
+        : 'Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.' }}{% endblock %}">
     <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
 
     {# ── Canonical & hreflang ─────────────────────────────── #}
@@ -33,8 +33,8 @@
     <meta property="og:url"              content="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
     <meta property="og:title"            content="{% block og_title %}MyBabyGuessr{% endblock %}">
     <meta property="og:description"      content="{% block og_description %}{{ app.request.locale == 'fr'
-        ? 'Le jeu de pronostics pour futurs parents. Invitez vos proches à deviner le prénom, la date de naissance, le poids et le sexe de votre bébé.'
-        : 'The prediction game for future parents. Invite your loved ones to guess your baby\'s name, due date, weight and gender.' }}{% endblock %}">
+        ? 'Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.'
+        : 'Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.' }}{% endblock %}">
     {% block og_image %}
     <meta property="og:image"        content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
     <meta property="og:image:width"  content="1024">
