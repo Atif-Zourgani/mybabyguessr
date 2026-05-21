@@ -55,6 +55,8 @@ class RegistrationController extends AbstractController
 
             $this->mailer->send($email);
 
+            $request->getSession()->set('registration_email', $user->getEmail());
+
             return $this->redirectToRoute('app_register_check_email', ['_locale' => $request->getLocale()]);
         }
 
@@ -64,9 +66,14 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/check-email', name: 'app_register_check_email')]
-    public function checkEmail(): Response
+    public function checkEmail(Request $request): Response
     {
-        return $this->render('registration/check_email.html.twig');
+        $email = $request->getSession()->get('registration_email');
+        $request->getSession()->remove('registration_email');
+
+        return $this->render('registration/check_email.html.twig', [
+            'email' => $email,
+        ]);
     }
 
     private function getVerificationSubject(string $locale): string
