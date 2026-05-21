@@ -1,15 +1,239 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ game.displayTitle }} — MyBabyGuessr{% endblock %}
+{% set _title = 'play.guess.title'|trans %}
+{% block title %}{{ _title }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
+{% block meta_description %}{{ 'play.identify.welcome_desc'|trans({'%name%': game.user.firstName}) }}{% endblock %}
+
+{% set _error_svg %}
+<svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="12"/>
+    <line x1="12" y1="16" x2="12.01" y2="16"/>
+</svg>
+{% endset %}
 
 {% block body %}
-<div class="max-w-xl mx-auto px-4 sm:px-6 py-12 text-center">
-    <p class="text-2xl font-bold mb-2" style="color: var(--color-ink)">
-        {{ player.name }}
+<section class="flex items-center justify-center px-4 py-8 sm:py-12">
+<div class="card w-full max-w-md">
+
+    {# ── Image de couverture ou logo ──────────────────────────── #}
+    {% if game.image %}
+    <div class="mb-6 -mx-6 -mt-6 rounded-t-2xl overflow-hidden" style="height: 200px">
+        <img src="{{ asset(game.image) }}"
+             alt="{{ game.displayTitle }}"
+             class="w-full h-full object-cover"
+             fetchpriority="high">
+    </div>
+    {% else %}
+    <div class="flex justify-center mb-6">
+        <img src="{{ asset('images/logo-mybabyguessr.png') }}"
+             alt="MyBabyGuessr"
+             width="1024" height="1024"
+             fetchpriority="high"
+             class="h-16 w-auto">
+    </div>
+    {% endif %}
+
+    {# ── Titre + invitation ───────────────────────────────────── #}
+    <div class="text-center mb-5">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-1" style="color: var(--color-ink)">
+            {{ game.displayTitle }}
+        </h1>
+        <p class="text-base font-semibold" style="color: var(--color-brand)">
+            {{ 'play.guess.intro'|trans({'%name%': game.user.firstName}) }}
+        </p>
+    </div>
+
+    {# ── Pills des catégories actives ─────────────────────────── #}
+    <div class="flex flex-wrap gap-2 justify-center mb-4">
+        {% if game.guessGender %}
+        <span class="text-xs font-semibold px-3 py-1 rounded-full"
+              style="background-color: rgba(196,113,74,0.10); color: var(--color-brand)">
+            {{ 'games.pill.gender'|trans }}
+        </span>
+        {% endif %}
+        {% if game.guessName %}
+        <span class="text-xs font-semibold px-3 py-1 rounded-full"
+              style="background-color: rgba(196,113,74,0.10); color: var(--color-brand)">
+            {{ 'games.pill.name'|trans }}
+        </span>
+        {% endif %}
+        {% if game.guessDate %}
+        <span class="text-xs font-semibold px-3 py-1 rounded-full"
+              style="background-color: rgba(196,113,74,0.10); color: var(--color-brand)">
+            {{ 'games.pill.date'|trans }}
+        </span>
+        {% endif %}
+        {% if game.guessWeight %}
+        <span class="text-xs font-semibold px-3 py-1 rounded-full"
+              style="background-color: rgba(196,113,74,0.10); color: var(--color-brand)">
+            {{ 'games.pill.weight'|trans }}
+        </span>
+        {% endif %}
+        {% if game.guessHeight %}
+        <span class="text-xs font-semibold px-3 py-1 rounded-full"
+              style="background-color: rgba(196,113,74,0.10); color: var(--color-brand)">
+            {{ 'games.pill.height'|trans }}
+        </span>
+        {% endif %}
+    </div>
+
+    {# ── Indice date prévue ───────────────────────────────────── #}
+    {% if game.dueDate %}
+    <p class="text-sm text-center mb-5 px-2" style="color: var(--color-muted)">
+        {{ 'play.guess.due_date_hint'|trans({'%date%': game.dueDate|date('d/m/Y')}) }}
     </p>
-    <p style="color: var(--color-muted)">
-        {{ game.displayTitle }} — formulaire de jeu à venir
+    {% endif %}
+
+    <hr class="mb-6" style="border-color: var(--color-border)">
+
+    {# ── Bonjour joueur ───────────────────────────────────────── #}
+    <p class="text-base font-semibold mb-6" style="color: var(--color-ink)">
+        {{ 'play.guess.hello'|trans({'%name%': player.name}) }}
     </p>
+
+    {# ── Formulaire ───────────────────────────────────────────── #}
+    <form method="post" novalidate>
+        <input type="hidden" name="_token" value="{{ csrf_token('play_guess') }}">
+
+        {# Sexe #}
+        {% if game.guessGender %}
+        {% set genderValue = formData.gender in ['boy', 'girl'] ? formData.gender : '' %}
+        <div class="mb-6" x-data="{ gender: '{{ genderValue }}' }">
+            <label class="form-label">{{ 'play.guess.gender_label'|trans }}</label>
+            <input type="hidden" name="guess_gender" :value="gender">
+            <div class="grid grid-cols-2 gap-3 mt-2">
+                <button type="button"
+                        @click="gender = 'boy'"
+                        class="py-3 px-4 rounded-xl text-center font-semibold border-2 transition-all"
+                        :style="gender === 'boy'
+                            ? 'border-color: var(--color-brand); background-color: rgba(196,113,74,0.10); color: var(--color-brand)'
+                            : 'border-color: var(--color-border); color: var(--color-muted)'">
+                    {{ 'play.guess.gender_boy'|trans }}
+                </button>
+                <button type="button"
+                        @click="gender = 'girl'"
+                        class="py-3 px-4 rounded-xl text-center font-semibold border-2 transition-all"
+                        :style="gender === 'girl'
+                            ? 'border-color: var(--color-brand); background-color: rgba(196,113,74,0.10); color: var(--color-brand)'
+                            : 'border-color: var(--color-border); color: var(--color-muted)'">
+                    {{ 'play.guess.gender_girl'|trans }}
+                </button>
+            </div>
+            {% if errors.gender is defined %}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                {{ _error_svg|raw }}
+                <span>{{ 'play.guess.gender_error'|trans }}</span>
+            </p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Prénom #}
+        {% if game.guessName %}
+        <div class="mb-6">
+            <label for="guess_name" class="form-label">{{ 'play.guess.name_label'|trans }}</label>
+            <input type="text"
+                   id="guess_name"
+                   name="guess_name"
+                   class="form-input"
+                   value="{{ formData.name ?? '' }}"
+                   placeholder="{{ 'play.guess.name_placeholder'|trans }}"
+                   maxlength="100"
+                   autocomplete="off"
+                   {% if errors.name is defined %}style="border-color: #ef4444;"{% endif %}>
+            {% if errors.name is defined %}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                {{ _error_svg|raw }}
+                <span>{{ 'play.guess.name_error'|trans }}</span>
+            </p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Date de naissance #}
+        {% if game.guessDate %}
+        <div class="mb-6">
+            <label for="guess_date" class="form-label">{{ 'play.guess.date_label'|trans }}</label>
+            <input type="date"
+                   id="guess_date"
+                   name="guess_date"
+                   class="form-input"
+                   value="{{ formData.date ?? (game.dueDate ? game.dueDate|date('Y-m-d') : '') }}"
+                   {% if errors.date is defined %}style="border-color: #ef4444;"{% endif %}>
+            {% if errors.date is defined %}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                {{ _error_svg|raw }}
+                <span>{{ 'play.guess.date_error'|trans }}</span>
+            </p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Poids #}
+        {% if game.guessWeight %}
+        <div class="mb-6">
+            <label for="guess_weight" class="form-label">
+                {{ 'play.guess.weight_label'|trans }}
+                <span class="text-xs font-normal ml-1" style="color: var(--color-muted)">({{ 'play.guess.weight_unit'|trans }})</span>
+            </label>
+            <input type="number"
+                   id="guess_weight"
+                   name="guess_weight"
+                   class="form-input"
+                   value="{{ formData.weight ?? '' }}"
+                   placeholder="{{ 'play.guess.weight_placeholder'|trans }}"
+                   step="0.001"
+                   min="0.5"
+                   max="7"
+                   {% if errors.weight is defined %}style="border-color: #ef4444;"{% endif %}>
+            {% if errors.weight is defined %}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                {{ _error_svg|raw }}
+                <span>{{ 'play.guess.weight_error'|trans }}</span>
+            </p>
+            {% else %}
+            <p class="mt-1 text-sm" style="color: var(--color-muted)">{{ 'play.guess.weight_hint'|trans }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Taille #}
+        {% if game.guessHeight %}
+        <div class="mb-6">
+            <label for="guess_height" class="form-label">
+                {{ 'play.guess.height_label'|trans }}
+                <span class="text-xs font-normal ml-1" style="color: var(--color-muted)">({{ 'play.guess.height_unit'|trans }})</span>
+            </label>
+            <input type="number"
+                   id="guess_height"
+                   name="guess_height"
+                   class="form-input"
+                   value="{{ formData.height ?? '' }}"
+                   placeholder="{{ 'play.guess.height_placeholder'|trans }}"
+                   step="1"
+                   min="20"
+                   max="70"
+                   {% if errors.height is defined %}style="border-color: #ef4444;"{% endif %}>
+            {% if errors.height is defined %}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                {{ _error_svg|raw }}
+                <span>{{ 'play.guess.height_error'|trans }}</span>
+            </p>
+            {% else %}
+            <p class="mt-1 text-sm" style="color: var(--color-muted)">{{ 'play.guess.height_hint'|trans }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary w-full mt-2">
+            {{ 'play.guess.submit'|trans }}
+        </button>
+    </form>
+
 </div>
+</section>
 {% endblock %}

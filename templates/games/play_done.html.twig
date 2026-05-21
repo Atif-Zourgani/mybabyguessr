@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'play.done.title'|trans }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12">
+<div class="card w-full max-w-md">
+
+    {# ── Icône succès ─────────────────────────────────────────── #}
+    <div class="flex justify-center mb-6">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center"
+             style="background-color: rgba(196,113,74,0.12)">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none"
+                 stroke="var(--color-brand)" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+        </div>
+    </div>
+
+    {# ── Titre ────────────────────────────────────────────────── #}
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold mb-2" style="color: var(--color-ink)">
+            {{ 'play.done.title'|trans }}
+        </h1>
+        <p class="text-base font-semibold mb-3" style="color: var(--color-brand)">
+            {{ 'play.done.heading'|trans({'%name%': playerName}) }}
+        </p>
+        <p class="text-sm leading-relaxed" style="color: var(--color-muted)">
+            {{ 'play.done.message'|trans }}
+        </p>
+        {% if guess and guess.playerEmail %}
+        <p class="text-sm leading-relaxed mt-1" style="color: var(--color-muted)">
+            {{ 'play.done.notify_if_email'|trans }}
+        </p>
+        {% endif %}
+    </div>
+
+    {# ── Récapitulatif ────────────────────────────────────────── #}
+    {% if guess and (guess.guessGender or guess.guessName or guess.guessDate or guess.guessWeight or guess.guessHeight) %}
+    <div class="rounded-xl p-4 mb-6"
+         style="background-color: rgba(196,113,74,0.06); border: 1px solid rgba(196,113,74,0.15)">
+        <h2 class="text-sm font-semibold mb-3" style="color: var(--color-ink)">
+            {{ 'play.done.your_guesses'|trans }}
+        </h2>
+        <dl class="space-y-2">
+            {% if guess.guessGender %}
+            <div class="flex justify-between text-sm">
+                <dt style="color: var(--color-muted)">{{ 'play.done.gender_summary'|trans }}</dt>
+                <dd class="font-medium" style="color: var(--color-ink)">
+                    {{ guess.guessGender.value == 'boy' ? 'play.done.gender_boy'|trans : 'play.done.gender_girl'|trans }}
+                </dd>
+            </div>
+            {% endif %}
+            {% if guess.guessName %}
+            <div class="flex justify-between text-sm">
+                <dt style="color: var(--color-muted)">{{ 'play.done.name_summary'|trans }}</dt>
+                <dd class="font-medium" style="color: var(--color-ink)">{{ guess.guessName }}</dd>
+            </div>
+            {% endif %}
+            {% if guess.guessDate %}
+            <div class="flex justify-between text-sm">
+                <dt style="color: var(--color-muted)">{{ 'play.done.date_summary'|trans }}</dt>
+                <dd class="font-medium" style="color: var(--color-ink)">{{ guess.guessDate|date('d/m/Y') }}</dd>
+            </div>
+            {% endif %}
+            {% if guess.guessWeight %}
+            <div class="flex justify-between text-sm">
+                <dt style="color: var(--color-muted)">{{ 'play.done.weight_summary'|trans }}</dt>
+                <dd class="font-medium" style="color: var(--color-ink)">{{ (guess.guessWeight / 1000) }} kg</dd>
+            </div>
+            {% endif %}
+            {% if guess.guessHeight %}
+            <div class="flex justify-between text-sm">
+                <dt style="color: var(--color-muted)">{{ 'play.done.height_summary'|trans }}</dt>
+                <dd class="font-medium" style="color: var(--color-ink)">{{ (guess.guessHeight / 10) }} cm</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </div>
+    {% endif %}
+
+    {# ── Promo ────────────────────────────────────────────────── #}
+    <div class="pt-5" style="border-top: 1px solid var(--color-border)">
+        <p class="text-sm font-semibold mb-1 text-center" style="color: var(--color-ink)">
+            {{ 'play.done.share_heading'|trans }}
+        </p>
+        <p class="text-sm mb-4 text-center" style="color: var(--color-muted)">
+            {{ 'play.done.share_desc'|trans }}
+        </p>
+        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
+           class="btn btn-primary w-full text-center">
+            {{ 'play.done.share_btn'|trans }}
+        </a>
+    </div>
+
+</div>
+</section>
+{% endblock %}
