@@ -101,7 +101,8 @@
 
         {# Sexe #}
         {% if game.guessGender %}
-        {% set genderValue = formData.gender in ['boy', 'girl'] ? formData.gender : '' %}
+        {% set _g = formData.gender ?? '' %}
+        {% set genderValue = _g in ['boy', 'girl'] ? _g : '' %}
         <div class="mb-6" x-data="{ gender: '{{ genderValue }}' }">
             <label class="form-label">{{ 'play.guess.gender_label'|trans }}</label>
             <input type="hidden" name="guess_gender" :value="gender">
