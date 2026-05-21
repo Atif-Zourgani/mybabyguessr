@@ -107,6 +107,12 @@ play:
         email_hint: "Optional — to be notified when the real answers are revealed."
         email_error: "This email address doesn't look valid."
         submit: "Let's play!"
+    intro:
+        heading: "Time to guess!"
+        desc: "%name% invites you to make your predictions about their baby — no right or wrong answers, it's all for fun!"
+        categories_label: "You'll be guessing:"
+        due_date: "Baby is expected on %date%"
+        cta: "Let's go!"
     guess:
         title: "Make your predictions!"
         intro: "%name% invites you to guess!"

@@ -1,11 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% set _invite_title = app.request.locale == 'fr'
-    ? game.user.firstName ~ ' vous invite à jouer !'
-    : game.user.firstName ~ ' invites you to play!' %}
-{% set _invite_desc = app.request.locale == 'fr'
-    ? game.displayTitle ~ ' — Faites vos pronostics sur l\'arrivée du bébé !'
-    : game.displayTitle ~ ' — Make your predictions about the baby\'s arrival!' %}
+{% set _invite_title = 'play.identify.welcome_title'|trans({'%name%': game.user.firstName}) %}
+{% set _invite_desc  = 'play.identify.welcome_desc'|trans({'%name%': game.user.firstName}) %}
 
 {% block title %}{{ _invite_title }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
@@ -42,28 +38,17 @@
     </div>
 
     {# ── Accueil ──────────────────────────────────────────────── #}
-    <div class="text-center mb-7">
-        <h1 class="text-2xl font-bold mb-1" style="color: var(--color-ink)">
-            {{ 'play.identify.welcome_title'|trans }}
+    <div class="text-center mb-8">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--color-ink)">
+            {{ game.displayTitle }}
         </h1>
-        <p class="text-sm font-semibold mb-3" style="color: var(--color-brand)">
-            {{ 'play.identify.welcome_context'|trans({'%name%': game.user.firstName}) }}
+        <p class="text-base font-semibold mb-3" style="color: var(--color-brand)">
+            {{ 'play.identify.welcome_title'|trans({'%name%': game.user.firstName}) }}
         </p>
         <p class="text-sm leading-relaxed" style="color: var(--color-muted)">
-            {{ 'play.identify.welcome_desc'|trans }}
+            {{ 'play.identify.welcome_desc'|trans({'%name%': game.user.firstName}) }}
         </p>
     </div>
-
-    {# ── Séparateur ───────────────────────────────────────────── #}
-    <div class="mb-6" style="border-top: 1px solid var(--color-line);"></div>
-
-    {# ── Titre formulaire ─────────────────────────────────────── #}
-    <p class="text-base font-bold mb-1" style="color: var(--color-ink)">
-        {{ 'play.identify.title'|trans }}
-    </p>
-    <p class="text-sm mb-5" style="color: var(--color-muted)">
-        {{ 'play.identify.subtitle'|trans }}
-    </p>
 
     {# ── Formulaire ───────────────────────────────────────────── #}
     <form method="post" novalidate>
@@ -86,10 +71,19 @@
                    placeholder="{{ 'play.identify.name_placeholder'|trans }}"
                    maxlength="100"
                    autocomplete="nickname"
-                   required>
+                   autofocus
+                   required
+                   {% if errors.name is defined %}style="border-color: #ef4444;"{% endif %}>
             {% if errors.name is defined %}
-            <p class="mt-1 text-sm text-red-600" role="alert">
-                {{ 'play.identify.name_error'|trans }}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                <svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>{{ 'play.identify.name_error'|trans }}</span>
             </p>
             {% elseif nameExists %}
             <p class="mt-2 text-sm px-3 py-2 rounded-lg leading-relaxed" role="alert"
@@ -103,6 +97,9 @@
         <div class="mb-7">
             <label for="player_email" class="form-label">
                 {{ 'play.identify.email_label'|trans }}
+                <span class="text-xs font-normal ml-1" style="color: var(--color-muted)">
+                    ({{ app.request.locale == 'fr' ? 'facultatif' : 'optional' }})
+                </span>
             </label>
             <input type="email"
                    id="player_email"
@@ -111,10 +108,18 @@
                    value="{{ formData.player_email|e('html_attr') }}"
                    placeholder="{{ 'play.identify.email_placeholder'|trans }}"
                    maxlength="255"
-                   autocomplete="email">
+                   autocomplete="email"
+                   {% if errors.email is defined %}style="border-color: #ef4444;"{% endif %}>
             {% if errors.email is defined %}
-            <p class="mt-1 text-sm text-red-600" role="alert">
-                {{ 'play.identify.email_error'|trans }}
+            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+                <svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>{{ 'play.identify.email_error'|trans }}</span>
             </p>
             {% else %}
             <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-muted)">

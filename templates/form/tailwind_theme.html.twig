@@ -1,8 +1,8 @@
 {%- block form_row -%}
     <div class="mb-5">
         {{- form_label(form) -}}
-        {{- form_errors(form) -}}
         {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
     </div>
 {%- endblock -%}
 
@@ -33,14 +33,24 @@
         {%- set attr = attr|merge({class: ('form-input ' ~ (attr.class|default(''))) | trim}) -%}
     {%- endif -%}
     <input type="{{ type }}" {{ block('widget_attributes') }}
-        {%- if value is not empty %} value="{{ value }}"{% endif -%}>
+        {%- if value is not empty %} value="{{ value }}"{% endif %}
+        {%- if errors|length > 0 %} style="border-color: #ef4444;"{% endif -%}>
 {%- endblock -%}
 
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
-        <ul class="mt-1 space-y-0.5" role="alert">
+        <ul class="mt-1.5 space-y-0.5" role="alert">
             {%- for error in errors -%}
-                <li class="text-sm text-red-600">{{ error.message }}</li>
+                <li class="flex items-start gap-1.5 text-sm text-red-600">
+                    <svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span>{{ error.message }}</span>
+                </li>
             {%- endfor -%}
         </ul>
     {%- endif -%}

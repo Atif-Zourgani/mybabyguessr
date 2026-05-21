@@ -107,6 +107,12 @@ play:
         email_hint: "Optionnel — pour être prévenu quand les vraies réponses seront révélées."
         email_error: "Cette adresse email ne semble pas valide."
         submit: "Je joue !"
+    intro:
+        heading: "C'est l'heure de deviner !"
+        desc: "%name% vous invite à faire vos pronostics sur son bébé — pas de bonne ou mauvaise réponse, c'est juste pour le fun !"
+        categories_label: "Vous allez deviner :"
+        due_date: "Bébé est attendu le %date%"
+        cta: "C'est parti !"
     guess:
         title: "Faites vos pronostics !"
         intro: "%name% vous invite à deviner !"

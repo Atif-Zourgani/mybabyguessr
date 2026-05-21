@@ -1,169 +1,271 @@
 {% extends 'base.html.twig' %}
-
-{% set _title = 'play.guess.title'|trans %}
-{% block title %}{{ _title }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'play.guess.title'|trans }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 {% block meta_description %}{{ 'play.identify.welcome_desc'|trans({'%name%': game.user.firstName}) }}{% endblock %}
 
-{% set _error_svg %}
-<svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
-     stroke="currentColor" stroke-width="2"
-     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="10"/>
-    <line x1="12" y1="8" x2="12" y2="12"/>
-    <line x1="12" y1="16" x2="12.01" y2="16"/>
-</svg>
-{% endset %}
+{% set steps = [] %}
+{% if game.guessGender %}{% set steps = steps|merge(['gender']) %}{% endif %}
+{% if game.guessName   %}{% set steps = steps|merge(['name'])   %}{% endif %}
+{% if game.guessDate   %}{% set steps = steps|merge(['date'])   %}{% endif %}
+{% if game.guessWeight %}{% set steps = steps|merge(['weight']) %}{% endif %}
+{% if game.guessHeight %}{% set steps = steps|merge(['height']) %}{% endif %}
+
+{% set _g = formData.gender ?? '' %}
+{% set genderValue = _g in ['boy', 'girl'] ? _g : '' %}
 
 {% block body %}
-<section class="px-4 pt-8 pb-12 sm:pt-10 sm:pb-16">
+<div class="px-4 py-10 sm:py-16"
+     x-data="{
+       showIntro: true,
+       steps: {{ steps|json_encode }},
+       current: 0,
+       gender: '{{ genderValue }}',
+       stepError: false,
+       errors: {{ errors|json_encode }},
+       get totalSteps() { return this.steps.length; },
+       get currentStep() { return this.steps[this.current]; },
+       get isLast() { return this.current === this.totalSteps - 1; },
+       init() {
+         const errKeys = Object.keys(this.errors);
+         if (errKeys.length > 0) {
+           this.showIntro = false;
+           const idx = this.steps.findIndex(s => errKeys.includes(s));
+           if (idx !== -1) { this.current = idx; this.stepError = true; }
+         }
+       },
+       validate() {
+         const s = this.currentStep;
+         if (s === 'gender') return this.gender !== '';
+         if (s === 'name')   return (document.getElementById('guess_name')?.value ?? '').trim().length > 0;
+         if (s === 'date')   return (document.getElementById('guess_date')?.value ?? '').length > 0;
+         if (s === 'weight') { const w = parseFloat((document.getElementById('guess_weight')?.value ?? '').replace(',','.')); return !isNaN(w) && w >= 0.5 && w <= 7; }
+         if (s === 'height') { const h = parseFloat((document.getElementById('guess_height')?.value ?? '').replace(',','.')); return !isNaN(h) && h >= 20 && h <= 70; }
+         return true;
+       },
+       next() { if (!this.validate()) { this.stepError = true; return; } this.stepError = false; if (this.current < this.totalSteps - 1) this.current++; },
+       prev() { this.stepError = false; if (this.current > 0) this.current--; }
+     }">
 <div class="max-w-md mx-auto">
 
-    {# ── En-tête ──────────────────────────────────────────────── #}
-    <div class="text-center mb-7">
-        {% if game.image %}
-        <img src="{{ asset(game.image) }}"
-             alt="{{ game.displayTitle }}"
-             class="w-20 h-20 rounded-2xl object-cover mx-auto mb-3"
-             fetchpriority="high">
-        {% else %}
-        <img src="{{ asset('images/logo-mybabyguessr.png') }}"
-             alt="MyBabyGuessr"
-             width="1024" height="1024"
-             fetchpriority="high"
-             class="h-14 w-auto mx-auto mb-3">
+    {# ══════════════════════════════════════════════════════════ #}
+    {# ── Écran d'intro ──────────────────────────────────────── #}
+    {# ══════════════════════════════════════════════════════════ #}
+    <div x-show="showIntro"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+
+        {# Image ou logo #}
+        <div class="flex justify-center mb-6">
+            {% if game.image %}
+            <img src="{{ asset(game.image) }}" alt="{{ game.displayTitle }}"
+                 width="96" height="96" fetchpriority="high"
+                 class="w-24 h-24 rounded-2xl object-cover">
+            {% else %}
+            <img src="{{ asset('images/logo-mybabyguessr.png') }}" alt="MyBabyGuessr"
+                 width="1024" height="1024" fetchpriority="high"
+                 class="h-16 w-auto">
+            {% endif %}
+        </div>
+
+        {# Heading + desc #}
+        <div class="text-center mb-7">
+            <h1 class="text-3xl font-bold mb-3" style="color:var(--color-ink)">
+                {{ 'play.intro.heading'|trans }}
+            </h1>
+            <p class="text-sm leading-relaxed" style="color:var(--color-muted)">
+                {{ 'play.intro.desc'|trans({'%name%': game.user.firstName}) }}
+            </p>
+        </div>
+
+        {# Séparateur #}
+        <div class="mb-5" style="border-top:1px solid var(--color-line)"></div>
+
+        {# Catégories #}
+        <p class="text-xs font-bold uppercase tracking-wider text-center mb-3"
+           style="color:var(--color-muted)">
+            {{ 'play.intro.categories_label'|trans }}
+        </p>
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
+            {% if game.guessGender %}
+            <span class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
+                {{ 'games.pill.gender'|trans }}
+            </span>
+            {% endif %}
+            {% if game.guessName %}
+            <span class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
+                {{ 'games.pill.name'|trans }}
+            </span>
+            {% endif %}
+            {% if game.guessDate %}
+            <span class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
+                {{ 'games.pill.date'|trans }}
+            </span>
+            {% endif %}
+            {% if game.guessWeight %}
+            <span class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
+                {{ 'games.pill.weight'|trans }}
+            </span>
+            {% endif %}
+            {% if game.guessHeight %}
+            <span class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
+                {{ 'games.pill.height'|trans }}
+            </span>
+            {% endif %}
+        </div>
+
+        {# Date prévue (si dispo) #}
+        {% if game.dueDate %}
+        <p class="text-sm text-center mb-6" style="color:var(--color-muted)">
+            {{ 'play.intro.due_date'|trans({'%date%': game.dueDate|date('d/m/Y')}) }}
+        </p>
         {% endif %}
-        <h1 class="text-2xl sm:text-3xl font-bold" style="color: var(--color-ink)">
-            {{ game.displayTitle }}
-        </h1>
-        <p class="text-sm font-semibold mt-1" style="color: var(--color-brand)">
-            {{ 'play.guess.intro'|trans({'%name%': game.user.firstName}) }}
-        </p>
-        <p class="text-base font-bold mt-3" style="color: var(--color-ink)">
-            {{ 'play.guess.hello'|trans({'%name%': player.name}) }}
-        </p>
+
+        {# CTA #}
+        <button type="button" @click="showIntro = false"
+                class="btn btn-primary w-full">
+            {{ 'play.intro.cta'|trans }} →
+        </button>
+
     </div>
 
-    {# ── Formulaire ───────────────────────────────────────────── #}
-    <form method="post" novalidate>
-        <input type="hidden" name="_token" value="{{ csrf_token('play_guess') }}">
+    {# ══════════════════════════════════════════════════════════ #}
+    {# ── Wizard ─────────────────────────────────────────────── #}
+    {# ══════════════════════════════════════════════════════════ #}
+    <div x-show="!showIntro"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100">
 
-        {# ── Sexe ─────────────────────────────────────────────── #}
-        {% if game.guessGender %}
-        <div class="rounded-2xl p-5 mb-3"
-             style="background: white; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.05)">
-            <div class="flex items-start gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                     style="background-color: rgba(196,113,74,0.12)">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                         stroke="var(--color-brand)" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
+        {# En-tête compact #}
+        <div class="text-center mb-8">
+            {% if game.image %}
+            <img src="{{ asset(game.image) }}" alt="{{ game.displayTitle }}"
+                 width="64" height="64" loading="lazy"
+                 class="w-16 h-16 rounded-2xl object-cover mx-auto mb-3">
+            {% else %}
+            <img src="{{ asset('images/logo-mybabyguessr.png') }}" alt="MyBabyGuessr"
+                 width="1024" height="1024" loading="lazy"
+                 class="h-10 w-auto mx-auto mb-3">
+            {% endif %}
+            <h1 class="text-xl font-bold" style="color:var(--color-ink)">{{ game.displayTitle }}</h1>
+            <p class="text-sm font-bold mt-1" style="color:var(--color-brand)">
+                {{ 'play.guess.hello'|trans({'%name%': player.name}) }}
+            </p>
+        </div>
+
+        {# Progression #}
+        <div class="flex justify-center items-center gap-2 mb-10">
+            <template x-for="(step, idx) in steps" :key="idx">
+                <div class="h-2 rounded-full transition-all duration-300"
+                     :class="idx === current ? 'w-6' : 'w-2'"
+                     :style="idx <= current
+                         ? 'background-color:var(--color-brand)'
+                         : 'background-color:var(--color-line)'">
                 </div>
-                <div>
-                    <h2 class="font-bold text-base leading-tight" style="color: var(--color-ink)">
+            </template>
+        </div>
+
+        {# Formulaire #}
+        <form method="post" novalidate
+              @submit="if (!validate()) { $event.preventDefault(); stepError = true; }">
+            <input type="hidden" name="_token" value="{{ csrf_token('play_guess') }}">
+            {% if game.guessGender %}
+            <input type="hidden" name="guess_gender" :value="gender">
+            {% endif %}
+
+            {# ── Sexe ──────────────────────────────────────────── #}
+            {% if game.guessGender %}
+            <div x-show="currentStep === 'gender'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold mb-2" style="color:var(--color-ink)">
                         {{ 'play.guess.gender_title'|trans }}
                     </h2>
-                    <p class="text-sm mt-0.5" style="color: var(--color-muted)">
+                    <p class="text-sm" style="color:var(--color-muted)">
                         {{ 'play.guess.gender_subtitle'|trans }}
                     </p>
                 </div>
-            </div>
-            {% set _g = formData.gender ?? '' %}
-            {% set genderValue = _g in ['boy', 'girl'] ? _g : '' %}
-            <div x-data="{ gender: '{{ genderValue }}' }">
-                <input type="hidden" name="guess_gender" :value="gender">
-                <div class="grid grid-cols-2 gap-3">
-                    <button type="button"
-                            @click="gender = 'boy'"
-                            class="py-4 rounded-xl text-center font-bold border-2 transition-all"
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="button" @click="gender = 'boy'; stepError = false"
+                            class="rounded-2xl py-10 flex flex-col items-center gap-3 border-2 transition-all duration-200"
                             :style="gender === 'boy'
-                                ? 'border-color: var(--color-brand); background-color: rgba(196,113,74,0.10); color: var(--color-brand)'
-                                : 'border-color: var(--color-border); color: var(--color-muted)'">
-                        {{ 'play.guess.gender_boy'|trans }}
+                                ? 'border-color:var(--color-brand);background-color:rgba(196,113,74,0.10);color:var(--color-brand)'
+                                : 'border-color:var(--color-line);background-color:#fff;color:var(--color-ink)'">
+                        <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.5"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="10" cy="14" r="5"/>
+                            <line x1="13.8" y1="10.2" x2="19" y2="5"/>
+                            <polyline points="14 5 19 5 19 10"/>
+                        </svg>
+                        <span class="font-bold text-base">{{ 'play.guess.gender_boy'|trans }}</span>
                     </button>
-                    <button type="button"
-                            @click="gender = 'girl'"
-                            class="py-4 rounded-xl text-center font-bold border-2 transition-all"
+                    <button type="button" @click="gender = 'girl'; stepError = false"
+                            class="rounded-2xl py-10 flex flex-col items-center gap-3 border-2 transition-all duration-200"
                             :style="gender === 'girl'
-                                ? 'border-color: var(--color-brand); background-color: rgba(196,113,74,0.10); color: var(--color-brand)'
-                                : 'border-color: var(--color-border); color: var(--color-muted)'">
-                        {{ 'play.guess.gender_girl'|trans }}
+                                ? 'border-color:var(--color-brand);background-color:rgba(196,113,74,0.10);color:var(--color-brand)'
+                                : 'border-color:var(--color-line);background-color:#fff;color:var(--color-ink)'">
+                        <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.5"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="9" r="5"/>
+                            <line x1="12" y1="14" x2="12" y2="20"/>
+                            <line x1="9" y1="17" x2="15" y2="17"/>
+                        </svg>
+                        <span class="font-bold text-base">{{ 'play.guess.gender_girl'|trans }}</span>
                     </button>
                 </div>
-                {% if errors.gender is defined %}
-                <p class="mt-2 flex items-start gap-1.5 text-sm text-red-600" role="alert">
-                    {{ _error_svg|raw }}
-                    <span>{{ 'play.guess.gender_error'|trans }}</span>
+                <p x-show="stepError" class="mt-3 text-sm text-center text-red-600" role="alert">
+                    {{ 'play.guess.gender_error'|trans }}
                 </p>
-                {% endif %}
             </div>
-        </div>
-        {% endif %}
+            {% endif %}
 
-        {# ── Prénom ────────────────────────────────────────────── #}
-        {% if game.guessName %}
-        <div class="rounded-2xl p-5 mb-3"
-             style="background: white; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.05)">
-            <div class="flex items-start gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                     style="background-color: rgba(196,113,74,0.12)">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                         stroke="var(--color-brand)" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                        <line x1="7" y1="7" x2="7.01" y2="7"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="font-bold text-base leading-tight" style="color: var(--color-ink)">
+            {# ── Prénom ────────────────────────────────────────── #}
+            {% if game.guessName %}
+            <div x-show="currentStep === 'name'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold mb-2" style="color:var(--color-ink)">
                         {{ 'play.guess.name_title'|trans }}
                     </h2>
-                    <p class="text-sm mt-0.5" style="color: var(--color-muted)">
+                    <p class="text-sm" style="color:var(--color-muted)">
                         {{ 'play.guess.name_subtitle'|trans }}
                     </p>
                 </div>
+                <input type="text" id="guess_name" name="guess_name"
+                       class="form-input"
+                       value="{{ formData.name ?? '' }}"
+                       placeholder="{{ 'play.guess.name_placeholder'|trans }}"
+                       maxlength="100" autocomplete="off"
+                       {% if errors.name is defined %}style="border-color:#ef4444"{% endif %}>
+                <p x-show="stepError" class="mt-2 text-sm text-center text-red-600" role="alert">
+                    {{ 'play.guess.name_error'|trans }}
+                </p>
             </div>
-            <input type="text"
-                   id="guess_name"
-                   name="guess_name"
-                   class="form-input"
-                   value="{{ formData.name ?? '' }}"
-                   placeholder="{{ 'play.guess.name_placeholder'|trans }}"
-                   maxlength="100"
-                   autocomplete="off"
-                   {% if errors.name is defined %}style="border-color: #ef4444;"{% endif %}>
-            {% if errors.name is defined %}
-            <p class="mt-2 flex items-start gap-1.5 text-sm text-red-600" role="alert">
-                {{ _error_svg|raw }}
-                <span>{{ 'play.guess.name_error'|trans }}</span>
-            </p>
             {% endif %}
-        </div>
-        {% endif %}
 
-        {# ── Date de naissance ────────────────────────────────── #}
-        {% if game.guessDate %}
-        <div class="rounded-2xl p-5 mb-3"
-             style="background: white; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.05)">
-            <div class="flex items-start gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                     style="background-color: rgba(196,113,74,0.12)">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                         stroke="var(--color-brand)" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="font-bold text-base leading-tight" style="color: var(--color-ink)">
+            {# ── Date ──────────────────────────────────────────── #}
+            {% if game.guessDate %}
+            <div x-show="currentStep === 'date'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold mb-2" style="color:var(--color-ink)">
                         {{ 'play.guess.date_title'|trans }}
                     </h2>
-                    <p class="text-sm mt-0.5" style="color: var(--color-muted)">
+                    <p class="text-sm" style="color:var(--color-muted)">
                         {% if game.dueDate %}
                             {{ 'play.guess.due_date_hint'|trans({'%date%': game.dueDate|date('d/m/Y')}) }}
                         {% else %}
@@ -171,120 +273,96 @@
                         {% endif %}
                     </p>
                 </div>
+                <input type="date" id="guess_date" name="guess_date"
+                       class="form-input"
+                       value="{{ formData.date ?? (game.dueDate ? game.dueDate|date('Y-m-d') : '') }}"
+                       {% if errors.date is defined %}style="border-color:#ef4444"{% endif %}>
+                <p x-show="stepError" class="mt-2 text-sm text-center text-red-600" role="alert">
+                    {{ 'play.guess.date_error'|trans }}
+                </p>
             </div>
-            <input type="date"
-                   id="guess_date"
-                   name="guess_date"
-                   class="form-input"
-                   value="{{ formData.date ?? (game.dueDate ? game.dueDate|date('Y-m-d') : '') }}"
-                   {% if errors.date is defined %}style="border-color: #ef4444;"{% endif %}>
-            {% if errors.date is defined %}
-            <p class="mt-2 flex items-start gap-1.5 text-sm text-red-600" role="alert">
-                {{ _error_svg|raw }}
-                <span>{{ 'play.guess.date_error'|trans }}</span>
-            </p>
             {% endif %}
-        </div>
-        {% endif %}
 
-        {# ── Poids ────────────────────────────────────────────── #}
-        {% if game.guessWeight %}
-        <div class="rounded-2xl p-5 mb-3"
-             style="background: white; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.05)">
-            <div class="flex items-start gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                     style="background-color: rgba(196,113,74,0.12)">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                         stroke="var(--color-brand)" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-                        <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-                        <path d="M7 21H17"/>
-                        <path d="M12 3v18"/>
-                        <path d="M3 7h2c2 0 4-1 7-1s5 1 7 1h2"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="font-bold text-base leading-tight" style="color: var(--color-ink)">
+            {# ── Poids ─────────────────────────────────────────── #}
+            {% if game.guessWeight %}
+            <div x-show="currentStep === 'weight'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold mb-2" style="color:var(--color-ink)">
                         {{ 'play.guess.weight_title'|trans }}
-                        <span class="text-xs font-normal ml-1" style="color: var(--color-muted)">({{ 'play.guess.weight_unit'|trans }})</span>
+                        <span class="text-base font-normal" style="color:var(--color-muted)">
+                            ({{ 'play.guess.weight_unit'|trans }})
+                        </span>
                     </h2>
-                    <p class="text-sm mt-0.5" style="color: var(--color-muted)">
+                    <p class="text-sm" style="color:var(--color-muted)">
                         {{ 'play.guess.weight_subtitle'|trans }}
                     </p>
                 </div>
+                <input type="number" id="guess_weight" name="guess_weight"
+                       class="form-input text-center text-xl"
+                       value="{{ formData.weight ?? '' }}"
+                       placeholder="{{ 'play.guess.weight_placeholder'|trans }}"
+                       step="0.001" min="0.5" max="7"
+                       {% if errors.weight is defined %}style="border-color:#ef4444"{% endif %}>
+                <p x-show="stepError" class="mt-2 text-sm text-center text-red-600" role="alert">
+                    {{ 'play.guess.weight_error'|trans }}
+                </p>
             </div>
-            <input type="number"
-                   id="guess_weight"
-                   name="guess_weight"
-                   class="form-input"
-                   value="{{ formData.weight ?? '' }}"
-                   placeholder="{{ 'play.guess.weight_placeholder'|trans }}"
-                   step="0.001"
-                   min="0.5"
-                   max="7"
-                   {% if errors.weight is defined %}style="border-color: #ef4444;"{% endif %}>
-            {% if errors.weight is defined %}
-            <p class="mt-2 flex items-start gap-1.5 text-sm text-red-600" role="alert">
-                {{ _error_svg|raw }}
-                <span>{{ 'play.guess.weight_error'|trans }}</span>
-            </p>
             {% endif %}
-        </div>
-        {% endif %}
 
-        {# ── Taille ───────────────────────────────────────────── #}
-        {% if game.guessHeight %}
-        <div class="rounded-2xl p-5 mb-3"
-             style="background: white; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.05)">
-            <div class="flex items-start gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                     style="background-color: rgba(196,113,74,0.12)">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                         stroke="var(--color-brand)" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/>
-                        <path d="m7.5 10.5 2 2"/>
-                        <path d="m10.5 7.5 2 2"/>
-                        <path d="m13.5 4.5 2 2"/>
-                        <path d="m4.5 13.5 2 2"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="font-bold text-base leading-tight" style="color: var(--color-ink)">
+            {# ── Taille ────────────────────────────────────────── #}
+            {% if game.guessHeight %}
+            <div x-show="currentStep === 'height'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold mb-2" style="color:var(--color-ink)">
                         {{ 'play.guess.height_title'|trans }}
-                        <span class="text-xs font-normal ml-1" style="color: var(--color-muted)">({{ 'play.guess.height_unit'|trans }})</span>
+                        <span class="text-base font-normal" style="color:var(--color-muted)">
+                            ({{ 'play.guess.height_unit'|trans }})
+                        </span>
                     </h2>
-                    <p class="text-sm mt-0.5" style="color: var(--color-muted)">
+                    <p class="text-sm" style="color:var(--color-muted)">
                         {{ 'play.guess.height_subtitle'|trans }}
                     </p>
                 </div>
+                <input type="number" id="guess_height" name="guess_height"
+                       class="form-input text-center text-xl"
+                       value="{{ formData.height ?? '' }}"
+                       placeholder="{{ 'play.guess.height_placeholder'|trans }}"
+                       step="1" min="20" max="70"
+                       {% if errors.height is defined %}style="border-color:#ef4444"{% endif %}>
+                <p x-show="stepError" class="mt-2 text-sm text-center text-red-600" role="alert">
+                    {{ 'play.guess.height_error'|trans }}
+                </p>
             </div>
-            <input type="number"
-                   id="guess_height"
-                   name="guess_height"
-                   class="form-input"
-                   value="{{ formData.height ?? '' }}"
-                   placeholder="{{ 'play.guess.height_placeholder'|trans }}"
-                   step="1"
-                   min="20"
-                   max="70"
-                   {% if errors.height is defined %}style="border-color: #ef4444;"{% endif %}>
-            {% if errors.height is defined %}
-            <p class="mt-2 flex items-start gap-1.5 text-sm text-red-600" role="alert">
-                {{ _error_svg|raw }}
-                <span>{{ 'play.guess.height_error'|trans }}</span>
-            </p>
             {% endif %}
-        </div>
-        {% endif %}
 
-        {# ── Bouton envoi ─────────────────────────────────────── #}
-        <button type="submit" class="btn btn-primary w-full mt-4">
-            {{ 'play.guess.submit'|trans }}
-        </button>
-    </form>
+            {# ── Navigation ────────────────────────────────────── #}
+            <div class="flex gap-3 mt-10">
+                <button type="button" @click="prev()"
+                        x-show="current > 0"
+                        class="btn btn-secondary flex-1">
+                    ← {{ 'games.new.btn_prev'|trans }}
+                </button>
+                <button type="button" @click="next()"
+                        x-show="!isLast"
+                        :class="current > 0 ? 'btn btn-primary flex-1' : 'btn btn-primary w-full'">
+                    {{ 'games.new.btn_next'|trans }} →
+                </button>
+                <button type="submit"
+                        x-show="isLast"
+                        :class="current > 0 ? 'btn btn-primary flex-1' : 'btn btn-primary w-full'">
+                    {{ 'play.guess.submit'|trans }}
+                </button>
+            </div>
+
+        </form>
+    </div>
 
 </div>
-</section>
+</div>
 {% endblock %}
