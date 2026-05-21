@@ -72,6 +72,7 @@ dashboard:
     title: Tableau de bord
     welcome: Bonjour
     subtitle: "Tout le monde veut savoir. À vous de créer le suspense."
+    active_games: "{1} 1 Baby Guessr en cours|]1,Inf] %count% Baby Guessr en cours"
     games:
         title: "Mes Baby Guessr"
         btn_create: "Nouveau Baby Guessr"
@@ -85,6 +86,7 @@ play:
 
 games:
     btn_view: "Voir"
+    btn_share: "Partager"
     show:
         created_at: "Créé le"
         answers_coming: "Les réponses arrivent bientôt"

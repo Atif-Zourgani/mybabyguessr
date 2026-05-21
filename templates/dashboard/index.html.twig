@@ -13,14 +13,20 @@
             {{ 'dashboard.welcome'|trans }},
             <span style="color: var(--color-brand)">{{ app.user.firstName }}</span> !
         </h1>
-        <p class="text-lg" style="color: var(--color-muted)">{{ 'dashboard.subtitle'|trans }}</p>
+        <p class="text-lg" style="color: var(--color-muted)">
+            {% if games|length > 0 %}
+                {{ 'dashboard.active_games'|trans({'%count%': games|length}) }}
+            {% else %}
+                {{ 'dashboard.subtitle'|trans }}
+            {% endif %}
+        </p>
     </div>
 
     {# ── Mes Baby Guessr ─────────────────────────────────── #}
     <section aria-labelledby="games-title">
         <div class="card-panel">
 
-            {# En-tête #}
+            {# En-tête section #}
             <div class="flex items-center gap-3 px-5 sm:px-8 py-4"
                  style="border-bottom: 1px solid var(--color-line);">
                 <div class="w-1 h-4 rounded-full shrink-0"
@@ -34,7 +40,12 @@
                     <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
                        class="btn btn-primary shrink-0"
                        style="font-size: 0.875rem; padding: 0.5rem 1rem;">
-                        <span aria-hidden="true">+</span>
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
                         <span class="hidden sm:inline">{{ 'dashboard.games.btn_create'|trans }}</span>
                         <span class="sr-only sm:hidden">{{ 'dashboard.games.btn_create'|trans }}</span>
                     </a>
@@ -59,6 +70,10 @@
                         </div>
                     </div>
 
+                    <p class="text-xl sm:text-2xl font-bold mb-3" style="color: var(--color-ink)">
+                        {{ 'dashboard.games.empty_title'|trans }}
+                    </p>
+
                     <p class="text-sm sm:text-base leading-relaxed max-w-sm mx-auto mb-3"
                        style="color: var(--color-muted)">
                         {{ 'dashboard.games.empty_desc'|trans }}
@@ -77,39 +92,45 @@
 
             {# ── Liste des Baby Guessr ─────────────────────── #}
             {% else %}
-                <div class="p-5 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
+                <div class="p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
                      style="background-color: var(--color-cream);">
 
                     {% for game in games %}
-                    <div class="card-panel">
+                    <div class="card-panel transition duration-200 hover:shadow-xl">
 
-                        {# En-tête de la carte #}
-                        <div class="flex items-center gap-4 p-4"
-                             style="border-bottom: 1px solid var(--color-line);">
+                        {# En-tête cliquable → page show #}
+                        <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"
+                           class="flex items-center gap-4 p-4 transition-colors duration-150 hover:bg-[#F8F3EE]"
+                           style="border-bottom: 1px solid var(--color-line); text-decoration: none;"
+                           aria-label="{{ game.displayTitle }}">
 
-                            {# Thumbnail / placeholder #}
+                            {# Thumbnail #}
                             <div class="shrink-0 rounded-xl flex items-center justify-center"
-                                 style="width: 3.5rem; height: 3.5rem; flex-shrink: 0; overflow: hidden; background-color: rgba(196,113,74,0.10);">
+                                 style="width: 4.5rem; height: 4.5rem; overflow: hidden; background-color: rgba(196,113,74,0.10);">
                                 {% if game.image %}
                                     <img src="{{ asset(game.image) }}"
                                          alt=""
+                                         width="72" height="72"
+                                         loading="lazy"
                                          style="width: 100%; height: 100%; object-fit: cover; display: block;">
                                 {% else %}
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M9 12h6M9 16h6M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M20 12V22H4V12" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M22 7H2V12H22V7Z" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 22V7" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 7H7.5C6.84 7 6.2 6.74 5.73 6.27C5.26 5.8 5 5.16 5 4.5C5 3.84 5.26 3.2 5.73 2.73C6.2 2.26 6.84 2 7.5 2C11 2 12 7 12 7Z" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 7H16.5C17.16 7 17.8 6.74 18.27 6.27C18.74 5.8 19 5.16 19 4.5C19 3.84 18.74 3.2 18.27 2.73C17.8 2.26 17.16 2 16.5 2C13 2 12 7 12 7Z" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 {% endif %}
                             </div>
 
                             {# Titre + date #}
                             <div class="flex-1 min-w-0">
-                                <div class="font-bold leading-tight truncate"
-                                     style="color: var(--color-ink)">
+                                <div class="font-bold leading-tight truncate" style="color: var(--color-ink)">
                                     {{ game.displayTitle }}
                                 </div>
-                                <div class="text-xs mt-0.5"
-                                     style="color: var(--color-muted)">
-                                    {{ game.createdAt|date('d/m/Y') }}
+                                <div class="text-xs mt-0.5" style="color: var(--color-muted)">
+                                    {{ game.createdAt|date(app.request.locale == 'fr' ? 'd/m/Y' : 'm/d/Y') }}
                                 </div>
                             </div>
 
@@ -124,22 +145,43 @@
                                 {{ ('games.status.' ~ game.status.value)|trans }}
                             </span>
 
-                        </div>
+                        </a>
 
-                        {# Catégories actives + bouton Voir #}
-                        <div class="px-4 py-3 flex items-center gap-2 flex-wrap">
-                            <div class="flex flex-wrap gap-1.5 flex-1">
+                        {# Catégories + actions — fond cream #}
+                        <div style="background-color: var(--color-cream);">
+
+                            {# Pills #}
+                            <div class="px-4 pt-3 pb-2 flex flex-wrap gap-1.5">
                                 {% if game.isGuessGender() %}<span class="pill">{{ 'games.pill.gender'|trans }}</span>{% endif %}
                                 {% if game.isGuessName() %}  <span class="pill">{{ 'games.pill.name'|trans }}</span>{% endif %}
                                 {% if game.isGuessDate() %}  <span class="pill">{{ 'games.pill.date'|trans }}</span>{% endif %}
                                 {% if game.isGuessWeight() %}<span class="pill">{{ 'games.pill.weight'|trans }}</span>{% endif %}
                                 {% if game.isGuessHeight() %}<span class="pill">{{ 'games.pill.height'|trans }}</span>{% endif %}
                             </div>
-                            <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"
-                               class="btn btn-secondary shrink-0"
-                               style="font-size: 0.8125rem; padding: 0.375rem 1rem;">
-                                {{ 'games.btn_view'|trans }} &rarr;
-                            </a>
+
+                            {# Actions #}
+                            <div class="px-4 pb-4 pt-1 flex items-center gap-2">
+                                <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"
+                                   class="btn btn-secondary shrink-0"
+                                   style="font-size: 0.8125rem; padding: 0.375rem 1rem;">
+                                    {{ 'games.btn_view'|trans }} &rarr;
+                                </a>
+                                <a href="{{ path('app_game_share', {'_locale': app.request.locale, 'token': game.token}) }}"
+                                   class="btn btn-primary shrink-0 flex items-center gap-1.5"
+                                   style="font-size: 0.8125rem; padding: 0.375rem 1rem;">
+                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="18" cy="5" r="3"/>
+                                        <circle cx="6" cy="12" r="3"/>
+                                        <circle cx="18" cy="19" r="3"/>
+                                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                    </svg>
+                                    {{ 'games.btn_share'|trans }}
+                                </a>
+                            </div>
+
                         </div>
 
                     </div>

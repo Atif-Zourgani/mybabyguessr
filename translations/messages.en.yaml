@@ -72,6 +72,7 @@ dashboard:
     title: Dashboard
     welcome: Hello
     subtitle: "Everyone wants to know. Time to build the suspense."
+    active_games: "{1} 1 Baby Guessr active|]1,Inf] %count% Baby Guessr active"
     games:
         title: "My Baby Guessr"
         btn_create: "New Baby Guessr"
@@ -85,6 +86,7 @@ play:
 
 games:
     btn_view: "View"
+    btn_share: "Share"
     show:
         created_at: "Created on"
         answers_coming: "Answers coming soon"
