@@ -4,7 +4,7 @@ home:
         description: "Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien."
     hero:
         title: "Faites deviner bébé à toute votre famille"
-        subtitle: "Devine. Partage. Révèle."
+        subtitle: "Devine. Partage. Profite."
         description: "Créez votre jeu de pronostics bébé en 2 minutes. Famille, amis et collègues devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Juste un lien à partager."
         cta_register: "Créer mon jeu gratuitement"
         cta_login: "Se connecter"
@@ -14,8 +14,8 @@ home:
         step1_desc: "Inscrivez-vous et configurez votre Baby Guessr en quelques clics — choisissez ce que vos proches devineront."
         step2_title: "Partagez le lien"
         step2_desc: "Envoyez votre lien par WhatsApp, SMS ou email. Aucun compte requis pour participer — vos invités jouent directement."
-        step3_title: "Révélez la surprise"
-        step3_desc: "Consultez tous les pronostics, découvrez qui a vu juste, et révélez la surprise quand vous le souhaitez."
+        step3_title: "Profitez des pronostics"
+        step3_desc: "Consultez toutes les réponses, comparez les avis et partagez le moment en famille. La révélation des vraies réponses ? Optionnelle — sur le site ou en face à face, c'est vous qui décidez."
     features:
         title: "Tout ce dont vous avez besoin"
         subtitle: "Un jeu de pronostics bébé simple, gratuit et sans friction pour vos invités."

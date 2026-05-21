@@ -4,7 +4,7 @@ home:
         description: "Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link."
     hero:
         title: "Let your whole family guess baby's arrival"
-        subtitle: "Guess. Share. Reveal."
+        subtitle: "Guess. Share. Enjoy."
         description: "Create your free baby guessing game in minutes. Family, friends and colleagues guess name, due date, weight and gender — no account needed. Just share a link."
         cta_register: "Create my free game"
         cta_login: "Sign in"
@@ -14,8 +14,8 @@ home:
         step1_desc: "Sign up and set up your Baby Guessr in a few clicks — choose what your loved ones will guess."
         step2_title: "Share the link"
         step2_desc: "Send your link via WhatsApp, SMS or email. No account needed to play — guests join directly."
-        step3_title: "Reveal the surprise"
-        step3_desc: "Browse all predictions, see who guessed right, and reveal the surprise whenever you're ready."
+        step3_title: "Enjoy the guesses"
+        step3_desc: "Browse all predictions, compare everyone's answers, and enjoy the moment together. Revealing the real answers? Optional — on the site or in person, it's your call."
     features:
         title: "Everything you need"
         subtitle: "A simple, free, friction-free baby guessing game for your guests."
