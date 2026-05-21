@@ -76,9 +76,15 @@ dashboard:
     games:
         title: "Mes Baby Guessr"
         btn_create: "Nouveau Baby Guessr"
-        empty_title: "Pas encore de Baby Guessr."
+        empty_title: "Votre Baby Guessr en 3 étapes"
         empty_desc: "Prénom, sexe, date… Choisissez vos questions, partagez le lien et laissez vos proches deviner."
         empty_hint: "Un seul Baby Guessr pour tout, ou un par étape — c'est vous qui choisissez."
+        step1_title: "Vous choisissez les catégories"
+        step1_desc: "Sexe, prénom, date de naissance, poids ou taille — une ou plusieurs selon l'envie."
+        step2_title: "Vous partagez un lien"
+        step2_desc: "Vos proches jouent directement depuis leur téléphone, sans créer de compte."
+        step3_title: "Vous révélez la surprise"
+        step3_desc: "Les pronostics arrivent. Vous dévoilez les vraies réponses au moment de votre choix."
         btn_create_first: "Démarrer mon Baby Guessr"
 
 play:
