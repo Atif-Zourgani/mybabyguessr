@@ -129,6 +129,133 @@ class GameController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->render('games/show.html.twig', ['game' => $game]);
+        $guesses = $game->getGuesses()->toArray();
+
+        return $this->render('games/show.html.twig', [
+            'game'    => $game,
+            'guesses' => $guesses,
+            'stats'   => $this->computeStats($game, $guesses),
+        ]);
+    }
+
+    private function computeStats(Game $game, array $guesses): array
+    {
+        $stats = ['total' => count($guesses)];
+
+        if ($game->isGuessGender()) {
+            $boys = 0;
+            $girls = 0;
+            foreach ($guesses as $g) {
+                match ($g->getGuessGender()?->value) {
+                    'boy'  => $boys++,
+                    'girl' => $girls++,
+                    default => null,
+                };
+            }
+            $total = $boys + $girls;
+            $stats['gender'] = [
+                'boy'      => $boys,
+                'girl'     => $girls,
+                'total'    => $total,
+                'boy_pct'  => $total > 0 ? (int) round($boys / $total * 100) : 0,
+                'girl_pct' => $total > 0 ? (int) round($girls / $total * 100) : 0,
+            ];
+        }
+
+        if ($game->isGuessName()) {
+            $named = array_values(array_filter($guesses, fn($g) => $g->getGuessName() !== null));
+            if ($named) {
+                $freq = [];
+                foreach ($named as $g) {
+                    $n = $g->getGuessName();
+                    $freq[$n] = ($freq[$n] ?? 0) + 1;
+                }
+                arsort($freq);
+
+                $topName  = array_key_first($freq);
+                $topCount = $freq[$topName];
+
+                $sorted = $named;
+                usort($sorted, fn($a, $b) => $a->getCreatedAt() <=> $b->getCreatedAt());
+                $last = end($sorted);
+
+                $stats['name'] = [
+                    'freq'         => $freq,
+                    'top'          => $topName,
+                    'top_count'    => $topCount,
+                    'unique_count' => count($freq),
+                    'last'         => $last->getGuessName(),
+                    'last_player'  => $last->getPlayerName(),
+                ];
+            }
+        }
+
+        if ($game->isGuessDate()) {
+            $dated = array_values(array_filter($guesses, fn($g) => $g->getGuessDate() !== null));
+            if ($dated) {
+                usort($dated, fn($a, $b) => $a->getGuessDate() <=> $b->getGuessDate());
+                $timestamps = array_map(fn($g) => $g->getGuessDate()->getTimestamp(), $dated);
+                $ds = [
+                    'sorted'   => $dated,
+                    'earliest' => $dated[0],
+                    'latest'   => $dated[count($dated) - 1],
+                    'avg_date' => new \DateTimeImmutable('@' . (int) round(array_sum($timestamps) / count($timestamps))),
+                ];
+                if ($game->getDueDate()) {
+                    $dueTs = $game->getDueDate()->getTimestamp();
+                    $byProx = $dated;
+                    usort($byProx, fn($a, $b) =>
+                        abs($a->getGuessDate()->getTimestamp() - $dueTs) <=>
+                        abs($b->getGuessDate()->getTimestamp() - $dueTs)
+                    );
+                    $ds['closest'] = $byProx[0];
+                }
+                $stats['date'] = $ds;
+            }
+        }
+
+        if ($game->isGuessWeight()) {
+            $ws = array_values(array_filter($guesses, fn($g) => $g->getGuessWeight() !== null));
+            if ($ws) {
+                $vals = array_map(fn($g) => $g->getGuessWeight(), $ws);
+                $min  = min($vals);
+                $max  = max($vals);
+                $wst  = ['avg' => array_sum($vals) / count($vals), 'min' => $min, 'max' => $max];
+                foreach ($ws as $g) {
+                    if ($g->getGuessWeight() === $min && !isset($wst['min_player'])) {
+                        $wst['min_player'] = $g->getPlayerName();
+                    }
+                    if ($g->getGuessWeight() === $max && !isset($wst['max_player'])) {
+                        $wst['max_player'] = $g->getPlayerName();
+                    }
+                }
+                usort($ws, fn($a, $b) => $a->getGuessWeight() <=> $b->getGuessWeight());
+                $wst['sorted'] = $ws;
+                $stats['weight'] = $wst;
+            }
+        }
+
+        if ($game->isGuessHeight()) {
+            $hs = array_values(array_filter($guesses, fn($g) => $g->getGuessHeight() !== null));
+            if ($hs) {
+                $vals = array_map(fn($g) => $g->getGuessHeight(), $hs);
+                $min  = min($vals);
+                $max  = max($vals);
+                $hst  = ['avg' => array_sum($vals) / count($vals), 'min' => $min, 'max' => $max];
+                foreach ($hs as $g) {
+                    if ($g->getGuessHeight() === $min && !isset($hst['min_player'])) {
+                        $hst['min_player'] = $g->getPlayerName();
+                    }
+                    if ($g->getGuessHeight() === $max && !isset($hst['max_player'])) {
+                        $hst['max_player'] = $g->getPlayerName();
+                    }
+                }
+                usort($hs, fn($a, $b) => $a->getGuessHeight() <=> $b->getGuessHeight());
+                $hst['sorted'] = $hs;
+                $stats['height'] = $hst;
+            }
+        }
+
+        return $stats;
     }
 }

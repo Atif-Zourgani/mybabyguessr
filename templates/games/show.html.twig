@@ -1,84 +1,687 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}{{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
+
+{% set dateFormat = app.request.locale == 'fr' ? 'd/m/Y' : 'm/d/Y' %}
 
 {% block body %}
 <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
 
+    {# ── Retour ───────────────────────────────────────────────── #}
     <a href="{{ path('app_dashboard', {'_locale': app.request.locale}) }}"
-       class="inline-flex items-center gap-1 text-sm font-bold hover:text-brand mb-8"
-       style="color: var(--color-muted); text-decoration:none">
+       class="inline-flex items-center gap-1 text-sm font-bold mb-8 hover:underline"
+       style="color: var(--color-muted); text-decoration: none">
         &larr; {{ 'games.new.back'|trans }}
     </a>
 
-    {# ── En-tête ────────────────────────────────────────── #}
+    {# ── En-tête ──────────────────────────────────────────────── #}
     <div class="card-panel mb-6">
 
-        {# Bannière image pleine largeur #}
         {% if game.image %}
-            <div style="height: 11rem; overflow: hidden;">
-                <img src="{{ asset(game.image) }}"
-                     alt=""
-                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
-            </div>
+        <div style="height: 11rem; overflow: hidden;">
+            <img src="{{ asset(game.image) }}" alt=""
+                 style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
         {% endif %}
 
-        {# Titre + date + statut #}
-        <div class="flex items-start justify-between gap-4 px-5 sm:px-7 py-5"
-             style="border-bottom: 1px solid var(--color-line);">
+        <div class="flex items-start gap-4 px-5 sm:px-7 py-5">
 
-            {# Icône placeholder si pas d'image #}
             {% if not game.image %}
-                <div class="shrink-0 flex items-center justify-center rounded-xl mr-2"
-                     style="width: 3rem; height: 3rem; background-color: rgba(196,113,74,0.10);">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M20 12V22H4V12" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M22 7H2V12H22V7Z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 22V7" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
+            <div class="shrink-0 flex items-center justify-center rounded-xl"
+                 style="width:3rem;height:3rem;background-color:rgba(196,113,74,0.10)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M20 12V22H4V12" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 7H2V12H22V7Z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 22V7" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
             {% endif %}
 
             <div class="flex-1 min-w-0">
-                <h1 class="text-2xl font-bold leading-tight">{{ game.displayTitle }}</h1>
+                <h1 class="text-2xl font-bold leading-tight" style="color: var(--color-ink)">
+                    {{ game.displayTitle }}
+                </h1>
                 <p class="text-sm mt-1" style="color: var(--color-muted)">
-                    {{ 'games.show.created_at'|trans }} {{ game.createdAt|date('d/m/Y') }}
+                    {{ 'games.show.created_at'|trans }} {{ game.createdAt|date(dateFormat) }}
+                    {% if game.dueDate %}
+                    &nbsp;·&nbsp; {{ 'games.show.due_date_label'|trans }}
+                    <span class="font-semibold" style="color: var(--color-ink)">{{ game.dueDate|date(dateFormat) }}</span>
+                    {% endif %}
+                </p>
+                <p class="text-sm font-semibold mt-0.5" style="color: var(--color-brand)">
+                    {{ 'games.show.players_count'|trans({'%count%': stats.total}) }}
                 </p>
             </div>
 
-            {% set statusStyles = {
-                'open':     'background-color: rgba(196,113,74,0.12); color: var(--color-brand)',
-                'closed':   'background-color: #f3f4f6; color: #6b7280',
-                'revealed': 'background-color: rgba(39,103,73,0.10); color: #276749'
-            } %}
-            <span class="shrink-0 text-sm font-bold px-3 py-1.5 rounded-full"
-                  style="{{ statusStyles[game.status.value] }}">
-                {{ ('games.status.' ~ game.status.value)|trans }}
-            </span>
+            <div class="shrink-0 flex flex-col items-end gap-2">
+                {% set statusStyles = {
+                    'open':     'background-color: rgba(196,113,74,0.12); color: var(--color-brand)',
+                    'closed':   'background-color: #f3f4f6; color: #6b7280',
+                    'revealed': 'background-color: rgba(39,103,73,0.10); color: #276749'
+                } %}
+                <span class="text-sm font-bold px-3 py-1.5 rounded-full"
+                      style="{{ statusStyles[game.status.value] }}">
+                    {{ ('games.status.' ~ game.status.value)|trans }}
+                </span>
+                <a href="{{ path('app_game_share', {'_locale': app.request.locale, 'token': game.token}) }}"
+                   class="btn btn-primary flex items-center gap-1.5"
+                   style="font-size:0.8125rem;padding:0.375rem 0.875rem">
+                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                    <span class="hidden sm:inline">{{ 'games.show.share_btn'|trans }}</span>
+                </a>
+            </div>
+
         </div>
 
-        {# Catégories #}
-        <div class="px-5 sm:px-7 py-4 flex flex-wrap gap-2">
-            {% if game.isGuessGender() %}<span class="pill">{{ 'games.pill.gender'|trans }}</span>{% endif %}
-            {% if game.isGuessName() %}  <span class="pill">{{ 'games.pill.name'|trans }}</span>{% endif %}
-            {% if game.isGuessDate() %}  <span class="pill">{{ 'games.pill.date'|trans }}</span>{% endif %}
-            {% if game.isGuessWeight() %}<span class="pill">{{ 'games.pill.weight'|trans }}</span>{% endif %}
-            {% if game.isGuessHeight() %}<span class="pill">{{ 'games.pill.height'|trans }}</span>{% endif %}
-        </div>
     </div>
 
-    {# ── Réponses (à venir) ─────────────────────────────── #}
-    <div class="card text-center py-14" style="color: var(--color-muted)">
-        <svg class="mx-auto mb-4 opacity-40" width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <p class="font-bold mb-1" style="color: var(--color-ink)">{{ 'games.show.answers_coming'|trans }}</p>
-        <p class="text-sm">{{ 'games.show.answers_desc'|trans }}</p>
-    </div>
+    {# ══════════════════════════════════════════════════════════ #}
+    {# ── Onglets ─────────────────────────────────────────────── #}
+    {# ══════════════════════════════════════════════════════════ #}
+
+    {% set firstTab = 'overview' %}
+    <div x-data="{ tab: '{{ firstTab }}' }">
+
+        {# Nav onglets — underline style #}
+        <div class="flex overflow-x-auto mb-6" style="border-bottom: 2px solid var(--color-line)">
+            {% set tabs = [['overview', 'games.show.tab_overview'|trans]] %}
+            {% if game.isGuessGender() %}{% set tabs = tabs|merge([['gender',  'games.show.tab_gender'|trans]]) %}{% endif %}
+            {% if game.isGuessName() %}  {% set tabs = tabs|merge([['name',    'games.show.tab_name'|trans]])   %}{% endif %}
+            {% if game.isGuessDate() %}  {% set tabs = tabs|merge([['date',    'games.show.tab_date'|trans]])   %}{% endif %}
+            {% if game.isGuessWeight() %}{% set tabs = tabs|merge([['weight',  'games.show.tab_weight'|trans]])  %}{% endif %}
+            {% if game.isGuessHeight() %}{% set tabs = tabs|merge([['height',  'games.show.tab_height'|trans]])  %}{% endif %}
+            {% set tabs = tabs|merge([['players', 'games.show.tab_players'|trans]]) %}
+
+            {% for tabItem in tabs %}
+            <button @click="tab = '{{ tabItem[0] }}'"
+                    class="px-5 py-3.5 text-sm font-semibold shrink-0 transition-colors -mb-0.5"
+                    :style="tab === '{{ tabItem[0] }}'
+                        ? 'color:var(--color-brand);border-bottom:2px solid var(--color-brand)'
+                        : 'color:var(--color-muted);border-bottom:2px solid transparent'">
+                {{ tabItem[1] }}
+            </button>
+            {% endfor %}
+        </div>
+
+        {# ── Onglet Synthèse ──────────────────────────────────── #}
+        <div x-show="tab === 'overview'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if stats.total == 0 %}
+            <div class="card text-center py-12">
+                <p class="text-4xl font-bold mb-1" style="color: var(--color-brand)">0</p>
+                <p class="text-sm mb-6" style="color: var(--color-muted)">{{ 'games.show.no_data'|trans }}</p>
+                <a href="{{ path('app_game_share', {'_locale': app.request.locale, 'token': game.token}) }}"
+                   class="btn btn-primary inline-flex items-center gap-2">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                    {{ 'games.show.share_btn'|trans }}
+                </a>
+            </div>
+
+            {% else %}
+
+            {# Stat joueurs + mini-résumés par catégorie #}
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+
+                {# Joueurs #}
+                <div class="col-span-2 sm:col-span-1 card text-center py-6">
+                    <p class="text-4xl font-bold" style="color: var(--color-brand)">{{ stats.total }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider mt-1" style="color: var(--color-muted)">
+                        {{ app.request.locale == 'fr' ? 'joueurs' : 'players' }}
+                    </p>
+                </div>
+
+                {% if stats.gender is defined %}
+                <div class="card flex flex-col items-center justify-center px-4 py-4 cursor-pointer text-center"
+                     @click="tab = 'gender'">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-3" style="color: var(--color-muted)">
+                        {{ 'games.show.tab_gender'|trans }}
+                    </p>
+                    <div class="flex items-center justify-center w-full gap-0">
+                        <div class="flex-1 flex flex-col items-center">
+                            <span class="text-xl font-bold" style="color:var(--color-brand)">{{ stats.gender.boy_pct }}%</span>
+                            <span class="text-xs mt-0.5" style="color:var(--color-muted)">{{ 'games.show.gender_boy'|trans }}</span>
+                        </div>
+                        <div class="shrink-0 w-px h-8 self-center" style="background-color:var(--color-line)"></div>
+                        <div class="flex-1 flex flex-col items-center">
+                            <span class="text-xl font-bold" style="color:var(--color-accent)">{{ stats.gender.girl_pct }}%</span>
+                            <span class="text-xs mt-0.5" style="color:var(--color-muted)">{{ 'games.show.gender_girl'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if stats.date is defined %}
+                <div class="card flex flex-col items-center justify-center px-4 py-4 cursor-pointer text-center"
+                     @click="tab = 'date'">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--color-muted)">
+                        {{ 'games.show.tab_date'|trans }}
+                    </p>
+                    <p class="text-xl font-bold" style="color: var(--color-ink)">
+                        {{ stats.date.avg_date|date(dateFormat) }}
+                    </p>
+                    <p class="text-xs mt-0.5" style="color: var(--color-muted)">
+                        {{ 'games.show.date_avg'|trans }}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% if stats.name is defined %}
+                <div class="card flex flex-col items-center justify-center px-4 py-4 cursor-pointer text-center"
+                     @click="tab = 'name'">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--color-muted)">
+                        {{ 'games.show.tab_name'|trans }}
+                    </p>
+                    {% if stats.name.top_count > 1 %}
+                        <p class="text-xl font-bold" style="color: var(--color-ink)">{{ stats.name.top }}</p>
+                        <p class="text-xs mt-0.5" style="color: var(--color-brand)">× {{ stats.name.top_count }} — {{ 'games.show.name_top_label'|trans }}</p>
+                    {% else %}
+                        <p class="text-xl font-bold" style="color: var(--color-ink)">{{ stats.name.unique_count }}</p>
+                        <p class="text-xs mt-0.5" style="color: var(--color-muted)">{{ 'games.show.name_unique_count'|trans({'%count%': stats.name.unique_count}) }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if stats.weight is defined %}
+                <div class="card flex flex-col items-center justify-center px-4 py-4 cursor-pointer text-center"
+                     @click="tab = 'weight'">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--color-muted)">
+                        {{ 'games.show.tab_weight'|trans }}
+                    </p>
+                    <p class="text-xl font-bold" style="color: var(--color-ink)">
+                        {{ (stats.weight.avg / 1000)|round(1) }} kg
+                    </p>
+                    <p class="text-xs mt-0.5" style="color: var(--color-muted)">
+                        {{ 'games.show.weight_avg'|trans }}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% if stats.height is defined %}
+                <div class="card flex flex-col items-center justify-center px-4 py-4 cursor-pointer text-center"
+                     @click="tab = 'height'">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--color-muted)">
+                        {{ 'games.show.tab_height'|trans }}
+                    </p>
+                    <p class="text-xl font-bold" style="color: var(--color-ink)">
+                        {{ (stats.height.avg / 10)|round(1) }} cm
+                    </p>
+                    <p class="text-xs mt-0.5" style="color: var(--color-muted)">
+                        {{ 'games.show.height_avg'|trans }}
+                    </p>
+                </div>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+        </div>
+
+        {# ── Onglet Sexe ──────────────────────────────────────── #}
+        {% if game.isGuessGender() %}
+        <div x-show="tab === 'gender'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if not stats.gender is defined or stats.gender.total == 0 %}
+            <div class="card text-center py-10 text-sm" style="color: var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+
+            {# Barre duel #}
+            <div class="card mb-4 px-6 py-6">
+                <div class="flex items-end justify-between mb-4">
+                    <div>
+                        <p class="text-3xl font-bold" style="color:var(--color-brand)">{{ stats.gender.boy_pct }}%</p>
+                        <p class="text-xs font-bold uppercase tracking-wider mt-1" style="color:var(--color-brand)">
+                            {{ 'games.show.gender_boy'|trans }}
+                            <span class="font-normal normal-case tracking-normal ml-1" style="color:var(--color-muted)">
+                                ({{ stats.gender.boy }})
+                            </span>
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold" style="color:var(--color-accent)">{{ stats.gender.girl_pct }}%</p>
+                        <p class="text-xs font-bold uppercase tracking-wider mt-1" style="color:var(--color-accent)">
+                            {{ 'games.show.gender_girl'|trans }}
+                            <span class="font-normal normal-case tracking-normal ml-1" style="color:var(--color-muted)">
+                                ({{ stats.gender.girl }})
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex h-4 rounded-full overflow-hidden">
+                    {% if stats.gender.boy_pct > 0 %}
+                    <div class="h-full" style="width:{{ stats.gender.boy_pct }}%;background-color:var(--color-brand)"></div>
+                    {% endif %}
+                    {% if stats.gender.girl_pct > 0 %}
+                    <div class="h-full" style="width:{{ stats.gender.girl_pct }}%;background-color:var(--color-accent)"></div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Deux camps #}
+            <div class="card-panel">
+                <div style="display:grid;grid-template-columns:1fr 1fr">
+                    <div class="px-5 py-4" style="border-right: 1px solid var(--color-line)">
+                        <p class="text-xs font-bold uppercase tracking-wider mb-3" style="color:var(--color-brand)">
+                            {{ 'games.show.gender_boy'|trans }}
+                        </p>
+                        {% if stats.gender.boy == 0 %}
+                            <p class="text-sm italic" style="color:var(--color-muted)">—</p>
+                        {% else %}
+                            {% for g in guesses %}
+                            {% if g.guessGender and g.guessGender.value == 'boy' %}
+                            <p class="text-sm py-1" style="color:var(--color-ink)">{{ g.playerName }}</p>
+                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="px-5 py-4">
+                        <p class="text-xs font-bold uppercase tracking-wider mb-3" style="color:var(--color-accent)">
+                            {{ 'games.show.gender_girl'|trans }}
+                        </p>
+                        {% if stats.gender.girl == 0 %}
+                            <p class="text-sm italic" style="color:var(--color-muted)">—</p>
+                        {% else %}
+                            {% for g in guesses %}
+                            {% if g.guessGender and g.guessGender.value == 'girl' %}
+                            <p class="text-sm py-1" style="color:var(--color-ink)">{{ g.playerName }}</p>
+                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# ── Onglet Prénom ────────────────────────────────────── #}
+        {% if game.isGuessName() %}
+        <div x-show="tab === 'name'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if game.nameMode is not null and game.nameMode.value == 'hints' %}
+
+            {# Mode indices — à venir #}
+            <div class="card-panel px-6 py-10 text-center">
+                <p class="text-sm font-bold mb-1" style="color: var(--color-brand)">
+                    {{ 'games.show.name_hints_soon'|trans }}
+                </p>
+                <p class="text-sm" style="color: var(--color-muted)">
+                    {{ 'games.show.name_hints_soon_desc'|trans }}
+                </p>
+            </div>
+
+            {% else %}
+
+            {# Mode libre #}
+            {% if not stats.name is defined or stats.name.freq is empty %}
+            <div class="card text-center py-10 text-sm" style="color: var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+
+            {# Prénoms suggérés plusieurs fois #}
+            {% if stats.name.freq|first > 1 %}
+            <div class="card-panel mb-4">
+                <div class="px-5 py-4" style="border-bottom: 1px solid var(--color-line)">
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--color-muted)">
+                        {{ 'games.show.name_popular'|trans }}
+                    </p>
+                </div>
+                {% for name, count in stats.name.freq %}
+                {% if count > 1 %}
+                <div class="flex items-center justify-between px-5 py-4"
+                     style="border-bottom: 1px solid var(--color-line)">
+                    <span class="text-base font-bold" style="color: var(--color-ink)">{{ name }}</span>
+                    <span class="px-3 py-1 rounded-full text-sm font-bold"
+                          style="background-color: rgba(196,113,74,0.15); color: var(--color-brand)">
+                        × {{ count }}
+                    </span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {# Toutes les réponses #}
+            <div class="card-panel">
+                <div class="px-5 py-4" style="border-bottom: 1px solid var(--color-line)">
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--color-muted)">
+                        {{ 'games.show.name_all'|trans }}
+                    </p>
+                </div>
+                {% for g in guesses %}
+                {% if g.guessName %}
+                <div class="flex items-center justify-between px-5 py-3.5 text-sm"
+                     style="border-bottom: 1px solid var(--color-line)">
+                    <span style="color: var(--color-muted)">{{ g.playerName }}</span>
+                    <span class="font-semibold" style="color: var(--color-ink)">{{ g.guessName }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            {% endif %}
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+        {# ── Onglet Date ──────────────────────────────────────── #}
+        {% if game.isGuessDate() %}
+        <div x-show="tab === 'date'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if not stats.date is defined %}
+            <div class="card text-center py-10 text-sm" style="color: var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+
+            {# Stat boxes #}
+            {% if stats.date.closest is defined %}
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+            {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            {% endif %}
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.08)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-muted)">
+                        {{ 'games.show.date_earliest'|trans }}
+                    </p>
+                    <p class="text-xl font-bold" style="color:var(--color-ink)">
+                        {{ stats.date.earliest.guessDate|date(dateFormat) }}
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.date.earliest.playerName }}</p>
+                </div>
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.08)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-muted)">
+                        {{ 'games.show.date_latest'|trans }}
+                    </p>
+                    <p class="text-xl font-bold" style="color:var(--color-ink)">
+                        {{ stats.date.latest.guessDate|date(dateFormat) }}
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.date.latest.playerName }}</p>
+                </div>
+                {% if stats.date.closest is defined %}
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.12)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-brand)">
+                        {{ 'games.show.date_closest'|trans }}
+                    </p>
+                    <p class="text-xl font-bold" style="color:var(--color-brand)">
+                        {{ stats.date.closest.guessDate|date(dateFormat) }}
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.date.closest.playerName }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {# Liste triée #}
+            <div class="card px-5 py-2">
+                {% for g in stats.date.sorted %}
+                <div class="flex justify-between items-center py-2.5 text-sm"
+                     style="border-bottom: 1px solid var(--color-line)">
+                    <span style="color: var(--color-ink)">{{ g.playerName }}</span>
+                    <span class="font-semibold" style="color: var(--color-ink)">
+                        {{ g.guessDate|date(dateFormat) }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# ── Onglet Poids ─────────────────────────────────────── #}
+        {% if game.isGuessWeight() %}
+        <div x-show="tab === 'weight'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if not stats.weight is defined %}
+            <div class="card text-center py-10 text-sm" style="color: var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.12)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-brand)">
+                        {{ 'games.show.weight_avg'|trans }}
+                    </p>
+                    <p class="text-2xl font-bold" style="color:var(--color-brand)">
+                        {{ (stats.weight.avg / 1000)|round(2) }} kg
+                    </p>
+                </div>
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.08)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-muted)">
+                        {{ 'games.show.weight_min'|trans }}
+                    </p>
+                    <p class="text-2xl font-bold" style="color:var(--color-ink)">
+                        {{ stats.weight.min / 1000 }} kg
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.weight.min_player }}</p>
+                </div>
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.08)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-muted)">
+                        {{ 'games.show.weight_max'|trans }}
+                    </p>
+                    <p class="text-2xl font-bold" style="color:var(--color-ink)">
+                        {{ stats.weight.max / 1000 }} kg
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.weight.max_player }}</p>
+                </div>
+            </div>
+
+            <div class="card px-5 py-2">
+                {% for g in stats.weight.sorted %}
+                <div class="flex justify-between items-center py-2.5 text-sm"
+                     style="border-bottom: 1px solid var(--color-line)">
+                    <span style="color: var(--color-ink)">{{ g.playerName }}</span>
+                    <span class="font-semibold" style="color: var(--color-ink)">
+                        {{ g.guessWeight / 1000 }} kg
+                        {% if g.guessWeight == stats.weight.min %}
+                        <span class="text-xs font-normal ml-1" style="color:var(--color-muted)">
+                            ← {{ 'games.show.weight_min'|trans|lower }}
+                        </span>
+                        {% elseif g.guessWeight == stats.weight.max %}
+                        <span class="text-xs font-normal ml-1" style="color:var(--color-muted)">
+                            ← {{ 'games.show.weight_max'|trans|lower }}
+                        </span>
+                        {% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# ── Onglet Taille ────────────────────────────────────── #}
+        {% if game.isGuessHeight() %}
+        <div x-show="tab === 'height'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if not stats.height is defined %}
+            <div class="card text-center py-10 text-sm" style="color: var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.12)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-brand)">
+                        {{ 'games.show.height_avg'|trans }}
+                    </p>
+                    <p class="text-2xl font-bold" style="color:var(--color-brand)">
+                        {{ (stats.height.avg / 10)|round(1) }} cm
+                    </p>
+                </div>
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.08)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-muted)">
+                        {{ 'games.show.height_min'|trans }}
+                    </p>
+                    <p class="text-2xl font-bold" style="color:var(--color-ink)">
+                        {{ stats.height.min / 10 }} cm
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.height.min_player }}</p>
+                </div>
+                <div class="rounded-xl p-5 text-center"
+                     style="background-color:rgba(196,113,74,0.08)">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--color-muted)">
+                        {{ 'games.show.height_max'|trans }}
+                    </p>
+                    <p class="text-2xl font-bold" style="color:var(--color-ink)">
+                        {{ stats.height.max / 10 }} cm
+                    </p>
+                    <p class="text-xs mt-1" style="color:var(--color-muted)">{{ stats.height.max_player }}</p>
+                </div>
+            </div>
+
+            <div class="card px-5 py-2">
+                {% for g in stats.height.sorted %}
+                <div class="flex justify-between items-center py-2.5 text-sm"
+                     style="border-bottom: 1px solid var(--color-line)">
+                    <span style="color: var(--color-ink)">{{ g.playerName }}</span>
+                    <span class="font-semibold" style="color: var(--color-ink)">
+                        {{ g.guessHeight / 10 }} cm
+                        {% if g.guessHeight == stats.height.min %}
+                        <span class="text-xs font-normal ml-1" style="color:var(--color-muted)">
+                            ← {{ 'games.show.height_min'|trans|lower }}
+                        </span>
+                        {% elseif g.guessHeight == stats.height.max %}
+                        <span class="text-xs font-normal ml-1" style="color:var(--color-muted)">
+                            ← {{ 'games.show.height_max'|trans|lower }}
+                        </span>
+                        {% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# ── Onglet Participants ──────────────────────────────── #}
+        <div x-show="tab === 'players'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {% if stats.total == 0 %}
+            <div class="card text-center py-10 text-sm" style="color: var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+            <div class="card-panel" x-data="{ open: null }">
+                {% for g in guesses %}
+                <div style="{{ not loop.last ? 'border-bottom: 1px solid var(--color-line)' : '' }}">
+
+                    <button @click="open = open === {{ loop.index }} ? null : {{ loop.index }}"
+                            class="w-full flex items-center justify-between px-5 py-4 text-left transition-colors hover:bg-[#F8F3EE]">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold" style="color: var(--color-ink)">
+                                {{ g.playerName }}
+                            </span>
+                            <span class="text-xs mt-0.5" style="color: var(--color-muted)">
+                                {{ g.createdAt|date(dateFormat) }} · {{ g.createdAt|date('H:i') }}
+                            </span>
+                        </div>
+                        <svg class="w-4 h-4 shrink-0 transition-transform duration-200"
+                             :style="open === {{ loop.index }} ? 'transform:rotate(180deg)' : ''"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+
+                    <div x-show="open === {{ loop.index }}"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         class="px-5 pb-4"
+                         style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 1.5rem"
+                         style="background-color: var(--color-cream)">
+                        {% if game.isGuessGender() and g.guessGender %}
+                        <div>
+                            <p class="text-xs mb-0.5" style="color: var(--color-muted)">{{ 'games.show.tab_gender'|trans }}</p>
+                            <p class="text-sm font-semibold"
+                               style="color: {{ g.guessGender.value == 'boy' ? 'var(--color-brand)' : 'var(--color-accent)' }}">
+                                {{ g.guessGender.value == 'boy' ? 'games.show.gender_boy'|trans : 'games.show.gender_girl'|trans }}
+                            </p>
+                        </div>
+                        {% endif %}
+                        {% if game.isGuessName() and g.guessName %}
+                        <div>
+                            <p class="text-xs mb-0.5" style="color: var(--color-muted)">{{ 'games.show.tab_name'|trans }}</p>
+                            <p class="text-sm font-semibold" style="color: var(--color-ink)">{{ g.guessName }}</p>
+                        </div>
+                        {% endif %}
+                        {% if game.isGuessDate() and g.guessDate %}
+                        <div>
+                            <p class="text-xs mb-0.5" style="color: var(--color-muted)">{{ 'games.show.tab_date'|trans }}</p>
+                            <p class="text-sm font-semibold" style="color: var(--color-ink)">{{ g.guessDate|date(dateFormat) }}</p>
+                        </div>
+                        {% endif %}
+                        {% if game.isGuessWeight() and g.guessWeight %}
+                        <div>
+                            <p class="text-xs mb-0.5" style="color: var(--color-muted)">{{ 'games.show.tab_weight'|trans }}</p>
+                            <p class="text-sm font-semibold" style="color: var(--color-ink)">{{ (g.guessWeight / 1000)|round(2) }} kg</p>
+                        </div>
+                        {% endif %}
+                        {% if game.isGuessHeight() and g.guessHeight %}
+                        <div>
+                            <p class="text-xs mb-0.5" style="color: var(--color-muted)">{{ 'games.show.tab_height'|trans }}</p>
+                            <p class="text-sm font-semibold" style="color: var(--color-ink)">{{ (g.guessHeight / 10)|round(1) }} cm</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>{# /x-data #}
 
 </div>
 {% endblock %}
