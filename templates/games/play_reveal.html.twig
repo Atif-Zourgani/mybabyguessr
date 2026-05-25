@@ -82,14 +82,11 @@
             {% if winners.name is defined and winners.name|length > 0 %}
             <div class="space-y-2">
                 {% for item in winners.name %}
-                <div class="rounded-xl px-4 py-2.5"
-                     style="display:flex;align-items:flex-start;gap:0.625rem;background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
-                    <span class="text-xs font-bold shrink-0 text-center"
-                          style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
-                    <div style="min-width:0">
-                        <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                        <div class="text-xs" style="margin-top:0.125rem;color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</div>
-                    </div>
+                <div class="rounded-xl px-4 py-3 text-center"
+                     style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
+                    <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
+                    <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                    <div class="text-xs" style="margin-top:0.125rem;color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</div>
                 </div>
                 {% endfor %}
             </div>
@@ -130,18 +127,15 @@
                     <div class="space-y-2">
                         {% for item in winners.date %}
                         {% set diffDays = (item.diff / 86400)|round %}
-                        <div class="rounded-lg px-3 py-2.5"
-                             style="display:flex;align-items:flex-start;gap:0.5rem;background-color:var(--color-cream)">
-                            <span class="text-xs font-bold shrink-0 text-center"
-                                  style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
-                            <div style="min-width:0">
-                                <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                    {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
-                                    {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
-                                    {% endif %}
-                                </div>
+                        <div class="rounded-lg px-3 py-3 text-center"
+                             style="background-color:var(--color-cream)">
+                            <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
+                            <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                            <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
+                                {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
@@ -164,18 +158,15 @@
                     {% if winners.weight is defined and winners.weight|length > 0 %}
                     <div class="space-y-2">
                         {% for item in winners.weight %}
-                        <div class="rounded-lg px-3 py-2.5"
-                             style="display:flex;align-items:flex-start;gap:0.5rem;background-color:var(--color-cream)">
-                            <span class="text-xs font-bold shrink-0 text-center"
-                                  style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
-                            <div style="min-width:0">
-                                <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                    {% elseif item.diff < 1000 %}{{ item.diff }} g
-                                    {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
-                                    {% endif %}
-                                </div>
+                        <div class="rounded-lg px-3 py-3 text-center"
+                             style="background-color:var(--color-cream)">
+                            <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
+                            <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                            <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                {% elseif item.diff < 1000 %}{{ item.diff }} g
+                                {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
@@ -198,18 +189,15 @@
                     {% if winners.height is defined and winners.height|length > 0 %}
                     <div class="space-y-2">
                         {% for item in winners.height %}
-                        <div class="rounded-lg px-3 py-2.5"
-                             style="display:flex;align-items:flex-start;gap:0.5rem;background-color:var(--color-cream)">
-                            <span class="text-xs font-bold shrink-0 text-center"
-                                  style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
-                            <div style="min-width:0">
-                                <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                    {% elseif item.diff < 10 %}{{ item.diff }} mm
-                                    {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
-                                    {% endif %}
-                                </div>
+                        <div class="rounded-lg px-3 py-3 text-center"
+                             style="background-color:var(--color-cream)">
+                            <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
+                            <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                            <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                {% elseif item.diff < 10 %}{{ item.diff }} mm
+                                {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
