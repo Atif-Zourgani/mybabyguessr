@@ -52,9 +52,9 @@ class GameController extends AbstractController
             $game->setGuessWeight($guessWeight);
             $game->setGuessHeight($guessHeight);
 
-            $title = trim($post['title'] ?? '');
+            $title = mb_substr(trim(strip_tags($post['title'] ?? '')), 0, 100);
             if ($title !== '') {
-                $game->setTitle(mb_substr($title, 0, 100));
+                $game->setTitle($title);
             }
 
             $slugBase = $title !== '' ? $title : ('Baby ' . ($this->getUser()?->getLastName() ?? 'Guessr'));
@@ -210,7 +210,7 @@ class GameController extends AbstractController
             }
 
             if ($game->isGuessName()) {
-                $name = mb_substr(trim($post['answerName'] ?? ''), 0, 100);
+                $name = mb_substr(trim(strip_tags($post['answerName'] ?? '')), 0, 100);
                 $game->setAnswerName($name !== '' ? $name : null);
             }
 

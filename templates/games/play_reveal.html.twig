@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ 'play.reveal.title'|trans({'%game%': game.displayTitle}) }} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 
 {% set dateFormat = app.request.locale == 'fr' ? 'd/m/Y' : 'm/d/Y' %}
 {% set isFr       = app.request.locale == 'fr' %}
@@ -79,20 +80,16 @@
                 {{ game.answerName }}
             </p>
             {% if winners.name is defined and winners.name|length > 0 %}
-            <div class="space-y-2 max-w-xs mx-auto text-left">
+            <div class="space-y-2">
                 {% for item in winners.name %}
-                <div class="flex items-center justify-between gap-3 rounded-xl px-4 py-2.5"
-                     style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
-                    <div class="flex items-center gap-2.5">
-                        <span class="text-xs font-bold w-5 shrink-0 text-center"
-                              style="color:var(--color-muted)">{{ loop.index }}</span>
-                        <span class="text-sm font-bold" style="color:var(--color-ink)">
-                            {{ item.guess.playerName }}
-                        </span>
+                <div class="rounded-xl px-4 py-2.5"
+                     style="display:flex;align-items:flex-start;gap:0.625rem;background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
+                    <span class="text-xs font-bold shrink-0 text-center"
+                          style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
+                    <div style="min-width:0">
+                        <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                        <div class="text-xs" style="margin-top:0.125rem;color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</div>
                     </div>
-                    <span class="text-xs shrink-0" style="color:var(--color-muted)">
-                        {{ item.guess.createdAt|date(dateFormat) }}
-                    </span>
                 </div>
                 {% endfor %}
             </div>
@@ -114,7 +111,7 @@
     {% if hasDate or hasWeight or hasHeight %}
 
         {% if hasDate and hasWeight and hasHeight %}
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         {% elseif (hasDate and hasWeight) or (hasDate and hasHeight) or (hasWeight and hasHeight) %}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         {% else %}
@@ -133,20 +130,19 @@
                     <div class="space-y-2">
                         {% for item in winners.date %}
                         {% set diffDays = (item.diff / 86400)|round %}
-                        <div class="flex items-center justify-between gap-2 rounded-lg px-3 py-2"
-                             style="background-color:var(--color-cream)">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-bold w-4 text-center"
-                                      style="color:var(--color-muted)">{{ loop.index }}</span>
-                                <span class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</span>
+                        <div class="rounded-lg px-3 py-2.5"
+                             style="display:flex;align-items:flex-start;gap:0.5rem;background-color:var(--color-cream)">
+                            <span class="text-xs font-bold shrink-0 text-center"
+                                  style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
+                            <div style="min-width:0">
+                                <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
+                                    {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
+                                    {% endif %}
+                                </div>
                             </div>
-                            <span class="text-xs font-semibold shrink-0"
-                                  style="color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
-                                {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
-                                {% endif %}
-                            </span>
                         </div>
                         {% endfor %}
                     </div>
@@ -168,20 +164,19 @@
                     {% if winners.weight is defined and winners.weight|length > 0 %}
                     <div class="space-y-2">
                         {% for item in winners.weight %}
-                        <div class="flex items-center justify-between gap-2 rounded-lg px-3 py-2"
-                             style="background-color:var(--color-cream)">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-bold w-4 text-center"
-                                      style="color:var(--color-muted)">{{ loop.index }}</span>
-                                <span class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</span>
+                        <div class="rounded-lg px-3 py-2.5"
+                             style="display:flex;align-items:flex-start;gap:0.5rem;background-color:var(--color-cream)">
+                            <span class="text-xs font-bold shrink-0 text-center"
+                                  style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
+                            <div style="min-width:0">
+                                <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% elseif item.diff < 1000 %}{{ item.diff }} g
+                                    {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
+                                    {% endif %}
+                                </div>
                             </div>
-                            <span class="text-xs font-semibold shrink-0"
-                                  style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                {% elseif item.diff < 1000 %}{{ item.diff }} g
-                                {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
-                                {% endif %}
-                            </span>
                         </div>
                         {% endfor %}
                     </div>
@@ -203,20 +198,19 @@
                     {% if winners.height is defined and winners.height|length > 0 %}
                     <div class="space-y-2">
                         {% for item in winners.height %}
-                        <div class="flex items-center justify-between gap-2 rounded-lg px-3 py-2"
-                             style="background-color:var(--color-cream)">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-bold w-4 text-center"
-                                      style="color:var(--color-muted)">{{ loop.index }}</span>
-                                <span class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</span>
+                        <div class="rounded-lg px-3 py-2.5"
+                             style="display:flex;align-items:flex-start;gap:0.5rem;background-color:var(--color-cream)">
+                            <span class="text-xs font-bold shrink-0 text-center"
+                                  style="width:1.25rem;padding-top:0.125rem;color:var(--color-muted)">{{ loop.index }}</span>
+                            <div style="min-width:0">
+                                <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
+                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% elseif item.diff < 10 %}{{ item.diff }} mm
+                                    {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
+                                    {% endif %}
+                                </div>
                             </div>
-                            <span class="text-xs font-semibold shrink-0"
-                                  style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                {% elseif item.diff < 10 %}{{ item.diff }} mm
-                                {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
-                                {% endif %}
-                            </span>
                         </div>
                         {% endfor %}
                     </div>
@@ -232,17 +226,81 @@
     {% endif %}
 
     {# ── CTA ──────────────────────────────────────────────────── #}
-    <div class="card text-center py-8 mt-4">
-        <p class="text-xl font-bold mb-2" style="color:var(--color-ink)">
+    {% set homeUrl   = url('app_home', {'_locale': app.request.locale}) %}
+    {% set waText    = 'play.reveal.cta_whatsapp'|trans ~ ' ' ~ homeUrl %}
+    {% set emailBody = 'play.reveal.cta_whatsapp'|trans ~ "\n\n" ~ homeUrl %}
+    <div class="card py-8 mt-4"
+         id="share-page"
+         data-share-url="{{ homeUrl }}"
+         data-share-title="MyBabyGuessr"
+         data-copy-label="{{ 'games.share.btn_copy'|trans|e('html_attr') }}"
+         data-copied-label="{{ 'games.share.btn_copied'|trans|e('html_attr') }}">
+
+        <p class="text-xl font-bold mb-2 text-center" style="color:var(--color-ink)">
             {{ 'play.reveal.cta_heading'|trans }}
         </p>
-        <p class="text-sm mb-6" style="color:var(--color-muted)">
+        <p class="text-sm mb-6 text-center" style="color:var(--color-muted)">
             {{ 'play.reveal.cta_desc'|trans }}
         </p>
-        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
-           class="btn btn-primary inline-flex items-center gap-2 text-base px-6 py-3">
-            {{ 'play.reveal.cta_btn'|trans }}
-        </a>
+
+        {# Lien + copier #}
+        <div class="flex items-center gap-2 mb-4">
+            <input type="text" readonly value="{{ homeUrl }}"
+                   class="flex-1 text-sm px-3 py-2.5 rounded-lg border-0 outline-none"
+                   style="background-color:var(--color-cream);color:var(--color-ink);font-family:monospace;min-width:0">
+            <button id="copy-link-btn" type="button"
+                    class="btn btn-primary shrink-0 text-sm px-4 py-2.5"
+                    aria-label="{{ 'games.share.btn_copy'|trans }}">
+                <svg class="w-4 h-4 inline-block mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                </svg>
+                <span id="copy-label">{{ 'games.share.btn_copy'|trans }}</span>
+            </button>
+        </div>
+
+        {# Bouton natif (Web Share API) — affiché par JS si disponible #}
+        <div id="mobile-share" class="hidden mb-3">
+            <button id="native-share-btn" class="btn btn-primary w-full py-3">
+                <svg class="w-5 h-5 inline-block mr-2 shrink-0" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+                {{ 'play.reveal.cta_btn'|trans }}
+            </button>
+        </div>
+
+        {# WhatsApp + Email #}
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            <a href="https://wa.me/?text={{ waText|url_encode }}"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn-primary flex items-center justify-center gap-2 text-sm">
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                WhatsApp
+            </a>
+            <a href="mailto:?subject={{ 'play.reveal.cta_email_subject'|trans|url_encode }}&body={{ emailBody|url_encode }}"
+               class="btn btn-secondary flex items-center justify-center gap-2 text-sm">
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Email
+            </a>
+        </div>
+
+        <p class="text-center text-sm" style="color:var(--color-muted)">
+            <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
+               style="color:var(--color-muted);text-decoration:underline;text-underline-offset:2px">
+                {{ 'play.reveal.cta_secondary'|trans }}
+            </a>
+        </p>
+
     </div>
 
 </div>
