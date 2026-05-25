@@ -1,0 +1,23 @@
+{% if locale == 'fr' %}
+Bonjour {{ playerName }} !
+
+Les vraies réponses du Baby Guessr « {{ game.displayTitle }} » sont révélées !
+Découvrez les résultats et voyez qui a deviné juste :
+
+{{ revealUrl }}
+
+---
+Vous recevez cet email car vous avez participé au Baby Guessr « {{ game.displayTitle }} ».
+© {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
+{% else %}
+Hello {{ playerName }}!
+
+The real answers for the Baby Guessr "{{ game.displayTitle }}" are here!
+Discover the results and see who guessed right:
+
+{{ revealUrl }}
+
+---
+You received this email because you participated in the Baby Guessr "{{ game.displayTitle }}".
+© {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
+{% endif %}

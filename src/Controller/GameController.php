@@ -17,6 +17,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[IsGranted('ROLE_USER')]
@@ -186,6 +187,7 @@ class GameController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
         MailerInterface $mailer,
+        LoggerInterface $logger,
     ): Response {
         $game = $gameRepository->findOneByToken($token);
 
@@ -252,7 +254,7 @@ class GameController extends AbstractController
                 && $playersWithEmail > 0;
 
             if ($sendEmails) {
-                $this->sendRevealEmails($game, $mailer, $request->getLocale());
+                $this->sendRevealEmails($game, $mailer, $request->getLocale(), $logger);
             }
 
             if ($wasAlreadyRevealed) {
@@ -294,7 +296,7 @@ class GameController extends AbstractController
         return $this->render('games/reveal_share.html.twig', ['game' => $game]);
     }
 
-    private function sendRevealEmails(Game $game, MailerInterface $mailer, string $locale): void
+    private function sendRevealEmails(Game $game, MailerInterface $mailer, string $locale, LoggerInterface $logger): void
     {
         $revealUrl = $this->generateUrl('app_game_reveal_public', [
             '_locale' => $locale,
@@ -319,6 +321,7 @@ class GameController extends AbstractController
                 ->to($email)
                 ->subject($subject)
                 ->htmlTemplate('emails/reveal.html.twig')
+                ->textTemplate('emails/reveal.txt.twig')
                 ->context([
                     'locale'     => $locale,
                     'game'       => $game,
@@ -328,7 +331,13 @@ class GameController extends AbstractController
 
             try {
                 $mailer->send($message);
-            } catch (\Throwable) {}
+            } catch (\Throwable $e) {
+                $logger->error('Reveal email failed', [
+                    'game'  => $game->getToken(),
+                    'email' => $email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
     }
 
