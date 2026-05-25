@@ -172,11 +172,13 @@ class GameController extends AbstractController
         }
 
         $guesses = $game->getGuesses()->toArray();
+        $stats   = $this->computeStats($game, $guesses);
 
         return $this->render('games/show.html.twig', [
-            'game'    => $game,
-            'guesses' => $guesses,
-            'stats'   => $this->computeStats($game, $guesses),
+            'game'          => $game,
+            'guesses'       => $guesses,
+            'stats'         => $stats,
+            'guessesRanked' => $game->isRevealed() ? $this->rankGuesses($game, $guesses, $stats) : null,
         ]);
     }
 
@@ -341,9 +343,43 @@ class GameController extends AbstractController
         }
     }
 
+    private function rankGuesses(Game $game, array $guesses, array $stats): array
+    {
+        $maxScore = 0;
+        if ($game->isGuessGender() && $game->getAnswerGender() !== null) $maxScore++;
+        if ($game->isGuessName()   && $game->getAnswerName()   !== null) $maxScore++;
+        if ($game->isGuessDate()   && $game->getAnswerDate()   !== null) $maxScore++;
+        if ($game->isGuessWeight() && $game->getAnswerWeight() !== null) $maxScore++;
+        if ($game->isGuessHeight() && $game->getAnswerHeight() !== null) $maxScore++;
+
+        $minDateDiff   = isset($stats['date']['sorted_by_diff'])   ? $stats['date']['sorted_by_diff'][0]['diff']   : null;
+        $minWeightDiff = isset($stats['weight']['sorted_by_diff']) ? $stats['weight']['sorted_by_diff'][0]['diff'] : null;
+        $minHeightDiff = isset($stats['height']['sorted_by_diff']) ? $stats['height']['sorted_by_diff'][0]['diff'] : null;
+
+        $scored = [];
+        foreach ($guesses as $g) {
+            $score = 0;
+            if ($game->isGuessGender() && $game->getAnswerGender() !== null)
+                if ($g->getGuessGender()?->value === $game->getAnswerGender()->value) $score++;
+            if ($game->isGuessName() && $game->getAnswerName() !== null && $g->getGuessName() !== null)
+                if (mb_strtolower(trim($g->getGuessName())) === mb_strtolower(trim($game->getAnswerName()))) $score++;
+            if ($minDateDiff !== null && $g->getGuessDate() !== null)
+                if (abs($g->getGuessDate()->getTimestamp() - $game->getAnswerDate()->getTimestamp()) === $minDateDiff) $score++;
+            if ($minWeightDiff !== null && $g->getGuessWeight() !== null)
+                if (abs($g->getGuessWeight() - $game->getAnswerWeight()) === $minWeightDiff) $score++;
+            if ($minHeightDiff !== null && $g->getGuessHeight() !== null)
+                if (abs($g->getGuessHeight() - $game->getAnswerHeight()) === $minHeightDiff) $score++;
+            $scored[] = ['guess' => $g, 'score' => $score];
+        }
+
+        usort($scored, fn($a, $b) => $b['score'] <=> $a['score'] ?: $a['guess']->getCreatedAt() <=> $b['guess']->getCreatedAt());
+        return ['items' => $scored, 'max' => $maxScore];
+    }
+
     private function computeStats(Game $game, array $guesses): array
     {
         $stats = ['total' => count($guesses)];
+        $isRevealed = $game->isRevealed();
 
         if ($game->isGuessGender()) {
             $boys = 0;
@@ -363,6 +399,13 @@ class GameController extends AbstractController
                 'boy_pct'  => $total > 0 ? (int) round($boys / $total * 100) : 0,
                 'girl_pct' => $total > 0 ? (int) round($girls / $total * 100) : 0,
             ];
+            if ($isRevealed && $game->getAnswerGender() !== null) {
+                $correctVal = $game->getAnswerGender()->value;
+                $gWinners   = array_filter($guesses, fn($g) => $g->getGuessGender()?->value === $correctVal);
+                $stats['gender']['winner_names']  = array_values(array_map(fn($g) => $g->getPlayerName(), $gWinners));
+                $stats['gender']['correct_count'] = count($gWinners);
+                $stats['gender']['correct_pct']   = $total > 0 ? (int) round(count($gWinners) / $total * 100) : 0;
+            }
         }
 
         if ($game->isGuessName()) {
@@ -390,6 +433,11 @@ class GameController extends AbstractController
                     'last'         => $last->getGuessName(),
                     'last_player'  => $last->getPlayerName(),
                 ];
+                if ($isRevealed && $game->getAnswerName() !== null) {
+                    $answerNorm = mb_strtolower(trim($game->getAnswerName()));
+                    $nWinners   = array_filter($named, fn($g) => mb_strtolower(trim($g->getGuessName() ?? '')) === $answerNorm);
+                    $stats['name']['winner_names'] = array_values(array_map(fn($g) => $g->getPlayerName(), $nWinners));
+                }
             }
         }
 
@@ -413,6 +461,12 @@ class GameController extends AbstractController
                     );
                     $ds['closest'] = $byProx[0];
                 }
+                if ($isRevealed && $game->getAnswerDate() !== null) {
+                    $ansTs     = $game->getAnswerDate()->getTimestamp();
+                    $dWithDiff = array_map(fn($g) => ['guess' => $g, 'diff' => abs($g->getGuessDate()->getTimestamp() - $ansTs)], $dated);
+                    usort($dWithDiff, fn($a, $b) => $a['diff'] <=> $b['diff']);
+                    $ds['sorted_by_diff'] = $dWithDiff;
+                }
                 $stats['date'] = $ds;
             }
         }
@@ -434,6 +488,12 @@ class GameController extends AbstractController
                 }
                 usort($ws, fn($a, $b) => $a->getGuessWeight() <=> $b->getGuessWeight());
                 $wst['sorted'] = $ws;
+                if ($isRevealed && $game->getAnswerWeight() !== null) {
+                    $ansW      = $game->getAnswerWeight();
+                    $wWithDiff = array_map(fn($g) => ['guess' => $g, 'diff' => abs($g->getGuessWeight() - $ansW)], $ws);
+                    usort($wWithDiff, fn($a, $b) => $a['diff'] <=> $b['diff']);
+                    $wst['sorted_by_diff'] = $wWithDiff;
+                }
                 $stats['weight'] = $wst;
             }
         }
@@ -455,6 +515,12 @@ class GameController extends AbstractController
                 }
                 usort($hs, fn($a, $b) => $a->getGuessHeight() <=> $b->getGuessHeight());
                 $hst['sorted'] = $hs;
+                if ($isRevealed && $game->getAnswerHeight() !== null) {
+                    $ansH      = $game->getAnswerHeight();
+                    $hWithDiff = array_map(fn($g) => ['guess' => $g, 'diff' => abs($g->getGuessHeight() - $ansH)], $hs);
+                    usort($hWithDiff, fn($a, $b) => $a['diff'] <=> $b['diff']);
+                    $hst['sorted_by_diff'] = $hWithDiff;
+                }
                 $stats['height'] = $hst;
             }
         }
