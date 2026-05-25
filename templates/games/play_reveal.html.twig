@@ -42,6 +42,9 @@
 .mbg-sp-6 { bottom:18%;right:20%;  font-size:0.95rem; animation-delay:0.3s;  }
 .mbg-sp-7 { top:32%;   left:2%;    font-size:0.5rem;  animation-delay:1.4s;  }
 .mbg-sp-8 { top:40%;   right:3%;   font-size:0.65rem; animation-delay:0.7s;  }
+.mbg-reveal-out  { transition: opacity 1s ease-in, filter 1s ease-in, transform 1s ease-in; }
+.mbg-reveal-from { opacity:1; filter:blur(0px);  transform:scale(1);    }
+.mbg-reveal-to   { opacity:0; filter:blur(9px);  transform:scale(1.02); }
 </style>
 {% endblock %}
 
@@ -86,7 +89,7 @@
          style="position:relative;overflow:hidden;{% if game.answerGender %}background:linear-gradient(135deg,rgba(196,113,74,0.07) 0%,rgba(122,78,59,0.04) 100%);border:2px solid rgba(196,113,74,0.18){% endif %}"
          x-data="{ revealed: false }">
 
-        <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition.duration.450ms>
+        <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
             <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
             <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
             <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -149,7 +152,7 @@
     {% if game.isGuessName() %}
     <div class="card mb-4 text-center py-8" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
 
-        <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition.duration.450ms>
+        <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
             <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
             <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
             <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -229,7 +232,7 @@
 
             {% if hasDate %}
             <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
-                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition.duration.450ms>
+                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
                     <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
                     <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -301,7 +304,7 @@
 
             {% if hasWeight %}
             <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
-                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition.duration.450ms>
+                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
                     <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
                     <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -371,7 +374,7 @@
 
             {% if hasHeight %}
             <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
-                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition.duration.450ms>
+                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
                     <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
                     <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
