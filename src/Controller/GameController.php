@@ -3,13 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Enum\AnswerGender;
+use App\Enum\GameStatus;
 use App\Enum\NameMode;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -108,13 +114,48 @@ class GameController extends AbstractController
         return $this->render('games/new.html.twig');
     }
 
-    #[Route('/{token}/share', name: 'app_game_share', methods: ['GET'])]
-    public function share(string $token, GameRepository $gameRepository): Response
+    #[Route('/{token}/toggle-status', name: 'app_game_toggle_status', methods: ['POST'])]
+    public function toggleStatus(string $token, GameRepository $gameRepository, EntityManagerInterface $em, Request $request): Response
     {
         $game = $gameRepository->findOneByToken($token);
 
         if ($game === null || $game->getUser() !== $this->getUser()) {
             throw $this->createNotFoundException();
+        }
+
+        if (!$this->isCsrfTokenValid('game_toggle_' . $token, $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($game->getStatus() === GameStatus::Open) {
+            $game->setStatus(GameStatus::Closed);
+        } elseif ($game->getStatus() === GameStatus::Closed) {
+            $game->setStatus(GameStatus::Open);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('app_game_show', [
+            '_locale' => $request->getLocale(),
+            'token'   => $token,
+        ]);
+    }
+
+    #[Route('/{token}/share', name: 'app_game_share', methods: ['GET'])]
+    public function share(string $token, GameRepository $gameRepository, Request $request): Response
+    {
+        $game = $gameRepository->findOneByToken($token);
+
+        if ($game === null || $game->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($game->getStatus() === GameStatus::Closed) {
+            $this->addFlash('warning', 'games.share.closed_warning');
+            return $this->redirectToRoute('app_game_show', [
+                '_locale' => $request->getLocale(),
+                'token'   => $token,
+            ]);
         }
 
         return $this->render('games/share.html.twig', ['game' => $game]);
@@ -136,6 +177,159 @@ class GameController extends AbstractController
             'guesses' => $guesses,
             'stats'   => $this->computeStats($game, $guesses),
         ]);
+    }
+
+    #[Route('/{token}/reveal', name: 'app_game_reveal', methods: ['GET', 'POST'])]
+    public function reveal(
+        string $token,
+        GameRepository $gameRepository,
+        EntityManagerInterface $em,
+        Request $request,
+        MailerInterface $mailer,
+    ): Response {
+        $game = $gameRepository->findOneByToken($token);
+
+        if ($game === null || $game->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException();
+        }
+
+        $guesses = $game->getGuesses()->toArray();
+        $playersWithEmail = count(array_filter($guesses, fn($g) => $g->getPlayerEmail() !== null));
+
+        if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('game_reveal_' . $token, $request->request->get('_csrf_token'))) {
+                throw $this->createAccessDeniedException();
+            }
+
+            $wasAlreadyRevealed = $game->isRevealed();
+            $post = $request->request->all();
+
+            if ($game->isGuessGender()) {
+                $genderStr = $post['answerGender'] ?? '';
+                $game->setAnswerGender($genderStr !== '' ? AnswerGender::tryFrom($genderStr) : null);
+            }
+
+            if ($game->isGuessName()) {
+                $name = mb_substr(trim($post['answerName'] ?? ''), 0, 100);
+                $game->setAnswerName($name !== '' ? $name : null);
+            }
+
+            if ($game->isGuessDate()) {
+                $dateStr = trim($post['answerDate'] ?? '');
+                if ($dateStr !== '') {
+                    $date = \DateTimeImmutable::createFromFormat('Y-m-d', $dateStr);
+                    $game->setAnswerDate($date !== false ? $date : null);
+                } else {
+                    $game->setAnswerDate(null);
+                }
+            }
+
+            if ($game->isGuessWeight()) {
+                $weightRaw = str_replace(',', '.', $post['answerWeight'] ?? '');
+                if ($weightRaw !== '' && is_numeric($weightRaw)) {
+                    $kg = (float) $weightRaw;
+                    $game->setAnswerWeight($kg >= 0.5 && $kg <= 7.0 ? (int) round($kg * 1000) : null);
+                } else {
+                    $game->setAnswerWeight(null);
+                }
+            }
+
+            if ($game->isGuessHeight()) {
+                $heightRaw = str_replace(',', '.', $post['answerHeight'] ?? '');
+                if ($heightRaw !== '' && is_numeric($heightRaw)) {
+                    $cm = (float) $heightRaw;
+                    $game->setAnswerHeight($cm >= 20 && $cm <= 70 ? (int) round($cm * 10) : null);
+                } else {
+                    $game->setAnswerHeight(null);
+                }
+            }
+
+            $game->setStatus(GameStatus::Revealed);
+            $em->flush();
+
+            $sendEmails = !$wasAlreadyRevealed
+                && ($post['notifyPlayers'] ?? '0') === '1'
+                && $playersWithEmail > 0;
+
+            if ($sendEmails) {
+                $this->sendRevealEmails($game, $mailer, $request->getLocale());
+            }
+
+            if ($wasAlreadyRevealed) {
+                $this->addFlash('success', 'games.reveal.updated');
+                return $this->redirectToRoute('app_game_show', [
+                    '_locale' => $request->getLocale(),
+                    'token'   => $token,
+                ]);
+            }
+
+            return $this->redirectToRoute('app_game_reveal_share', [
+                '_locale' => $request->getLocale(),
+                'token'   => $token,
+            ]);
+        }
+
+        return $this->render('games/reveal.html.twig', [
+            'game'             => $game,
+            'playersWithEmail' => $playersWithEmail,
+        ]);
+    }
+
+    #[Route('/{token}/reveal/share', name: 'app_game_reveal_share', methods: ['GET'])]
+    public function revealShare(string $token, GameRepository $gameRepository, Request $request): Response
+    {
+        $game = $gameRepository->findOneByToken($token);
+
+        if ($game === null || $game->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$game->isRevealed()) {
+            return $this->redirectToRoute('app_game_reveal', [
+                '_locale' => $request->getLocale(),
+                'token'   => $token,
+            ]);
+        }
+
+        return $this->render('games/reveal_share.html.twig', ['game' => $game]);
+    }
+
+    private function sendRevealEmails(Game $game, MailerInterface $mailer, string $locale): void
+    {
+        $revealUrl = $this->generateUrl('app_game_reveal_public', [
+            '_locale' => $locale,
+            'slug'    => $game->getSlug(),
+            'token'   => $game->getToken(),
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $subject = $locale === 'fr'
+            ? sprintf('La révélation — %s !', $game->getDisplayTitle())
+            : sprintf('The reveal — %s!', $game->getDisplayTitle());
+
+        $emailsSent = [];
+        foreach ($game->getGuesses() as $guess) {
+            $email = $guess->getPlayerEmail();
+            if ($email === null || in_array($email, $emailsSent, true)) {
+                continue;
+            }
+            $emailsSent[] = $email;
+
+            $message = (new TemplatedEmail())
+                ->from(new Address('noreply@mybabyguessr.com', 'MyBabyGuessr'))
+                ->to($email)
+                ->subject($subject)
+                ->htmlTemplate('emails/reveal.html.twig')
+                ->context([
+                    'locale'     => $locale,
+                    'game'       => $game,
+                    'playerName' => $guess->getPlayerName(),
+                    'revealUrl'  => $revealUrl,
+                ]);
+
+            try {
+                $mailer->send($message);
+            } catch (\Throwable) {}
+        }
     }
 
     private function computeStats(Game $game, array $guesses): array

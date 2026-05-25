@@ -1,0 +1,249 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'play.reveal.title'|trans({'%game%': game.displayTitle}) }} — MyBabyGuessr{% endblock %}
+
+{% set dateFormat = app.request.locale == 'fr' ? 'd/m/Y' : 'm/d/Y' %}
+{% set isFr       = app.request.locale == 'fr' %}
+
+{% block body %}
+
+{# ── En-tête ──────────────────────────────────────────────────── #}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 pt-10 pb-2 sm:pt-14 sm:pb-4 text-center">
+
+    {% if game.image %}
+    <div class="mx-auto mb-5 rounded-2xl overflow-hidden"
+         style="width:5rem;height:5rem">
+        <img src="{{ asset(game.image) }}" alt=""
+             style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    {% endif %}
+
+    <p class="text-xs font-bold uppercase tracking-widest mb-3"
+       style="color:var(--color-brand)">
+        {{ 'play.reveal.label'|trans }}
+    </p>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-2" style="color:var(--color-ink)">
+        {{ game.displayTitle }}
+    </h1>
+    <p class="text-sm" style="color:var(--color-muted)">
+        {{ 'play.reveal.subtitle'|trans }}
+    </p>
+
+    <div class="mt-6 mb-2"
+         style="height:2px;background:linear-gradient(to right,transparent,var(--color-brand),transparent)"></div>
+
+</div>
+
+{# ── Contenu ──────────────────────────────────────────────────── #}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    {# ── Sexe ─────────────────────────────────────────────────── #}
+    {% if game.isGuessGender() %}
+    <div class="card mb-4 text-center py-8"
+         style="{% if game.answerGender %}background:linear-gradient(135deg,rgba(196,113,74,0.07) 0%,rgba(122,78,59,0.04) 100%);border:2px solid rgba(196,113,74,0.18){% endif %}">
+
+        <p class="text-xs font-bold uppercase tracking-widest mb-5"
+           style="color:var(--color-muted)">{{ 'play.reveal.winners_gender'|trans }}</p>
+
+        {% if game.answerGender %}
+            <p style="font-size:clamp(1.75rem,6vw,2.5rem);font-weight:800;color:var(--color-brand);line-height:1.2;margin-bottom:1.5rem">
+                {{ game.answerGender.value == 'boy' ? 'play.reveal.gender_boy'|trans : 'play.reveal.gender_girl'|trans }}
+            </p>
+            {% if winners.gender is defined and winners.gender|length > 0 %}
+            <div class="flex flex-wrap justify-center gap-2">
+                {% for item in winners.gender %}
+                <span class="text-sm font-bold px-3 py-1.5 rounded-full"
+                      style="background-color:rgba(196,113,74,0.14);color:var(--color-brand)">
+                    {{ item.guess.playerName }}
+                </span>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm italic" style="color:var(--color-muted)">{{ 'play.reveal.no_winner'|trans }}</p>
+            {% endif %}
+        {% else %}
+            <p class="text-base italic" style="color:var(--color-muted)">{{ 'play.reveal.not_revealed'|trans }}</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    {# ── Prénom ───────────────────────────────────────────────── #}
+    {% if game.isGuessName() %}
+    <div class="card mb-4 text-center py-8">
+
+        <p class="text-xs font-bold uppercase tracking-widest mb-5"
+           style="color:var(--color-muted)">{{ 'play.reveal.winners_name'|trans }}</p>
+
+        {% if game.answerName %}
+            <p style="font-size:clamp(2rem,7vw,3rem);font-weight:800;color:var(--color-ink);line-height:1.15;margin-bottom:1.5rem">
+                {{ game.answerName }}
+            </p>
+            {% if winners.name is defined and winners.name|length > 0 %}
+            <div class="space-y-2 max-w-xs mx-auto text-left">
+                {% for item in winners.name %}
+                <div class="flex items-center justify-between gap-3 rounded-xl px-4 py-2.5"
+                     style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-xs font-bold w-5 shrink-0 text-center"
+                              style="color:var(--color-muted)">{{ loop.index }}</span>
+                        <span class="text-sm font-bold" style="color:var(--color-ink)">
+                            {{ item.guess.playerName }}
+                        </span>
+                    </div>
+                    <span class="text-xs shrink-0" style="color:var(--color-muted)">
+                        {{ item.guess.createdAt|date(dateFormat) }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm italic" style="color:var(--color-muted)">{{ 'play.reveal.no_winner'|trans }}</p>
+            {% endif %}
+        {% else %}
+            <p class="text-base italic" style="color:var(--color-muted)">{{ 'play.reveal.not_revealed'|trans }}</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    {# ── Date / Poids / Taille — grille responsive ────────────── #}
+    {% set hasDate   = game.isGuessDate() %}
+    {% set hasWeight = game.isGuessWeight() %}
+    {% set hasHeight = game.isGuessHeight() %}
+
+    {% if hasDate or hasWeight or hasHeight %}
+
+        {% if hasDate and hasWeight and hasHeight %}
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        {% elseif (hasDate and hasWeight) or (hasDate and hasHeight) or (hasWeight and hasHeight) %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        {% else %}
+        <div class="grid grid-cols-1 gap-4 mb-4">
+        {% endif %}
+
+            {% if hasDate %}
+            <div class="card text-center py-6">
+                <p class="text-xs font-bold uppercase tracking-widest mb-4"
+                   style="color:var(--color-muted)">{{ 'play.reveal.winners_date'|trans }}</p>
+                {% if game.answerDate %}
+                    <p class="text-xl font-bold mb-4" style="color:var(--color-ink)">
+                        {{ game.answerDate|date(dateFormat) }}
+                    </p>
+                    {% if winners.date is defined and winners.date|length > 0 %}
+                    <div class="space-y-2">
+                        {% for item in winners.date %}
+                        {% set diffDays = (item.diff / 86400)|round %}
+                        <div class="flex items-center justify-between gap-2 rounded-lg px-3 py-2"
+                             style="background-color:var(--color-cream)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold w-4 text-center"
+                                      style="color:var(--color-muted)">{{ loop.index }}</span>
+                                <span class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</span>
+                            </div>
+                            <span class="text-xs font-semibold shrink-0"
+                                  style="color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
+                                {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-sm italic" style="color:var(--color-muted)">{{ 'play.reveal.not_revealed'|trans }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if hasWeight %}
+            <div class="card text-center py-6">
+                <p class="text-xs font-bold uppercase tracking-widest mb-4"
+                   style="color:var(--color-muted)">{{ 'play.reveal.winners_weight'|trans }}</p>
+                {% if game.answerWeight %}
+                    <p class="text-xl font-bold mb-4" style="color:var(--color-ink)">
+                        {{ (game.answerWeight / 1000)|number_format(3, '.', '') }} kg
+                    </p>
+                    {% if winners.weight is defined and winners.weight|length > 0 %}
+                    <div class="space-y-2">
+                        {% for item in winners.weight %}
+                        <div class="flex items-center justify-between gap-2 rounded-lg px-3 py-2"
+                             style="background-color:var(--color-cream)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold w-4 text-center"
+                                      style="color:var(--color-muted)">{{ loop.index }}</span>
+                                <span class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</span>
+                            </div>
+                            <span class="text-xs font-semibold shrink-0"
+                                  style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                {% elseif item.diff < 1000 %}{{ item.diff }} g
+                                {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-sm italic" style="color:var(--color-muted)">{{ 'play.reveal.not_revealed'|trans }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if hasHeight %}
+            <div class="card text-center py-6">
+                <p class="text-xs font-bold uppercase tracking-widest mb-4"
+                   style="color:var(--color-muted)">{{ 'play.reveal.winners_height'|trans }}</p>
+                {% if game.answerHeight %}
+                    <p class="text-xl font-bold mb-4" style="color:var(--color-ink)">
+                        {{ (game.answerHeight / 10)|number_format(1, '.', '') }} cm
+                    </p>
+                    {% if winners.height is defined and winners.height|length > 0 %}
+                    <div class="space-y-2">
+                        {% for item in winners.height %}
+                        <div class="flex items-center justify-between gap-2 rounded-lg px-3 py-2"
+                             style="background-color:var(--color-cream)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold w-4 text-center"
+                                      style="color:var(--color-muted)">{{ loop.index }}</span>
+                                <span class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</span>
+                            </div>
+                            <span class="text-xs font-semibold shrink-0"
+                                  style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                {% elseif item.diff < 10 %}{{ item.diff }} mm
+                                {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-sm italic" style="color:var(--color-muted)">{{ 'play.reveal.not_revealed'|trans }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+    {# ── CTA ──────────────────────────────────────────────────── #}
+    <div class="card text-center py-8 mt-4">
+        <p class="text-xl font-bold mb-2" style="color:var(--color-ink)">
+            {{ 'play.reveal.cta_heading'|trans }}
+        </p>
+        <p class="text-sm mb-6" style="color:var(--color-muted)">
+            {{ 'play.reveal.cta_desc'|trans }}
+        </p>
+        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
+           class="btn btn-primary inline-flex items-center gap-2 text-base px-6 py-3">
+            {{ 'play.reveal.cta_btn'|trans }}
+        </a>
+    </div>
+
+</div>
+{% endblock %}

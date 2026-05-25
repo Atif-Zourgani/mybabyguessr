@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'games.reveal.title'|trans }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% set currentGender = game.answerGender ? game.answerGender.value : '' %}
+
+{% block body %}
+<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12"
+     x-data="{ gender: '{{ currentGender }}' }">
+
+    {# ── Retour ───────────────────────────────────────────────── #}
+    <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"
+       class="inline-flex items-center gap-1 text-sm font-bold mb-8"
+       style="color: var(--color-muted); text-decoration: none">
+        &larr; {{ 'games.reveal.back'|trans }}
+    </a>
+
+    <div class="card">
+
+        {# ── En-tête ──────────────────────────────────────────── #}
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold mb-1" style="color: var(--color-ink)">
+                {% if game.isRevealed() %}
+                    {{ 'games.reveal.title_edit'|trans }}
+                {% else %}
+                    {{ 'games.reveal.title'|trans }}
+                {% endif %}
+            </h1>
+            <p class="text-sm leading-relaxed" style="color: var(--color-muted)">
+                {% if game.isRevealed() %}
+                    {{ 'games.reveal.subtitle_edit'|trans }}
+                {% else %}
+                    {{ 'games.reveal.subtitle_first'|trans }}
+                {% endif %}
+            </p>
+        </div>
+
+        <form method="POST" novalidate>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('game_reveal_' ~ game.token) }}">
+
+            {# ── Sexe ─────────────────────────────────────────── #}
+            {% if game.isGuessGender() %}
+            <div style="border-top: 1px solid var(--color-line)" class="pt-6 mb-6">
+                <input type="hidden" name="answerGender" :value="gender">
+                <p class="text-sm font-bold mb-3" style="color: var(--color-ink)">
+                    {{ 'games.reveal.gender_label'|trans }}
+                </p>
+                <div class="flex rounded-xl p-1 gap-1"
+                     style="background-color: var(--color-cream); border: 1px solid var(--color-line)">
+                    <button type="button" @click="gender = 'boy'"
+                            class="flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold transition-all duration-200"
+                            :style="gender === 'boy'
+                                ? 'background-color:#fff;color:var(--color-brand);box-shadow:0 1px 4px rgba(44,31,21,0.10)'
+                                : 'background-color:transparent;color:var(--color-muted)'">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.75"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="10" cy="14" r="5"/>
+                            <line x1="13.8" y1="10.2" x2="19" y2="5"/>
+                            <polyline points="14 5 19 5 19 10"/>
+                        </svg>
+                        {{ 'play.guess.gender_boy'|trans }}
+                    </button>
+                    <button type="button" @click="gender = 'girl'"
+                            class="flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold transition-all duration-200"
+                            :style="gender === 'girl'
+                                ? 'background-color:#fff;color:var(--color-brand);box-shadow:0 1px 4px rgba(44,31,21,0.10)'
+                                : 'background-color:transparent;color:var(--color-muted)'">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.75"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="9" r="5"/>
+                            <line x1="12" y1="14" x2="12" y2="20"/>
+                            <line x1="9" y1="17" x2="15" y2="17"/>
+                        </svg>
+                        {{ 'play.guess.gender_girl'|trans }}
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            {# ── Prénom ───────────────────────────────────────── #}
+            {% if game.isGuessName() %}
+            <div style="border-top: 1px solid var(--color-line)" class="pt-6 mb-6">
+                <label for="answerName" class="block text-sm font-bold mb-3"
+                       style="color: var(--color-ink)">
+                    {{ 'games.reveal.name_label'|trans }}
+                </label>
+                <input id="answerName" type="text" name="answerName"
+                       class="form-input"
+                       value="{{ game.answerName ?? '' }}"
+                       maxlength="100" autocomplete="off"
+                       placeholder="Emma, Lucas, Chloé…">
+            </div>
+            {% endif %}
+
+            {# ── Date ─────────────────────────────────────────── #}
+            {% if game.isGuessDate() %}
+            <div style="border-top: 1px solid var(--color-line)" class="pt-6 mb-6">
+                <label for="answerDate" class="block text-sm font-bold mb-3"
+                       style="color: var(--color-ink)">
+                    {{ 'games.reveal.date_label'|trans }}
+                </label>
+                <input id="answerDate" type="date" name="answerDate"
+                       class="form-input"
+                       value="{{ game.answerDate ? game.answerDate|date('Y-m-d') : '' }}">
+            </div>
+            {% endif %}
+
+            {# ── Poids ────────────────────────────────────────── #}
+            {% if game.isGuessWeight() %}
+            <div style="border-top: 1px solid var(--color-line)" class="pt-6 mb-6">
+                <label for="answerWeight" class="block text-sm font-bold mb-3"
+                       style="color: var(--color-ink)">
+                    {{ 'games.reveal.weight_label'|trans }}
+                    <span class="font-normal" style="color: var(--color-muted)">
+                        ({{ 'games.reveal.weight_unit'|trans }})
+                    </span>
+                </label>
+                <input id="answerWeight" type="number" name="answerWeight"
+                       class="form-input"
+                       value="{{ game.answerWeight ? (game.answerWeight / 1000)|number_format(3, '.', '') : '' }}"
+                       min="0.5" max="7" step="0.001"
+                       placeholder="3.300">
+            </div>
+            {% endif %}
+
+            {# ── Taille ───────────────────────────────────────── #}
+            {% if game.isGuessHeight() %}
+            <div style="border-top: 1px solid var(--color-line)" class="pt-6 mb-6">
+                <label for="answerHeight" class="block text-sm font-bold mb-3"
+                       style="color: var(--color-ink)">
+                    {{ 'games.reveal.height_label'|trans }}
+                    <span class="font-normal" style="color: var(--color-muted)">
+                        ({{ 'games.reveal.height_unit'|trans }})
+                    </span>
+                </label>
+                <input id="answerHeight" type="number" name="answerHeight"
+                       class="form-input"
+                       value="{{ game.answerHeight ? (game.answerHeight / 10)|number_format(1, '.', '') : '' }}"
+                       min="20" max="70" step="0.1"
+                       placeholder="50.0">
+            </div>
+            {% endif %}
+
+            {# ── Notification email ───────────────────────────── #}
+            {% if not game.isRevealed() and playersWithEmail > 0 %}
+            <div style="border-top: 1px solid var(--color-line)" class="pt-6 mb-6">
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" name="notifyPlayers" value="1" checked
+                           class="mt-0.5 w-4 h-4 shrink-0 accent-orange-600">
+                    <div>
+                        <p class="text-sm font-semibold" style="color: var(--color-ink)">
+                            {{ 'games.reveal.notify_label'|trans }}
+                        </p>
+                        <p class="text-xs mt-0.5 leading-relaxed" style="color: var(--color-muted)">
+                            {{ 'games.reveal.notify_hint'|trans({'%count%': playersWithEmail}) }}
+                        </p>
+                    </div>
+                </label>
+            </div>
+            {% endif %}
+
+            {# ── Submit ───────────────────────────────────────── #}
+            <div {% if game.isGuessGender() or game.isGuessName() or game.isGuessDate() or game.isGuessWeight() or game.isGuessHeight() %}
+                 style="border-top: 1px solid var(--color-line)" class="pt-6"
+                 {% endif %}>
+                <button type="submit" class="btn btn-primary w-full"
+                        style="min-height: 3rem; font-size: 1rem">
+                    {% if game.isRevealed() %}
+                        {{ 'games.reveal.btn_update'|trans }}
+                    {% else %}
+                        {{ 'games.reveal.btn_reveal'|trans }}
+                    {% endif %}
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}

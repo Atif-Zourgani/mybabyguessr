@@ -1,9 +1,19 @@
-{% set _flashes = app.flashes(['success', 'error', 'verify_email_error', 'reset_password_error']) %}
+{% set _flashes = app.flashes(['success', 'warning', 'error', 'verify_email_error', 'reset_password_error']) %}
 
 {% if _flashes.success is defined and _flashes.success|length %}
     <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="polite">
         {% for msg in _flashes.success %}
             <div class="flash-success">{{ msg|trans }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if _flashes.warning is defined and _flashes.warning|length %}
+    <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-4" role="alert" aria-live="polite">
+        {% for msg in _flashes.warning %}
+            <div style="background-color:rgba(196,113,74,0.12);color:var(--color-brand);border:1px solid rgba(196,113,74,0.3);border-radius:0.75rem;padding:0.875rem 1.25rem;font-weight:600;">
+                {{ msg|trans }}
+            </div>
         {% endfor %}
     </div>
 {% endif %}

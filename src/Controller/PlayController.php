@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Game;
 use App\Entity\Guess;
 use App\Enum\AnswerGender;
+use App\Enum\GameStatus;
 use App\Repository\GameRepository;
 use App\Repository\GuessRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +28,18 @@ class PlayController extends AbstractController
 
         if ($game === null) {
             throw $this->createNotFoundException();
+        }
+
+        if ($game->getStatus() === GameStatus::Closed) {
+            return $this->render('games/play_closed.html.twig', ['game' => $game]);
+        }
+
+        if ($game->getStatus() === GameStatus::Revealed) {
+            return $this->redirectToRoute('app_game_reveal_public', [
+                '_locale' => $request->getLocale(),
+                'slug'    => $game->getSlug(),
+                'token'   => $token,
+            ]);
         }
 
         $sessionKey = 'player_' . $token;
@@ -101,6 +115,18 @@ class PlayController extends AbstractController
 
         if ($game === null) {
             throw $this->createNotFoundException();
+        }
+
+        if ($game->getStatus() === GameStatus::Closed) {
+            return $this->render('games/play_closed.html.twig', ['game' => $game]);
+        }
+
+        if ($game->getStatus() === GameStatus::Revealed) {
+            return $this->redirectToRoute('app_game_reveal_public', [
+                '_locale' => $request->getLocale(),
+                'slug'    => $game->getSlug(),
+                'token'   => $token,
+            ]);
         }
 
         $sessionKey = 'player_' . $token;
@@ -237,6 +263,108 @@ class PlayController extends AbstractController
             'slug'    => $game->getSlug(),
             'token'   => $token,
         ]);
+    }
+
+    #[Route('/play/{slug}/{token}/reveal', name: 'app_game_reveal_public', methods: ['GET'])]
+    public function revealPublic(
+        string $slug,
+        string $token,
+        GameRepository $gameRepository,
+    ): Response {
+        $game = $gameRepository->findOneByToken($token);
+
+        if ($game === null) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$game->isRevealed()) {
+            return $this->redirectToRoute('app_game_play', [
+                'slug'  => $game->getSlug(),
+                'token' => $token,
+            ]);
+        }
+
+        $guesses = $game->getGuesses()->toArray();
+        usort($guesses, fn($a, $b) => $a->getCreatedAt() <=> $b->getCreatedAt());
+
+        return $this->render('games/play_reveal.html.twig', [
+            'game'    => $game,
+            'winners' => $this->computeRevealWinners($game, $guesses),
+        ]);
+    }
+
+    private function computeRevealWinners(Game $game, array $guesses): array
+    {
+        $winners = [];
+
+        // Sexe — tous les corrects, ordre chronologique
+        if ($game->isGuessGender() && $game->getAnswerGender() !== null) {
+            $correct = array_values(array_filter(
+                $guesses, fn($g) => $g->getGuessGender() === $game->getAnswerGender()
+            ));
+            $winners['gender'] = array_map(fn($g) => ['guess' => $g, 'diff' => null], $correct);
+        }
+
+        // Prénom — tous les corrects, ordre chronologique (premier = meilleur)
+        if ($game->isGuessName() && $game->getAnswerName() !== null) {
+            $norm    = mb_strtolower(trim($game->getAnswerName()));
+            $correct = array_values(array_filter(
+                $guesses,
+                fn($g) => $g->getGuessName() !== null
+                    && mb_strtolower(trim($g->getGuessName())) === $norm
+            ));
+            $winners['name'] = array_map(fn($g) => ['guess' => $g, 'diff' => null], $correct);
+        }
+
+        // Date — top 3 les plus proches, diff en secondes
+        if ($game->isGuessDate() && $game->getAnswerDate() !== null) {
+            $answerTs = $game->getAnswerDate()->getTimestamp();
+            $dated    = array_values(array_filter($guesses, fn($g) => $g->getGuessDate() !== null));
+            if ($dated) {
+                usort($dated, fn($a, $b) =>
+                    abs($a->getGuessDate()->getTimestamp() - $answerTs) <=>
+                    abs($b->getGuessDate()->getTimestamp() - $answerTs)
+                );
+                $winners['date'] = array_map(
+                    fn($g) => ['guess' => $g, 'diff' => abs($g->getGuessDate()->getTimestamp() - $answerTs)],
+                    array_slice($dated, 0, 3)
+                );
+            }
+        }
+
+        // Poids — top 3 les plus proches, diff en grammes
+        if ($game->isGuessWeight() && $game->getAnswerWeight() !== null) {
+            $answerW  = $game->getAnswerWeight();
+            $weighted = array_values(array_filter($guesses, fn($g) => $g->getGuessWeight() !== null));
+            if ($weighted) {
+                usort($weighted, fn($a, $b) =>
+                    abs($a->getGuessWeight() - $answerW) <=>
+                    abs($b->getGuessWeight() - $answerW)
+                );
+                $winners['weight'] = array_map(
+                    fn($g) => ['guess' => $g, 'diff' => abs($g->getGuessWeight() - $answerW)],
+                    array_slice($weighted, 0, 3)
+                );
+            }
+        }
+
+        // Taille — top 3 les plus proches, diff en mm
+        if ($game->isGuessHeight() && $game->getAnswerHeight() !== null) {
+            $answerH  = $game->getAnswerHeight();
+            $heighted = array_values(array_filter($guesses, fn($g) => $g->getGuessHeight() !== null));
+            if ($heighted) {
+                usort($heighted, fn($a, $b) =>
+                    abs($a->getGuessHeight() - $answerH) <=>
+                    abs($b->getGuessHeight() - $answerH)
+                );
+                $winners['height'] = array_map(
+                    fn($g) => ['guess' => $g, 'diff' => abs($g->getGuessHeight() - $answerH)],
+                    array_slice($heighted, 0, 3)
+                );
+            }
+        }
+
+        return $winners;
     }
 
     #[Route('/play/{slug}/{token}/done', name: 'app_game_done', methods: ['GET'])]
