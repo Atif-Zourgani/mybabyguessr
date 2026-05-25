@@ -42,9 +42,21 @@
 .mbg-sp-6 { bottom:18%;right:20%;  font-size:0.95rem; animation-delay:0.3s;  }
 .mbg-sp-7 { top:32%;   left:2%;    font-size:0.5rem;  animation-delay:1.4s;  }
 .mbg-sp-8 { top:40%;   right:3%;   font-size:0.65rem; animation-delay:0.7s;  }
-.mbg-reveal-out  { transition: opacity 1s ease-in, filter 1s ease-in, transform 1s ease-in; }
-.mbg-reveal-from { opacity:1; filter:blur(0px);  transform:scale(1);    }
-.mbg-reveal-to   { opacity:0; filter:blur(9px);  transform:scale(1.02); }
+@property --mbg-r { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+@keyframes mbg-ink-dissolve { from { --mbg-r: 0%; } to { --mbg-r: 200%; } }
+@keyframes mbg-fog-lift { from { opacity: 1; } to { opacity: 0; } }
+.mbg-cover.mbg-dissolving {
+    animation: mbg-ink-dissolve 1.2s ease-in forwards;
+    -webkit-mask-image: radial-gradient(circle at var(--ox,50%) var(--oy,50%), transparent var(--mbg-r), #000 calc(var(--mbg-r) + 12%));
+    mask-image: radial-gradient(circle at var(--ox,50%) var(--oy,50%), transparent var(--mbg-r), #000 calc(var(--mbg-r) + 12%));
+    pointer-events: none;
+}
+.mbg-fog {
+    position: absolute; inset: 0; z-index: 5; pointer-events: none;
+    background: rgba(248,243,238,0.65);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.mbg-fog.mbg-lifting { animation: mbg-fog-lift 0.8s ease-out 0.55s forwards; }
 </style>
 {% endblock %}
 
@@ -87,9 +99,9 @@
     {% if game.isGuessGender() %}
     <div class="card mb-4 text-center py-8"
          style="position:relative;overflow:hidden;{% if game.answerGender %}background:linear-gradient(135deg,rgba(196,113,74,0.07) 0%,rgba(122,78,59,0.04) 100%);border:2px solid rgba(196,113,74,0.18){% endif %}"
-         x-data="{ revealed: false }">
+         x-data="{ revealed: false, dissolving: false }">
 
-        <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
+        <div class="mbg-cover" x-show="!revealed" @click="dissolving=true; const _r=$el.getBoundingClientRect(); $el.style.setProperty('--ox',((event.clientX-_r.left)/_r.width*100).toFixed(1)+'%'); $el.style.setProperty('--oy',((event.clientY-_r.top)/_r.height*100).toFixed(1)+'%'); $el.classList.add('mbg-dissolving'); setTimeout(()=>{revealed=true},1400)">
             <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
             <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
             <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -101,6 +113,7 @@
                 {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
             </p>
         </div>
+        <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
 
         <p class="text-xs font-bold uppercase tracking-widest mb-5"
            style="color:var(--color-muted)">{{ 'play.reveal.winners_gender'|trans }}</p>
@@ -150,9 +163,9 @@
 
     {# ── Prénom ───────────────────────────────────────────────── #}
     {% if game.isGuessName() %}
-    <div class="card mb-4 text-center py-8" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
+    <div class="card mb-4 text-center py-8" style="position:relative;overflow:hidden" x-data="{ revealed: false, dissolving: false }">
 
-        <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
+        <div class="mbg-cover" x-show="!revealed" @click="dissolving=true; const _r=$el.getBoundingClientRect(); $el.style.setProperty('--ox',((event.clientX-_r.left)/_r.width*100).toFixed(1)+'%'); $el.style.setProperty('--oy',((event.clientY-_r.top)/_r.height*100).toFixed(1)+'%'); $el.classList.add('mbg-dissolving'); setTimeout(()=>{revealed=true},1400)">
             <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
             <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
             <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -164,6 +177,7 @@
                 {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
             </p>
         </div>
+        <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
 
         <p class="text-xs font-bold uppercase tracking-widest mb-5"
            style="color:var(--color-muted)">{{ 'play.reveal.winners_name'|trans }}</p>
@@ -231,8 +245,8 @@
         {% endif %}
 
             {% if hasDate %}
-            <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
-                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
+            <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false, dissolving: false }">
+                <div class="mbg-cover" x-show="!revealed" @click="dissolving=true; const _r=$el.getBoundingClientRect(); $el.style.setProperty('--ox',((event.clientX-_r.left)/_r.width*100).toFixed(1)+'%'); $el.style.setProperty('--oy',((event.clientY-_r.top)/_r.height*100).toFixed(1)+'%'); $el.classList.add('mbg-dissolving'); setTimeout(()=>{revealed=true},1400)">
                     <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
                     <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -244,6 +258,7 @@
                         {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
                     </p>
                 </div>
+                <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
                 <p class="text-xs font-bold uppercase tracking-widest mb-4"
                    style="color:var(--color-muted)">{{ 'play.reveal.winners_date'|trans }}</p>
                 {% if game.answerDate %}
@@ -303,8 +318,8 @@
             {% endif %}
 
             {% if hasWeight %}
-            <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
-                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
+            <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false, dissolving: false }">
+                <div class="mbg-cover" x-show="!revealed" @click="dissolving=true; const _r=$el.getBoundingClientRect(); $el.style.setProperty('--ox',((event.clientX-_r.left)/_r.width*100).toFixed(1)+'%'); $el.style.setProperty('--oy',((event.clientY-_r.top)/_r.height*100).toFixed(1)+'%'); $el.classList.add('mbg-dissolving'); setTimeout(()=>{revealed=true},1400)">
                     <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
                     <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -316,6 +331,7 @@
                         {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
                     </p>
                 </div>
+                <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
                 <p class="text-xs font-bold uppercase tracking-widest mb-4"
                    style="color:var(--color-muted)">{{ 'play.reveal.winners_weight'|trans }}</p>
                 {% if game.answerWeight %}
@@ -373,8 +389,8 @@
             {% endif %}
 
             {% if hasHeight %}
-            <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false }">
-                <div class="mbg-cover" x-show="!revealed" @click="revealed = true" x-transition:leave="mbg-reveal-out" x-transition:leave-start="mbg-reveal-from" x-transition:leave-end="mbg-reveal-to">
+            <div class="card text-center py-6" style="position:relative;overflow:hidden" x-data="{ revealed: false, dissolving: false }">
+                <div class="mbg-cover" x-show="!revealed" @click="dissolving=true; const _r=$el.getBoundingClientRect(); $el.style.setProperty('--ox',((event.clientX-_r.left)/_r.width*100).toFixed(1)+'%'); $el.style.setProperty('--oy',((event.clientY-_r.top)/_r.height*100).toFixed(1)+'%'); $el.classList.add('mbg-dissolving'); setTimeout(()=>{revealed=true},1400)">
                     <em class="mbg-sp mbg-sp-1">✦</em><em class="mbg-sp mbg-sp-2">✧</em>
                     <em class="mbg-sp mbg-sp-3">✦</em><em class="mbg-sp mbg-sp-4">✧</em>
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
@@ -386,6 +402,7 @@
                         {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
                     </p>
                 </div>
+                <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
                 <p class="text-xs font-bold uppercase tracking-widest mb-4"
                    style="color:var(--color-muted)">{{ 'play.reveal.winners_height'|trans }}</p>
                 {% if game.answerHeight %}
