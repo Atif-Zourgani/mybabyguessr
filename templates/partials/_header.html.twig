@@ -29,9 +29,9 @@
                 {% set _route  = app.request.attributes.get('_route') %}
                 {% set _params = app.request.attributes.get('_route_params') %}
                 {% set _langs = [
-                    {'code': 'fr', 'label': 'Français'},
-                    {'code': 'en', 'label': 'English'},
-                    {'code': 'es', 'label': 'Español'}
+                    {'code': 'fr', 'label': 'Français', 'flag': '🇫🇷'},
+                    {'code': 'en', 'label': 'English',  'flag': '🇬🇧'},
+                    {'code': 'es', 'label': 'Español',  'flag': '🇪🇸'}
                 ] %}
                 <nav aria-label="{{ 'nav.lang_' ~ app.request.locale|default('fr')|trans }}"
                      x-data="{ open: false }"
@@ -39,17 +39,14 @@
                      @keydown.escape="open = false"
                      class="relative">
 
+                    {% set _currentFlag = '' %}
+                    {% for lang in _langs %}{% if lang.code == app.request.locale %}{% set _currentFlag = lang.flag %}{% endif %}{% endfor %}
                     <button @click="open = !open"
                             :aria-expanded="open"
                             type="button"
                             class="flex items-center gap-1.5 text-sm font-bold rounded-lg px-2.5 py-1.5 transition-colors"
                             style="color:var(--color-ink);border:1px solid var(--color-border);background:var(--color-cream)">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
+                        <span style="font-size:1.1rem;line-height:1" aria-hidden="true">{{ _currentFlag }}</span>
                         <span>{{ app.request.locale|upper }}</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
@@ -76,16 +73,16 @@
                            {% if app.request.locale == lang.code %}aria-current="true"{% endif %}
                            class="flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors"
                            style="text-decoration:none;color:var(--color-ink);{% if app.request.locale == lang.code %}background:rgba(196,113,74,0.10);{% endif %}">
+                            <span style="font-size:1.1rem;line-height:1;width:20px;display:inline-block;text-align:center" aria-hidden="true">{{ lang.flag }}</span>
+                            {{ lang.label }}
                             {% if app.request.locale == lang.code %}
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                                  stroke="var(--color-brand)" stroke-width="3"
-                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                                 class="ml-auto">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            {% else %}
-                            <span style="width:13px" aria-hidden="true"></span>
                             {% endif %}
-                            {{ lang.label }}
                         </a>
                         {% endfor %}
                     </div>
