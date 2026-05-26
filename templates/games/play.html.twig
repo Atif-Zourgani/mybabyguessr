@@ -10,7 +10,8 @@
 {% block og_description %}{{ _invite_desc }}{% endblock %}
 
 {% block og_image %}
-{% set _img_url = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
+{% set _base = app.request.schemeAndHttpHost %}
+{% set _img_url = game.image ? (_base ~ '/' ~ game.image) : (_base ~ asset('images/logo-mybabyguessr.png')) %}
 <meta property="og:image" content="{{ _img_url }}">
 {% if game.image %}
 <meta property="og:image:alt" content="{{ game.displayTitle }}">
@@ -22,7 +23,7 @@
 {% endblock %}
 
 {% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
-{% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
+{% block twitter_image %}{% set _b = app.request.schemeAndHttpHost %}{{ game.image ? (_b ~ '/' ~ game.image) : (_b ~ asset('images/logo-mybabyguessr.png')) }}{% endblock %}
 
 {% block stylesheets %}
 <style>

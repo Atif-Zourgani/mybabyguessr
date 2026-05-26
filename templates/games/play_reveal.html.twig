@@ -15,14 +15,15 @@
                     ? 'Scopri le risposte vere e i vincitori del Baby Guessr ' ~ game.displayTitle ~ '!'
                     : 'Discover the real answers and the winners of the ' ~ game.displayTitle ~ ' Baby Guessr!')))) }}{% endblock %}
 {% block og_image %}
-{% set _og_img = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
+{% set _base = app.request.schemeAndHttpHost %}
+{% set _og_img = game.image ? (_base ~ '/' ~ game.image) : (_base ~ asset('images/logo-mybabyguessr.png')) %}
 <meta property="og:image" content="{{ _og_img }}">
 <meta property="og:image:width"  content="{{ game.image ? '800' : '1024' }}">
 <meta property="og:image:height" content="{{ game.image ? '800' : '1024' }}">
 <meta property="og:image:alt"    content="{{ game.displayTitle|e('html_attr') }}">
 {% endblock %}
 {% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
-{% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
+{% block twitter_image %}{% set _b = app.request.schemeAndHttpHost %}{{ game.image ? (_b ~ '/' ~ game.image) : (_b ~ asset('images/logo-mybabyguessr.png')) }}{% endblock %}
 
 {% block stylesheets %}
 <style>
