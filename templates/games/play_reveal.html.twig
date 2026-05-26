@@ -13,7 +13,7 @@
                 ? 'Entdecke die echten Antworten und die Gewinner des Baby Guessr ' ~ game.displayTitle ~ '!'
                 : (app.request.locale == 'it'
                     ? 'Scopri le risposte vere e i vincitori del Baby Guessr ' ~ game.displayTitle ~ '!'
-                    : 'Discover the real answers and the winners of the ' ~ game.displayTitle ~ ' Baby Guessr!'))) }}{% endblock %}
+                    : 'Discover the real answers and the winners of the ' ~ game.displayTitle ~ ' Baby Guessr!')))) }}{% endblock %}
 {% block og_image %}
 {% set _og_img = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
 <meta property="og:image" content="{{ _og_img }}">
