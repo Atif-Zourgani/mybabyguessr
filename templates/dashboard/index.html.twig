@@ -163,7 +163,7 @@
                                     {{ game.displayTitle }}
                                 </div>
                                 <div class="text-xs mt-0.5" style="color: var(--color-muted)">
-                                    {{ game.createdAt|date(app.request.locale != 'en' ? 'd/m/Y' : 'm/d/Y') }}
+                                    {{ game.createdAt|date(app.request.locale == 'en' ? 'm/d/Y' : (app.request.locale == 'de' ? 'd.m.Y' : 'd/m/Y')) }}
                                 </div>
                             </div>
 

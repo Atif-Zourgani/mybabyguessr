@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ locale == 'fr' ? 'Réinitialisation de votre mot de passe' : (locale == 'es' ? 'Restablece tu contraseña' : (locale == 'pt' ? 'Reposição da sua palavra-passe' : 'Reset your password')) }}</title>
+    <title>{{ locale == 'fr' ? 'Réinitialisation de votre mot de passe' : (locale == 'es' ? 'Restablece tu contraseña' : (locale == 'pt' ? 'Reposição da sua palavra-passe' : (locale == 'de' ? 'Dein Passwort zurücksetzen' : 'Reset your password'))) }}</title>
     <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
@@ -57,6 +57,8 @@
                                 ¡Hola {{ user.firstName }}!
                             {% elseif locale == 'pt' %}
                                 Olá {{ user.firstName }}!
+                            {% elseif locale == 'de' %}
+                                Hallo {{ user.firstName }}!
                             {% else %}
                                 Hello {{ user.firstName }}!
                             {% endif %}
@@ -73,6 +75,9 @@
                             {% elseif locale == 'pt' %}
                                 Solicitou a reposição da sua palavra-passe no <strong style="color:#2C1F15;">MyBabyGuessr</strong>.
                                 Clique no botão abaixo para escolher uma nova.
+                            {% elseif locale == 'de' %}
+                                Du hast das Zurücksetzen deines Passworts bei <strong style="color:#2C1F15;">MyBabyGuessr</strong> angefordert.
+                                Klicke auf den Button unten, um ein neues Passwort zu wählen.
                             {% else %}
                                 You requested a password reset on <strong style="color:#2C1F15;">MyBabyGuessr</strong>.
                                 Click the button below to choose a new one.
@@ -87,7 +92,7 @@
                                        class="btn-cta"
                                        style="display:inline-block;background-color:#C4714A;color:#ffffff;font-family:'Nunito','Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:10px;mso-padding-alt:0;text-align:center;">
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%;mso-text-raise:30pt">&nbsp;</i><![endif]-->
-                                        {{ locale == 'fr' ? 'Réinitialiser mon mot de passe' : (locale == 'es' ? 'Restablecer mi contraseña' : (locale == 'pt' ? 'Repor a minha palavra-passe' : 'Reset my password')) }}
+                                        {{ locale == 'fr' ? 'Réinitialiser mon mot de passe' : (locale == 'es' ? 'Restablecer mi contraseña' : (locale == 'pt' ? 'Repor a minha palavra-passe' : (locale == 'de' ? 'Passwort zurücksetzen' : 'Reset my password'))) }}
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%">&nbsp;</i><![endif]-->
                                     </a>
                                 </td>
@@ -102,6 +107,8 @@
                                 ⏱ Este enlace expira en <strong style="color:#2C1F15;">{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
                             {% elseif locale == 'pt' %}
                                 ⏱ Este link expira em <strong style="color:#2C1F15;">{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
+                            {% elseif locale == 'de' %}
+                                ⏱ Dieser Link läuft ab in <strong style="color:#2C1F15;">{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
                             {% else %}
                                 ⏱ This link expires in <strong style="color:#2C1F15;">{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
                             {% endif %}
@@ -110,7 +117,7 @@
                         {# Lien de secours #}
                         {% set resetUrl = url('app_reset_password', {token: resetToken.token, _locale: locale}) %}
                         <p style="margin:0 0 8px;font-size:13px;color:#7A6A5F;line-height:1.5;">
-                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : 'If the button doesn\'t work, copy this link into your browser:')) }}
+                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : (locale == 'de' ? 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:' : 'If the button doesn\'t work, copy this link into your browser:'))) }}
                         </p>
                         <p style="margin:0 0 32px;font-size:12px;word-break:break-all;">
                             <a href="{{ resetUrl }}" style="color:#C4714A;">{{ resetUrl }}</a>
@@ -127,6 +134,8 @@
                                 Si no has solicitado este restablecimiento, ignora este email — tu contraseña no será modificada.
                             {% elseif locale == 'pt' %}
                                 Se não solicitou esta reposição, ignore este email — a sua palavra-passe não será alterada.
+                            {% elseif locale == 'de' %}
+                                Falls du kein Zurücksetzen des Passworts angefordert hast, kannst du diese E-Mail ignorieren — dein Passwort wird nicht geändert.
                             {% else %}
                                 If you did not request a password reset, you can safely ignore this email — your password will not be changed.
                             {% endif %}

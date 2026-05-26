@@ -1,0 +1,5 @@
+error.agree_terms: "Du musst die Nutzungsbedingungen akzeptieren."
+error.email.unique: "Es existiert bereits ein Konto mit dieser E-Mail-Adresse."
+error.password.mismatch: "Die beiden Passwörter stimmen nicht überein."
+error.password.uppercase: "Das Passwort muss mindestens einen Großbuchstaben enthalten."
+error.password.special: "Das Passwort muss mindestens ein Sonderzeichen enthalten."

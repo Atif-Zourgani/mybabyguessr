@@ -31,6 +31,17 @@ Descubra os resultados e veja quem adivinhou certo:
 ---
 Recebeu este email porque participou no Baby Guessr "{{ game.displayTitle }}".
 © {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
+{% elseif locale == 'de' %}
+Hallo {{ playerName }}!
+
+Die echten Antworten für den Baby Guessr "{{ game.displayTitle }}" sind da!
+Entdecke die Ergebnisse und sieh, wer richtig geraten hat:
+
+{{ revealUrl }}
+
+---
+Du erhältst diese E-Mail, weil du am Baby Guessr "{{ game.displayTitle }}" teilgenommen hast.
+© {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
 {% else %}
 Hello {{ playerName }}!
 

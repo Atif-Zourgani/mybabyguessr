@@ -14,7 +14,7 @@
     "name": "MyBabyGuessr",
     "url": "{{ app.request.schemeAndHttpHost }}",
     "description": "{{ 'home.seo.description'|trans|e('js') }}",
-    "inLanguage": "{{ app.request.locale == 'fr' ? 'fr-FR' : (app.request.locale == 'es' ? 'es-ES' : (app.request.locale == 'pt' ? 'pt-PT' : 'en-GB')) }}"
+    "inLanguage": "{{ app.request.locale == 'fr' ? 'fr-FR' : (app.request.locale == 'es' ? 'es-ES' : (app.request.locale == 'pt' ? 'pt-PT' : (app.request.locale == 'de' ? 'de-DE' : 'en-GB'))) }}"
   },
   {
     "@context": "https://schema.org",

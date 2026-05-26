@@ -2,8 +2,8 @@
 {% block title %}{{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
-{% set dateFormat = app.request.locale != 'en' ? 'd/m/Y' : 'm/d/Y' %}
 {% set locale = app.request.locale %}
+{% set dateFormat = locale == 'en' ? 'm/d/Y' : (locale == 'de' ? 'd.m.Y' : 'd/m/Y') %}
 {% set isEsOrPt = locale == 'es' or locale == 'pt' %}
 
 {% block body %}
@@ -89,7 +89,7 @@
                     </svg>
                     <span class="hidden sm:inline">{{ 'games.show.share_btn'|trans }}</span>
                     <span class="sm:hidden" style="font-size:0.6rem;line-height:1.3;margin-top:0.1rem">
-                        {{ locale == 'fr' ? 'Partager' : (locale == 'es' ? 'Compartir' : (locale == 'pt' ? 'Partilhar' : 'Share')) }}
+                        {{ locale == 'fr' ? 'Partager' : (locale == 'es' ? 'Compartir' : (locale == 'pt' ? 'Partilhar' : (locale == 'de' ? 'Teilen' : 'Share'))) }}
                     </span>
                 </a>
 
@@ -129,7 +129,7 @@
                         </svg>
                         <span class="hidden sm:inline">{{ 'games.toggle.btn_close'|trans }}</span>
                         <span class="sm:hidden" style="font-size:0.6rem;line-height:1.3;margin-top:0.1rem">
-                            {{ locale == 'fr' ? 'Fermer' : (locale == 'es' ? 'Cerrar' : (locale == 'pt' ? 'Fechar' : 'Close')) }}
+                            {{ locale == 'fr' ? 'Fermer' : (locale == 'es' ? 'Cerrar' : (locale == 'pt' ? 'Fechar' : (locale == 'de' ? 'Schließen' : 'Close'))) }}
                         </span>
                     {% else %}
                         <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none"
@@ -140,7 +140,7 @@
                         </svg>
                         <span class="hidden sm:inline">{{ 'games.toggle.btn_open'|trans }}</span>
                         <span class="sm:hidden" style="font-size:0.6rem;line-height:1.3;margin-top:0.1rem">
-                            {{ locale == 'fr' ? 'Ouvrir' : (locale == 'es' or locale == 'pt' ? 'Abrir' : 'Open') }}
+                            {{ locale == 'fr' ? 'Ouvrir' : (locale == 'es' or locale == 'pt' ? 'Abrir' : (locale == 'de' ? 'Öffnen' : 'Open')) }}
                         </span>
                     {% endif %}
                 </button>
@@ -284,7 +284,7 @@
                 <div class="col-span-2 sm:col-span-1 card text-center py-6">
                     <p class="text-4xl font-bold" style="color: var(--color-brand)">{{ stats.total }}</p>
                     <p class="text-xs font-semibold uppercase tracking-wider mt-1" style="color: var(--color-muted)">
-                        {{ locale == 'fr' ? 'joueurs' : (locale == 'es' ? 'jugadores' : (locale == 'pt' ? 'jogadores' : 'players')) }}
+                        {{ locale == 'fr' ? 'joueurs' : (locale == 'es' ? 'jugadores' : (locale == 'pt' ? 'jogadores' : (locale == 'de' ? 'Spieler' : 'players'))) }}
                     </p>
                 </div>
 
@@ -377,12 +377,12 @@
             <div class="card mb-4 px-5 py-5">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Palmarès' : (locale == 'es' or locale == 'pt' ? 'Resultados' : 'Results') }}
+                        {{ locale == 'fr' ? 'Palmarès' : (locale == 'es' or locale == 'pt' ? 'Resultados' : (locale == 'de' ? 'Ergebnisse' : 'Results')) }}
                     </p>
                     <a href="{{ url('app_game_reveal_public', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) }}"
                        class="text-xs font-semibold hover:underline"
                        style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Voir la page publique →' : (locale == 'es' ? 'Ver la página pública →' : (locale == 'pt' ? 'Ver a página pública →' : 'See public page →')) }}
+                        {{ locale == 'fr' ? 'Voir la page publique →' : (locale == 'es' ? 'Ver la página pública →' : (locale == 'pt' ? 'Ver a página pública →' : (locale == 'de' ? 'Öffentliche Seite →' : 'See public page →'))) }}
                     </a>
                 </div>
                 {% if game.isGuessGender() and game.answerGender %}
@@ -410,7 +410,7 @@
                             {{ stats.name.winner_names[0] }}{% if stats.name.winner_names|length > 1 %} +{{ stats.name.winner_names|length - 1 }}{% endif %}
                         </span>
                         {% else %}
-                        <span class="text-xs italic" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Personne' : (locale == 'es' ? 'Nadie' : (locale == 'pt' ? 'Ninguém' : 'No one')) }}</span>
+                        <span class="text-xs italic" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Personne' : (locale == 'es' ? 'Nadie' : (locale == 'pt' ? 'Ninguém' : (locale == 'de' ? 'Niemand' : 'No one'))) }}</span>
                         {% endif %}
                     </div>
                 </div>
@@ -511,7 +511,9 @@
                                 ? stats.gender.correct_count ~ ' jugador' ~ (stats.gender.correct_count > 1 ? 'es' : '') ~ ' acertaron (' ~ stats.gender.correct_pct ~ '%)'
                                 : (locale == 'pt'
                                     ? stats.gender.correct_count ~ ' jogador' ~ (stats.gender.correct_count > 1 ? 'es' : '') ~ ' acertaram (' ~ stats.gender.correct_pct ~ '%)'
-                                    : stats.gender.correct_count ~ ' player' ~ (stats.gender.correct_count > 1 ? 's' : '') ~ ' got it right (' ~ stats.gender.correct_pct ~ '%)')) }}
+                                    : (locale == 'de'
+                                        ? stats.gender.correct_count ~ ' Spieler ' ~ (stats.gender.correct_count > 1 ? 'haben' : 'hat') ~ ' richtig getippt (' ~ stats.gender.correct_pct ~ '%)'
+                                        : stats.gender.correct_count ~ ' player' ~ (stats.gender.correct_count > 1 ? 's' : '') ~ ' got it right (' ~ stats.gender.correct_pct ~ '%)'))) }}
                     </p>
                 </div>
                 {% endif %}
@@ -615,7 +617,7 @@
                     </p>
                     {% if game.status.value == 'revealed' and game.answerName %}
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : 'Answer:')) }}
+                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : 'Answer:'))) }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ game.answerName }}</span>
                     </p>
                     {% endif %}
@@ -697,9 +699,9 @@
             {% if game.status.value == 'revealed' and game.answerDate and stats.date.sorted_by_diff is defined %}
             <div class="card-panel">
                 <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--color-line)">
-                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : 'Ranking')) }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : (locale == 'de' ? 'Rangliste' : 'Ranking'))) }}</p>
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : 'Answer:')) }}
+                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : 'Answer:'))) }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ game.answerDate|date(dateFormat) }}</span>
                     </p>
                 </div>
@@ -717,9 +719,9 @@
                     <div class="text-right">
                         <span class="font-semibold" style="color:var(--color-ink)">{{ item.guess.guessDate|date(dateFormat) }}</span>
                         <span class="text-xs ml-2" style="color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                            {% if diffDays == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : 'Exact!')) }}
-                            {% elseif diffDays == 1 %}{{ locale == 'fr' ? '1 jour' : (locale == 'es' ? '1 día' : (locale == 'pt' ? '1 dia' : '1 day')) }}
-                            {% else %}{{ diffDays }}{{ locale == 'fr' ? ' j' : ' d' }}
+                            {% if diffDays == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : (locale == 'de' ? 'Genau!' : 'Exact!'))) }}
+                            {% elseif diffDays == 1 %}{{ locale == 'fr' ? '1 jour' : (locale == 'es' ? '1 día' : (locale == 'pt' ? '1 dia' : (locale == 'de' ? '1 Tag' : '1 day'))) }}
+                            {% else %}{{ diffDays }}{{ locale == 'fr' ? ' j' : (locale == 'de' ? ' T' : ' d') }}
                             {% endif %}
                         </span>
                     </div>
@@ -790,9 +792,9 @@
             {% if game.status.value == 'revealed' and game.answerWeight and stats.weight.sorted_by_diff is defined %}
             <div class="card-panel">
                 <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--color-line)">
-                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : 'Ranking')) }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : (locale == 'de' ? 'Rangliste' : 'Ranking'))) }}</p>
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : 'Answer:')) }}
+                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : 'Answer:'))) }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ (game.answerWeight / 1000)|number_format(3, '.', '') }} kg</span>
                     </p>
                 </div>
@@ -809,7 +811,7 @@
                     <div class="text-right">
                         <span class="font-semibold" style="color:var(--color-ink)">{{ (item.guess.guessWeight / 1000)|number_format(3, '.', '') }} kg</span>
                         <span class="text-xs ml-2" style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                            {% if item.diff == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : 'Exact!')) }}
+                            {% if item.diff == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : (locale == 'de' ? 'Genau!' : 'Exact!'))) }}
                             {% elseif item.diff < 1000 %}{{ item.diff }} g
                             {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
                             {% endif %}
@@ -889,9 +891,9 @@
             {% if game.status.value == 'revealed' and game.answerHeight and stats.height.sorted_by_diff is defined %}
             <div class="card-panel">
                 <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--color-line)">
-                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : 'Ranking')) }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : (locale == 'de' ? 'Rangliste' : 'Ranking'))) }}</p>
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : 'Answer:')) }}
+                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : 'Answer:'))) }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ (game.answerHeight / 10)|number_format(1, '.', '') }} cm</span>
                     </p>
                 </div>
@@ -908,7 +910,7 @@
                     <div class="text-right">
                         <span class="font-semibold" style="color:var(--color-ink)">{{ (item.guess.guessHeight / 10)|number_format(1, '.', '') }} cm</span>
                         <span class="text-xs ml-2" style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                            {% if item.diff == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : 'Exact!')) }}
+                            {% if item.diff == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : (locale == 'de' ? 'Genau!' : 'Exact!'))) }}
                             {% elseif item.diff < 10 %}{{ item.diff }} mm
                             {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
                             {% endif %}
