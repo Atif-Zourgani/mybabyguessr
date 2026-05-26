@@ -19,7 +19,7 @@ home:
     features:
         title: "Everything you need"
         subtitle: "A simple, free, friction-free baby guessing game for your guests."
-        feature1_title: "5 categories to guess"
+        feature1_title: "Up to 5 categories to guess"
         feature1_desc: "Name, gender, due date, weight, length — choose one or several categories as you like."
         feature2_title: "Instant sharing"
         feature2_desc: "One unique link to send via WhatsApp, SMS or email. Works on all devices, no app required."
