@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ locale == 'fr' ? 'Confirmez votre adresse email' : (locale == 'es' ? 'Confirma tu dirección de email' : (locale == 'pt' ? 'Confirme o seu endereço de email' : (locale == 'de' ? 'Bestätige deine E-Mail-Adresse' : 'Confirm your email address'))) }}</title>
+    <title>{{ locale == 'fr' ? 'Confirmez votre adresse email' : (locale == 'es' ? 'Confirma tu dirección de email' : (locale == 'pt' ? 'Confirme o seu endereço de email' : (locale == 'de' ? 'Bestätige deine E-Mail-Adresse' : (locale == 'it' ? 'Conferma il tuo indirizzo e-mail' : 'Confirm your email address')))) }}</title>
     <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
@@ -60,6 +60,8 @@
                                 Olá {{ user.firstName }}!
                             {% elseif locale == 'de' %}
                                 Hallo {{ user.firstName }}!
+                            {% elseif locale == 'it' %}
+                                Ciao {{ user.firstName }}!
                             {% else %}
                                 Hello {{ user.firstName }}!
                             {% endif %}
@@ -79,6 +81,9 @@
                             {% elseif locale == 'de' %}
                                 Danke für deine Registrierung bei <strong style="color:#2C1F15;">MyBabyGuessr</strong>.
                                 Um dein Konto zu aktivieren und loszuspielen, bestätige deine E-Mail-Adresse mit einem Klick auf den Button unten.
+                            {% elseif locale == 'it' %}
+                                Grazie per la tua registrazione su <strong style="color:#2C1F15;">MyBabyGuessr</strong>.
+                                Per attivare il tuo account e iniziare a giocare, conferma il tuo indirizzo e-mail cliccando sul pulsante qui sotto.
                             {% else %}
                                 Thank you for signing up on <strong style="color:#2C1F15;">MyBabyGuessr</strong>.
                                 To activate your account and start playing, confirm your email address by clicking the button below.
@@ -93,7 +98,7 @@
                                        class="btn-cta"
                                        style="display:inline-block;background-color:#C4714A;color:#ffffff;font-family:'Nunito','Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:10px;mso-padding-alt:0;text-align:center;">
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%;mso-text-raise:30pt">&nbsp;</i><![endif]-->
-                                        {{ locale == 'fr' ? 'Confirmer mon adresse email' : (locale == 'es' ? 'Confirmar mi dirección de email' : (locale == 'pt' ? 'Confirmar o meu endereço de email' : (locale == 'de' ? 'E-Mail-Adresse bestätigen' : 'Confirm my email address'))) }}
+                                        {{ locale == 'fr' ? 'Confirmer mon adresse email' : (locale == 'es' ? 'Confirmar mi dirección de email' : (locale == 'pt' ? 'Confirmar o meu endereço de email' : (locale == 'de' ? 'E-Mail-Adresse bestätigen' : (locale == 'it' ? 'Conferma il mio indirizzo e-mail' : 'Confirm my email address')))) }}
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%">&nbsp;</i><![endif]-->
                                     </a>
                                 </td>
@@ -110,6 +115,8 @@
                                 ⏱ Este link expira a <strong style="color:#2C1F15;">{{ expiresAt|date('d/m/Y às H:i', 'Europe/Paris') }}</strong>.
                             {% elseif locale == 'de' %}
                                 ⏱ Dieser Link läuft ab am <strong style="color:#2C1F15;">{{ expiresAt|date('d.m.Y um H:i', 'Europe/Berlin') }}</strong>.
+                            {% elseif locale == 'it' %}
+                                ⏱ Questo link scade il <strong style="color:#2C1F15;">{{ expiresAt|date('d/m/Y alle H:i', 'Europe/Rome') }}</strong>.
                             {% else %}
                                 ⏱ This link expires on <strong style="color:#2C1F15;">{{ expiresAt|date('m/d/Y at H:i', 'Europe/Paris') }}</strong>.
                             {% endif %}
@@ -117,7 +124,7 @@
 
                         {# Lien de secours #}
                         <p style="margin:0 0 8px;font-size:13px;color:#7A6A5F;line-height:1.5;">
-                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : (locale == 'de' ? 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:' : 'If the button doesn\'t work, copy this link into your browser:'))) }}
+                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : (locale == 'de' ? 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:' : (locale == 'it' ? 'Se il pulsante non funziona, copia questo link nel tuo browser:' : 'If the button doesn\'t work, copy this link into your browser:')))) }}
                         </p>
                         <p style="margin:0 0 32px;font-size:12px;word-break:break-all;">
                             <a href="{{ signedUrl }}" style="color:#C4714A;">{{ signedUrl }}</a>
@@ -136,6 +143,8 @@
                                 Se não criou uma conta no MyBabyGuessr, ignore este email.
                             {% elseif locale == 'de' %}
                                 Falls du kein MyBabyGuessr-Konto erstellt hast, kannst du diese E-Mail einfach ignorieren.
+                            {% elseif locale == 'it' %}
+                                Se non hai creato un account MyBabyGuessr, puoi ignorare questa e-mail.
                             {% else %}
                                 If you did not create a MyBabyGuessr account, you can safely ignore this email.
                             {% endif %}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ locale == 'fr' ? 'La révélation est arrivée !' : (locale == 'es' ? '¡La revelación está aquí!' : (locale == 'pt' ? 'A revelação chegou!' : (locale == 'de' ? 'Die Enthüllung ist da!' : 'The reveal is here!'))) }}</title>
+    <title>{{ locale == 'fr' ? 'La révélation est arrivée !' : (locale == 'es' ? '¡La revelación está aquí!' : (locale == 'pt' ? 'A revelação chegou!' : (locale == 'de' ? 'Die Enthüllung ist da!' : (locale == 'it' ? 'La rivelazione è arrivata!' : 'The reveal is here!')))) }}</title>
     <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
@@ -70,6 +70,8 @@
                                 Olá {{ playerName }}!
                             {% elseif locale == 'de' %}
                                 Hallo {{ playerName }}!
+                            {% elseif locale == 'it' %}
+                                Ciao {{ playerName }}!
                             {% else %}
                                 Hello {{ playerName }}!
                             {% endif %}
@@ -89,6 +91,9 @@
                             {% elseif locale == 'de' %}
                                 Die echten Antworten für <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong> sind da!
                                 Entdecke die Ergebnisse und sieh, wer richtig geraten hat.
+                            {% elseif locale == 'it' %}
+                                Le risposte vere per <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong> sono qui!
+                                Scopri i risultati e vedi chi ha indovinato.
                             {% else %}
                                 The real answers for <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong> are here!
                                 Discover the results and see who guessed right.
@@ -103,7 +108,7 @@
                                        class="btn-cta"
                                        style="display:inline-block;background-color:#C4714A;color:#ffffff;font-family:'Nunito','Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:10px;mso-padding-alt:0;text-align:center;">
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%;mso-text-raise:30pt">&nbsp;</i><![endif]-->
-                                        {{ locale == 'fr' ? 'Voir la révélation' : (locale == 'es' ? 'Ver la revelación' : (locale == 'pt' ? 'Ver a revelação' : (locale == 'de' ? 'Enthüllung ansehen' : 'See the reveal'))) }}
+                                        {{ locale == 'fr' ? 'Voir la révélation' : (locale == 'es' ? 'Ver la revelación' : (locale == 'pt' ? 'Ver a revelação' : (locale == 'de' ? 'Enthüllung ansehen' : (locale == 'it' ? 'Vedi la rivelazione' : 'See the reveal')))) }}
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%">&nbsp;</i><![endif]-->
                                     </a>
                                 </td>
@@ -112,7 +117,7 @@
 
                         {# Lien de secours #}
                         <p style="margin:0 0 8px;font-size:13px;color:#7A6A5F;line-height:1.5;">
-                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : (locale == 'de' ? 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:' : 'If the button doesn\'t work, copy this link into your browser:'))) }}
+                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : (locale == 'de' ? 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:' : (locale == 'it' ? 'Se il pulsante non funziona, copia questo link nel tuo browser:' : 'If the button doesn\'t work, copy this link into your browser:')))) }}
                         </p>
                         <p style="margin:0 0 32px;font-size:12px;word-break:break-all;">
                             <a href="{{ revealUrl }}" style="color:#C4714A;">{{ revealUrl }}</a>
@@ -131,6 +136,8 @@
                                 Recebeu este email porque participou no Baby Guessr <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong>.
                             {% elseif locale == 'de' %}
                                 Du erhältst diese E-Mail, weil du am Baby Guessr <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong> teilgenommen hast.
+                            {% elseif locale == 'it' %}
+                                Hai ricevuto questa e-mail perché hai partecipato al Baby Guessr <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong>.
                             {% else %}
                                 You received this email because you participated in the Baby Guessr <strong style="color:#2C1F15;">{{ game.displayTitle }}</strong>.
                             {% endif %}
