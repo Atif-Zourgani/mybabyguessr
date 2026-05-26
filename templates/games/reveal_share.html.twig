@@ -2,6 +2,44 @@
 {% block title %}{{ 'games.reveal_share.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block og_title %}{{ app.request.locale == 'fr'
+    ? 'Révélation — ' ~ game.displayTitle
+    : (app.request.locale == 'es'
+        ? 'Revelación — ' ~ game.displayTitle
+        : (app.request.locale == 'pt'
+            ? 'Revelação — ' ~ game.displayTitle
+            : (app.request.locale == 'de'
+                ? 'Enthüllung — ' ~ game.displayTitle
+                : (app.request.locale == 'it'
+                    ? 'Rivelazione — ' ~ game.displayTitle
+                    : 'The Reveal — ' ~ game.displayTitle)))) }}{% endblock %}
+
+{% block og_description %}{{ app.request.locale == 'fr'
+    ? 'Les vraies réponses du Baby Guessr ' ~ game.displayTitle ~ ' sont révélées ! Découvrez qui a deviné juste.'
+    : (app.request.locale == 'es'
+        ? '¡Las respuestas reales del Baby Guessr ' ~ game.displayTitle ~ ' ya están aquí! Descubre quién ha acertado.'
+        : (app.request.locale == 'pt'
+            ? 'As respostas reais do Baby Guessr ' ~ game.displayTitle ~ ' foram reveladas! Veja quem adivinhou certo.'
+            : (app.request.locale == 'de'
+                ? 'Die echten Antworten für ' ~ game.displayTitle ~ ' sind da! Sieh, wer richtig getippt hat.'
+                : (app.request.locale == 'it'
+                    ? 'Le risposte vere del Baby Guessr ' ~ game.displayTitle ~ ' sono qui! Scopri chi ha indovinato.'
+                    : 'The real answers for ' ~ game.displayTitle ~ ' are here! See who guessed right.')))) }}{% endblock %}
+
+{% block og_image %}
+{% set _og_img = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
+<meta property="og:image" content="{{ _og_img }}">
+{% if game.image %}
+<meta property="og:image:alt" content="{{ game.displayTitle }}">
+{% else %}
+<meta property="og:image:width"  content="1024">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:alt"    content="MyBabyGuessr">
+{% endif %}
+{% endblock %}
+{% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
+{% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
+
 {% block stylesheets %}
 <style>
 .deco-revs { position:absolute; pointer-events:none; z-index:2; }

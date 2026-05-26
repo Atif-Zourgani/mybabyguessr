@@ -3,6 +3,44 @@
 {% block title %}{{ 'games.share.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block og_title %}{{ app.request.locale == 'fr'
+    ? 'Baby Guessr de ' ~ game.user.firstName ~ ' — À toi de deviner !'
+    : (app.request.locale == 'es'
+        ? 'Baby Guessr de ' ~ game.user.firstName ~ ' — ¡Adivina!'
+        : (app.request.locale == 'pt'
+            ? 'Baby Guessr de ' ~ game.user.firstName ~ ' — Adivinhas?'
+            : (app.request.locale == 'de'
+                ? 'Baby-Tippspiel von ' ~ game.user.firstName ~ ' — Rate mit!'
+                : (app.request.locale == 'it'
+                    ? 'Baby Guessr di ' ~ game.user.firstName ~ ' — Indovina!'
+                    : game.user.firstName ~ '\'s Baby Guessr — Make your guesses!')))) }}{% endblock %}
+
+{% block og_description %}{{ app.request.locale == 'fr'
+    ? 'Devine le prénom, le sexe, la date et le poids du bébé de ' ~ game.user.firstName ~ '. Participe maintenant — sans créer de compte !'
+    : (app.request.locale == 'es'
+        ? 'Adivina el nombre, el sexo, la fecha y el peso del bebé de ' ~ game.user.firstName ~ '. ¡Participa ahora, sin crear cuenta!'
+        : (app.request.locale == 'pt'
+            ? 'Adivinha o nome, o sexo, a data e o peso do bebé de ' ~ game.user.firstName ~ '. Participa agora — sem criar conta!'
+            : (app.request.locale == 'de'
+                ? 'Tippe auf Name, Geschlecht, Datum und Gewicht des Babys von ' ~ game.user.firstName ~ '. Mitmachen — ohne Konto!'
+                : (app.request.locale == 'it'
+                    ? 'Indovina nome, sesso, data e peso del bebè di ' ~ game.user.firstName ~ '. Partecipa ora — senza registrarti!'
+                    : 'Guess the name, gender, due date and weight of ' ~ game.user.firstName ~ '\'s baby. Join now — no account needed!')))) }}{% endblock %}
+
+{% block og_image %}
+{% set _og_img = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
+<meta property="og:image" content="{{ _og_img }}">
+{% if game.image %}
+<meta property="og:image:alt" content="{{ game.displayTitle }}">
+{% else %}
+<meta property="og:image:width"  content="1024">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:alt"    content="MyBabyGuessr">
+{% endif %}
+{% endblock %}
+{% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
+{% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
+
 {% block stylesheets %}
 <style>
 .deco-share { position:absolute; pointer-events:none; z-index:2; }
