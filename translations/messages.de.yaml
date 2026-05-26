@@ -209,6 +209,7 @@ play:
 games:
     btn_view: "Anzeigen"
     btn_share: "Teilen"
+    btn_share_reveal: "Die Enthüllung"
     toggle:
         btn_close: "Teilnahme schließen"
         btn_open: "Teilnahme wieder öffnen"

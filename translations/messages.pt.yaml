@@ -209,6 +209,7 @@ play:
 games:
     btn_view: "Ver"
     btn_share: "Partilhar"
+    btn_share_reveal: "A revelação"
     toggle:
         btn_close: "Fechar participação"
         btn_open: "Reabrir participação"

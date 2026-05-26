@@ -192,7 +192,9 @@
                                    style="color: var(--color-ink); text-decoration: none; border-right: 1px solid var(--color-line)">
                                     {{ 'games.btn_view'|trans }} →
                                 </a>
-                                <a href="{{ path('app_game_share', {'_locale': app.request.locale, 'token': game.token}) }}"
+                                <a href="{{ game.status.value == 'revealed'
+                                        ? path('app_game_reveal_share', {'_locale': app.request.locale, 'token': game.token})
+                                        : path('app_game_share',        {'_locale': app.request.locale, 'token': game.token}) }}"
                                    class="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold transition-colors duration-150 hover:bg-[#ede6de]"
                                    style="color: var(--color-brand); text-decoration: none;">
                                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none"
@@ -204,7 +206,7 @@
                                         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
                                         <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
                                     </svg>
-                                    {{ 'games.btn_share'|trans }}
+                                    {{ game.status.value == 'revealed' ? 'games.btn_share_reveal'|trans : 'games.btn_share'|trans }}
                                 </a>
                             </div>
 

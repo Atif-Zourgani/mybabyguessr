@@ -209,6 +209,7 @@ play:
 games:
     btn_view: "View"
     btn_share: "Share"
+    btn_share_reveal: "The reveal"
     toggle:
         btn_close: "Close participation"
         btn_open: "Reopen participation"
