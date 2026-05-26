@@ -36,7 +36,7 @@
     <div class="mt-8 text-center">
         <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
            class="btn btn-secondary">
-            {% if app.request.locale == 'fr' %}Retour à l'accueil{% else %}Back to home{% endif %}
+            {% if app.request.locale == 'fr' %}Retour à l'accueil{% elseif app.request.locale == 'es' %}Volver al inicio{% elseif app.request.locale == 'pt' %}Voltar ao início{% else %}Back to home{% endif %}
         </a>
     </div>
 

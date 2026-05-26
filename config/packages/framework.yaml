@@ -1,7 +1,7 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
-    enabled_locales: [fr, en, es]
+    enabled_locales: [fr, en, es, pt]
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true

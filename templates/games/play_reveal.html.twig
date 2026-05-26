@@ -5,7 +5,9 @@
 {% block og_title %}{{ 'play.reveal.title'|trans({'%game%': game.displayTitle}) }} — MyBabyGuessr{% endblock %}
 {% block og_description %}{{ app.request.locale == 'fr'
     ? 'Découvrez les vraies réponses et les gagnants du Baby Guessr ' ~ game.displayTitle ~ ' !'
-    : 'Discover the real answers and the winners of the ' ~ game.displayTitle ~ ' Baby Guessr!' }}{% endblock %}
+    : (app.request.locale == 'es'
+        ? '¡Descubre las respuestas reales y los ganadores del Baby Guessr ' ~ game.displayTitle ~ '!'
+        : 'Discover the real answers and the winners of the ' ~ game.displayTitle ~ ' Baby Guessr!') }}{% endblock %}
 {% block og_image %}
 {% set _og_img = game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) %}
 <meta property="og:image" content="{{ _og_img }}">
@@ -60,8 +62,10 @@
 </style>
 {% endblock %}
 
-{% set dateFormat = app.request.locale == 'fr' ? 'd/m/Y' : 'm/d/Y' %}
-{% set isFr       = app.request.locale == 'fr' %}
+{% set dateFormat = app.request.locale != 'en' ? 'd/m/Y' : 'm/d/Y' %}
+{% set isFr = app.request.locale == 'fr' %}
+{% set isEs = app.request.locale == 'es' %}
+{% set isPt = app.request.locale == 'pt' %}
 
 {% block body %}
 
@@ -107,10 +111,10 @@
             <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
             <em class="mbg-sp mbg-sp-7">✦</em><em class="mbg-sp mbg-sp-8">✧</em>
             <p style="font-size:1.125rem;font-weight:800;color:#fff;margin:0 0 0.5rem;text-align:center;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,0.18)">
-                {{ isFr ? 'C\'est un garçon ou une fille ?' : 'Boy or girl?' }}
+                {{ isFr ? 'C\'est un garçon ou une fille ?' : (isEs ? '¿Niño o niña?' : (isPt ? 'Menino ou menina?' : 'Boy or girl?')) }}
             </p>
             <p style="font-size:0.8rem;font-weight:600;color:rgba(255,248,235,0.8);margin:0;text-align:center">
-                {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
+                {{ isFr ? 'Appuyer pour révéler' : (isEs ? 'Toca para revelar' : (isPt ? 'Toque para revelar' : 'Tap to reveal')) }} ✦
             </p>
         </div>
         <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
@@ -146,8 +150,8 @@
                 <button @click="open = !open" type="button"
                         class="mt-3 text-sm font-semibold"
                         style="background:none;border:none;cursor:pointer;padding:0;color:var(--color-brand)">
-                    <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ genderHidden|length ~ ' autres' : 'See ' ~ genderHidden|length ~ ' more' }}</span>
-                    <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : 'Show less' }}</span>
+                    <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ genderHidden|length ~ ' autres' : (isEs ? 'Ver los ' ~ genderHidden|length ~ ' más' : (isPt ? 'Ver os ' ~ genderHidden|length ~ ' outros' : 'See ' ~ genderHidden|length ~ ' more')) }}</span>
+                    <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : (isEs ? 'Mostrar menos' : (isPt ? 'Mostrar menos' : 'Show less')) }}</span>
                 </button>
                 {% endif %}
             </div>
@@ -171,10 +175,10 @@
             <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
             <em class="mbg-sp mbg-sp-7">✦</em><em class="mbg-sp mbg-sp-8">✧</em>
             <p style="font-size:1.125rem;font-weight:800;color:#fff;margin:0 0 0.5rem;text-align:center;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,0.18)">
-                {{ isFr ? 'Quel prénom ont-ils choisi ?' : 'What name did they choose?' }}
+                {{ isFr ? 'Quel prénom ont-ils choisi ?' : (isEs ? '¿Qué nombre eligieron?' : (isPt ? 'Que nome escolheram?' : 'What name did they choose?')) }}
             </p>
             <p style="font-size:0.8rem;font-weight:600;color:rgba(255,248,235,0.8);margin:0;text-align:center">
-                {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
+                {{ isFr ? 'Appuyer pour révéler' : (isEs ? 'Toca para revelar' : (isPt ? 'Toque para revelar' : 'Tap to reveal')) }} ✦
             </p>
         </div>
         <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
@@ -214,8 +218,8 @@
                 <button @click="open = !open" type="button"
                         class="mt-3 text-sm font-semibold w-full"
                         style="background:none;border:none;cursor:pointer;padding:0;color:var(--color-brand)">
-                    <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ nameHidden|length ~ ' autres' : 'See ' ~ nameHidden|length ~ ' more' }}</span>
-                    <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : 'Show less' }}</span>
+                    <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ nameHidden|length ~ ' autres' : (isEs ? 'Ver los ' ~ nameHidden|length ~ ' más' : (isPt ? 'Ver os ' ~ nameHidden|length ~ ' outros' : 'See ' ~ nameHidden|length ~ ' more')) }}</span>
+                    <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : (isEs ? 'Mostrar menos' : (isPt ? 'Mostrar menos' : 'Show less')) }}</span>
                 </button>
                 {% endif %}
             </div>
@@ -252,10 +256,10 @@
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
                     <em class="mbg-sp mbg-sp-7">✦</em><em class="mbg-sp mbg-sp-8">✧</em>
                     <p style="font-size:1rem;font-weight:800;color:#fff;margin:0 0 0.5rem;text-align:center;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,0.18)">
-                        {{ isFr ? 'Quelle était la bonne date ?' : 'What was the right date?' }}
+                        {{ isFr ? 'Quelle était la bonne date ?' : (isEs ? '¿Cuál era la fecha correcta?' : (isPt ? 'Qual era a data certa?' : 'What was the right date?')) }}
                     </p>
                     <p style="font-size:0.75rem;font-weight:600;color:rgba(255,248,235,0.8);margin:0;text-align:center">
-                        {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
+                        {{ isFr ? 'Appuyer pour révéler' : (isEs ? 'Toca para revelar' : (isPt ? 'Toque para revelar' : 'Tap to reveal')) }} ✦
                     </p>
                 </div>
                 <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
@@ -277,9 +281,9 @@
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
                                 <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                    {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
-                                    {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
+                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : 'Exact!')) }}
+                                    {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : (isEs ? '1 día' : (isPt ? '1 dia' : '1 day')) }}
+                                    {% else %}{{ diffDays }}{{ isFr ? ' jours' : (isEs ? ' días' : (isPt ? ' dias' : ' days')) }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -294,9 +298,9 @@
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index + 5 }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
                                 <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
-                                    {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : '1 day' }}
-                                    {% else %}{{ diffDays }}{{ isFr ? ' jours' : ' days' }}
+                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : 'Exact!')) }}
+                                    {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : (isEs ? '1 día' : (isPt ? '1 dia' : '1 day')) }}
+                                    {% else %}{{ diffDays }}{{ isFr ? ' jours' : (isEs ? ' días' : (isPt ? ' dias' : ' days')) }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -305,8 +309,8 @@
                         <button @click="open = !open" type="button"
                                 class="mt-3 text-xs font-semibold w-full"
                                 style="background:none;border:none;cursor:pointer;padding:0;color:var(--color-brand)">
-                            <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ dateHidden|length ~ ' autres' : 'See ' ~ dateHidden|length ~ ' more' }}</span>
-                            <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : 'Show less' }}</span>
+                            <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ dateHidden|length ~ ' autres' : (isEs ? 'Ver los ' ~ dateHidden|length ~ ' más' : (isPt ? 'Ver os ' ~ dateHidden|length ~ ' outros' : 'See ' ~ dateHidden|length ~ ' more')) }}</span>
+                            <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : (isEs ? 'Mostrar menos' : (isPt ? 'Mostrar menos' : 'Show less')) }}</span>
                         </button>
                         {% endif %}
                     </div>
@@ -325,10 +329,10 @@
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
                     <em class="mbg-sp mbg-sp-7">✦</em><em class="mbg-sp mbg-sp-8">✧</em>
                     <p style="font-size:1rem;font-weight:800;color:#fff;margin:0 0 0.5rem;text-align:center;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,0.18)">
-                        {{ isFr ? 'Combien pesait bébé ?' : 'How much did baby weigh?' }}
+                        {{ isFr ? 'Combien pesait bébé ?' : (isEs ? '¿Cuánto pesaba el bebé?' : (isPt ? 'Quanto pesava o bebé?' : 'How much did baby weigh?')) }}
                     </p>
                     <p style="font-size:0.75rem;font-weight:600;color:rgba(255,248,235,0.8);margin:0;text-align:center">
-                        {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
+                        {{ isFr ? 'Appuyer pour révéler' : (isEs ? 'Toca para revelar' : (isPt ? 'Toque para revelar' : 'Tap to reveal')) }} ✦
                     </p>
                 </div>
                 <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
@@ -349,7 +353,7 @@
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
                                 <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : 'Exact!')) }}
                                     {% elseif item.diff < 1000 %}{{ item.diff }} g
                                     {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
                                     {% endif %}
@@ -365,7 +369,7 @@
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index + 5 }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
                                 <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : 'Exact!')) }}
                                     {% elseif item.diff < 1000 %}{{ item.diff }} g
                                     {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
                                     {% endif %}
@@ -376,8 +380,8 @@
                         <button @click="open = !open" type="button"
                                 class="mt-3 text-xs font-semibold w-full"
                                 style="background:none;border:none;cursor:pointer;padding:0;color:var(--color-brand)">
-                            <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ weightHidden|length ~ ' autres' : 'See ' ~ weightHidden|length ~ ' more' }}</span>
-                            <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : 'Show less' }}</span>
+                            <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ weightHidden|length ~ ' autres' : (isEs ? 'Ver los ' ~ weightHidden|length ~ ' más' : (isPt ? 'Ver os ' ~ weightHidden|length ~ ' outros' : 'See ' ~ weightHidden|length ~ ' more')) }}</span>
+                            <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : (isEs ? 'Mostrar menos' : (isPt ? 'Mostrar menos' : 'Show less')) }}</span>
                         </button>
                         {% endif %}
                     </div>
@@ -396,10 +400,10 @@
                     <em class="mbg-sp mbg-sp-5">✦</em><em class="mbg-sp mbg-sp-6">✧</em>
                     <em class="mbg-sp mbg-sp-7">✦</em><em class="mbg-sp mbg-sp-8">✧</em>
                     <p style="font-size:1rem;font-weight:800;color:#fff;margin:0 0 0.5rem;text-align:center;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,0.18)">
-                        {{ isFr ? 'Et quelle était sa taille ?' : 'How tall was baby?' }}
+                        {{ isFr ? 'Et quelle était sa taille ?' : (isEs ? '¿Y cuánto medía?' : (isPt ? 'E qual era o seu tamanho?' : 'How tall was baby?')) }}
                     </p>
                     <p style="font-size:0.75rem;font-weight:600;color:rgba(255,248,235,0.8);margin:0;text-align:center">
-                        {{ isFr ? 'Appuyer pour révéler' : 'Tap to reveal' }} ✦
+                        {{ isFr ? 'Appuyer pour révéler' : (isEs ? 'Toca para revelar' : (isPt ? 'Toque para revelar' : 'Tap to reveal')) }} ✦
                     </p>
                 </div>
                 <div class="mbg-fog" x-show="!revealed" :class="{ 'mbg-lifting': dissolving }"></div>
@@ -420,7 +424,7 @@
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
                                 <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : 'Exact!')) }}
                                     {% elseif item.diff < 10 %}{{ item.diff }} mm
                                     {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
                                     {% endif %}
@@ -436,7 +440,7 @@
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index + 5 }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
                                 <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : 'Exact!' }}
+                                    {% if item.diff == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : 'Exact!')) }}
                                     {% elseif item.diff < 10 %}{{ item.diff }} mm
                                     {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
                                     {% endif %}
@@ -447,8 +451,8 @@
                         <button @click="open = !open" type="button"
                                 class="mt-3 text-xs font-semibold w-full"
                                 style="background:none;border:none;cursor:pointer;padding:0;color:var(--color-brand)">
-                            <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ heightHidden|length ~ ' autres' : 'See ' ~ heightHidden|length ~ ' more' }}</span>
-                            <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : 'Show less' }}</span>
+                            <span x-show="!open">+ {{ isFr ? 'Voir les ' ~ heightHidden|length ~ ' autres' : (isEs ? 'Ver los ' ~ heightHidden|length ~ ' más' : (isPt ? 'Ver os ' ~ heightHidden|length ~ ' outros' : 'See ' ~ heightHidden|length ~ ' more')) }}</span>
+                            <span x-show="open" style="display:none">▲ {{ isFr ? 'Réduire' : (isEs ? 'Mostrar menos' : (isPt ? 'Mostrar menos' : 'Show less')) }}</span>
                         </button>
                         {% endif %}
                     </div>
@@ -501,7 +505,7 @@
             <p class="text-xs font-bold uppercase tracking-widest mb-1"
                style="color: var(--color-muted)">MyBabyGuessr</p>
             <p class="text-base font-bold" style="color: var(--color-ink)">
-                {{ isFr ? 'Gratuit · 2 minutes' : 'Free · 2 minutes' }}
+                {{ isFr ? 'Gratuit · 2 minutes' : (isEs ? 'Gratis · 2 minutos' : (isPt ? 'Grátis · 2 minutos' : 'Free · 2 minutes')) }}
             </p>
         </div>
 

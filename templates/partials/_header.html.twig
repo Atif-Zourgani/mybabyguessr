@@ -29,9 +29,10 @@
                 {% set _route  = app.request.attributes.get('_route') %}
                 {% set _params = app.request.attributes.get('_route_params') %}
                 {% set _langs = [
-                    {'code': 'fr', 'label': 'Français', 'flag': 'fr'},
-                    {'code': 'en', 'label': 'English',  'flag': 'gb'},
-                    {'code': 'es', 'label': 'Español',  'flag': 'es'}
+                    {'code': 'fr', 'label': 'Français',   'flag': 'fr'},
+                    {'code': 'en', 'label': 'English',    'flag': 'gb'},
+                    {'code': 'es', 'label': 'Español',    'flag': 'es'},
+                    {'code': 'pt', 'label': 'Português',  'flag': 'pt'}
                 ] %}
                 <nav aria-label="{{ 'nav.lang_' ~ app.request.locale|default('fr')|trans }}"
                      x-data="{ open: false }"

@@ -9,6 +9,28 @@ Découvrez les résultats et voyez qui a deviné juste :
 ---
 Vous recevez cet email car vous avez participé au Baby Guessr « {{ game.displayTitle }} ».
 © {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
+{% elseif locale == 'es' %}
+¡Hola {{ playerName }}!
+
+¡Las respuestas reales del Baby Guessr "{{ game.displayTitle }}" están reveladas!
+Descubre los resultados y ve quién ha acertado:
+
+{{ revealUrl }}
+
+---
+Recibiste este email porque participaste en el Baby Guessr "{{ game.displayTitle }}".
+© {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
+{% elseif locale == 'pt' %}
+Olá {{ playerName }}!
+
+As respostas reais do Baby Guessr "{{ game.displayTitle }}" foram reveladas!
+Descubra os resultados e veja quem adivinhou certo:
+
+{{ revealUrl }}
+
+---
+Recebeu este email porque participou no Baby Guessr "{{ game.displayTitle }}".
+© {{ "now"|date("Y") }} MyBabyGuessr — mybabyguessr.com
 {% else %}
 Hello {{ playerName }}!
 

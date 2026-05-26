@@ -5,7 +5,7 @@
          loading="lazy"
          class="h-16 w-auto mx-auto mb-3">
     <p class="mb-2">© {{ "now"|date("Y") }} MyBabyGuessr &mdash; {{ 'home.hero.subtitle'|trans }}</p>
-    <nav aria-label="{{ app.request.locale == 'fr' ? 'Liens légaux' : 'Legal links' }}"
+    <nav aria-label="{{ app.request.locale == 'fr' ? 'Liens légaux' : (app.request.locale == 'es' ? 'Enlaces legales' : (app.request.locale == 'pt' ? 'Ligações legais' : 'Legal links')) }}"
          class="flex justify-center gap-4 mt-2 text-xs">
         <a href="{{ path('app_privacy', {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.privacy'|trans }}</a>
         <a href="{{ path('app_terms',   {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.terms'|trans }}</a>
