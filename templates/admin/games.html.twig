@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin — Jeux — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
+
+    {% include 'admin/_nav.html.twig' %}
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+
+        {# ── En-tête ── #}
+        <div style="margin-bottom:1.75rem">
+            <h1 class="text-2xl font-bold" style="color:var(--color-ink)">Jeux</h1>
+            <p style="font-size:0.875rem;color:var(--color-muted);margin-top:0.25rem">Tous les Baby Guessr créés</p>
+        </div>
+
+        {# ── Stat boxes ── #}
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem">
+
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-muted);margin-bottom:0.5rem">Statuts</div>
+                <div style="display:flex;gap:1.25rem;flex-wrap:wrap">
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:800;color:var(--color-brand)">{{ gamesByStatus.open ?? 0 }}</div>
+                        <div style="font-size:0.75rem;color:var(--color-muted)">Ouverts</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:800;color:#6b7280">{{ gamesByStatus.closed ?? 0 }}</div>
+                        <div style="font-size:0.75rem;color:var(--color-muted)">Fermés</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:800;color:#276749">{{ gamesByStatus.revealed ?? 0 }}</div>
+                        <div style="font-size:0.75rem;color:var(--color-muted)">Révélés</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-muted);margin-bottom:0.5rem">Participations</div>
+                <div style="display:flex;gap:1.25rem;flex-wrap:wrap">
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:800;color:var(--color-brand)">{{ totalGuesses }}</div>
+                        <div style="font-size:0.75rem;color:var(--color-muted)">Total</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:800;color:var(--color-brand)">{{ avgGuesses }}</div>
+                        <div style="font-size:0.75rem;color:var(--color-muted)">Moy. / jeu</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {# ── Category usage ── #}
+        {% if catStats is not empty %}
+        <div class="card" style="padding:1.25rem 1.5rem;margin-bottom:1.5rem">
+            <div style="font-size:0.8125rem;font-weight:700;color:var(--color-ink);margin-bottom:1rem">Catégories activées</div>
+            {% set total = games|length %}
+            {% set cats = [
+                {label: 'Sexe',    count: catStats.gender},
+                {label: 'Prénom',  count: catStats.name},
+                {label: 'Date',    count: catStats.date_cat},
+                {label: 'Poids',   count: catStats.weight},
+                {label: 'Taille',  count: catStats.height},
+            ] %}
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.75rem">
+                {% for cat in cats %}
+                {% set pct = total > 0 ? ((cat.count / total) * 100)|round : 0 %}
+                <div style="text-align:center">
+                    <div style="font-size:1.125rem;font-weight:800;color:var(--color-brand)">{{ cat.count ?? 0 }}</div>
+                    <div style="height:6px;background:var(--color-line);border-radius:3px;margin:0.375rem 0">
+                        <div style="height:6px;background:var(--color-brand);border-radius:3px;width:{{ pct }}%;opacity:0.7"></div>
+                    </div>
+                    <div style="font-size:0.6875rem;color:var(--color-muted)">{{ cat.label }}</div>
+                    <div style="font-size:0.6875rem;color:var(--color-muted)">{{ pct }}%</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# ── Table ── #}
+        <div class="card" style="padding:0;overflow:hidden">
+            <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Titre</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Créateur</th>
+                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Statut</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Catégories</th>
+                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Part.</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Créé le</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for game in games %}
+                        <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                            <td style="padding:0.75rem 1rem">
+                                <span style="font-weight:600;color:var(--color-ink)">{{ game.displayTitle }}</span>
+                            </td>
+                            <td style="padding:0.75rem 1rem">
+                                <div style="font-weight:600;color:var(--color-ink)">{{ game.user.firstName }} {{ game.user.lastName }}</div>
+                                <div style="font-size:0.6875rem;color:var(--color-muted)">{{ game.user.email }}</div>
+                            </td>
+                            <td style="padding:0.75rem 1rem;text-align:center">
+                                <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;
+                                      {% if game.status.value == 'revealed' %}background:rgba(39,103,73,0.10);color:#276749
+                                      {% elseif game.status.value == 'closed' %}background:#f3f4f6;color:#6b7280
+                                      {% else %}background:rgba(196,113,74,0.12);color:var(--color-brand){% endif %}">
+                                    {{ game.status.value }}
+                                </span>
+                            </td>
+                            <td style="padding:0.75rem 1rem">
+                                <div style="display:flex;flex-wrap:wrap;gap:0.25rem">
+                                    {% if game.guessGender %}<span style="font-size:0.5625rem;font-weight:700;padding:0.0625rem 0.375rem;border-radius:999px;background:var(--color-line);color:var(--color-muted)">Sexe</span>{% endif %}
+                                    {% if game.guessName %}<span style="font-size:0.5625rem;font-weight:700;padding:0.0625rem 0.375rem;border-radius:999px;background:var(--color-line);color:var(--color-muted)">Prénom</span>{% endif %}
+                                    {% if game.guessDate %}<span style="font-size:0.5625rem;font-weight:700;padding:0.0625rem 0.375rem;border-radius:999px;background:var(--color-line);color:var(--color-muted)">Date</span>{% endif %}
+                                    {% if game.guessWeight %}<span style="font-size:0.5625rem;font-weight:700;padding:0.0625rem 0.375rem;border-radius:999px;background:var(--color-line);color:var(--color-muted)">Poids</span>{% endif %}
+                                    {% if game.guessHeight %}<span style="font-size:0.5625rem;font-weight:700;padding:0.0625rem 0.375rem;border-radius:999px;background:var(--color-line);color:var(--color-muted)">Taille</span>{% endif %}
+                                </div>
+                            </td>
+                            <td style="padding:0.75rem 1rem;text-align:center;font-weight:600;color:var(--color-ink)">
+                                {{ game.guesses|length }}
+                            </td>
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ game.createdAt|date('d/m/Y') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

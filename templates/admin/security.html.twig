@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin — Sécurité — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
+
+    {% include 'admin/_nav.html.twig' %}
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+
+        {# ── En-tête ── #}
+        <div style="margin-bottom:1.75rem">
+            <h1 class="text-2xl font-bold" style="color:var(--color-ink)">Sécurité</h1>
+            <p style="font-size:0.875rem;color:var(--color-muted);margin-top:0.25rem">Réinitialisations de mot de passe, comptes non vérifiés, administrateurs</p>
+        </div>
+
+        {# ── Stat boxes ── #}
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+
+            <div class="card" style="padding:1.25rem;text-align:center">
+                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ totalResets30d }}</div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Réinitialisations (30j)</div>
+            </div>
+
+            <div class="card" style="padding:1.25rem;text-align:center">
+                <div style="font-size:1.875rem;font-weight:800;color:{% if unverifiedUsers|length > 0 %}#b45309{% else %}var(--color-brand){% endif %}">
+                    {{ unverifiedUsers|length }}
+                </div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Comptes non vérifiés</div>
+            </div>
+
+            <div class="card" style="padding:1.25rem;text-align:center">
+                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ adminUsers|length }}</div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Administrateurs</div>
+            </div>
+
+        </div>
+
+        {# ── Réinitialisations MDP ── #}
+        <div class="card" style="padding:0;overflow:hidden;margin-bottom:1.5rem">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--color-line);display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:0.875rem;font-weight:700;color:var(--color-ink)">Réinitialisations de mot de passe</span>
+                <span style="font-size:0.75rem;color:var(--color-muted)">
+                    {{ expiredResets }} expirée{{ expiredResets > 1 ? 's' }}
+                </span>
+            </div>
+            <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Utilisateur</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Email</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Demandé le</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Expire le</th>
+                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">État</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if resetRequests is empty %}
+                        <tr><td colspan="5" style="padding:2rem;text-align:center;color:var(--color-muted)">Aucune demande</td></tr>
+                        {% else %}
+                        {% for row in resetRequests %}
+                        {% set expired = row.expires_at < 'now'|date('Y-m-d H:i:s') %}
+                        <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                            <td style="padding:0.75rem 1rem;font-weight:600;color:var(--color-ink)">{{ row.first_name }} {{ row.last_name }}</td>
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ row.email }}</td>
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted);white-space:nowrap">{{ row.requested_at|date('d/m/Y H:i') }}</td>
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted);white-space:nowrap">{{ row.expires_at|date('d/m/Y H:i') }}</td>
+                            <td style="padding:0.75rem 1rem;text-align:center">
+                                {% set nowStr = 'now'|date('Y-m-d H:i:s') %}
+                                {% if row.expires_at < nowStr %}
+                                <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;background:#f3f4f6;color:#6b7280">expirée</span>
+                                {% else %}
+                                <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;background:rgba(196,113,74,0.12);color:var(--color-brand)">active</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {# ── Comptes non vérifiés ── #}
+        <div class="card" style="padding:0;overflow:hidden;margin-bottom:1.5rem">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--color-line)">
+                <span style="font-size:0.875rem;font-weight:700;color:var(--color-ink)">
+                    Comptes non vérifiés
+                    <span style="font-size:0.8125rem;font-weight:400;color:var(--color-muted);margin-left:0.5rem">({{ unverifiedUsers|length }})</span>
+                </span>
+            </div>
+            {% if unverifiedUsers is empty %}
+            <div style="padding:1.5rem;text-align:center;color:var(--color-muted);font-size:0.875rem">
+                Tous les comptes sont vérifiés ✓
+            </div>
+            {% else %}
+            <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">#</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Nom</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in unverifiedUsers %}
+                        <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ row.id }}</td>
+                            <td style="padding:0.75rem 1rem;font-weight:600;color:var(--color-ink)">{{ row.first_name }} {{ row.last_name }}</td>
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ row.email }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+        {# ── Comptes Admin ── #}
+        <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--color-line)">
+                <span style="font-size:0.875rem;font-weight:700;color:var(--color-ink)">
+                    Administrateurs
+                    <span style="font-size:0.8125rem;font-weight:400;color:var(--color-muted);margin-left:0.5rem">({{ adminUsers|length }})</span>
+                </span>
+            </div>
+            {% if adminUsers is empty %}
+            <div style="padding:1.5rem;text-align:center;color:var(--color-muted);font-size:0.875rem">Aucun administrateur</div>
+            {% else %}
+            {% for user in adminUsers %}
+            <div style="padding:0.875rem 1.25rem;{% if not loop.last %}border-bottom:1px solid var(--color-line);{% endif %}display:flex;align-items:center;justify-content:space-between">
+                <div>
+                    <span style="font-weight:700;color:var(--color-ink)">{{ user.firstName }} {{ user.lastName }}</span>
+                    <span style="font-size:0.8125rem;color:var(--color-muted);margin-left:0.5rem">{{ user.email }}</span>
+                </div>
+                <div style="display:flex;gap:0.25rem">
+                    {% for role in user.roles %}
+                    {% if role != 'ROLE_USER' %}
+                    <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;background:rgba(196,113,74,0.12);color:var(--color-brand)">
+                        {{ role }}
+                    </span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,156 +1,190 @@
 {% extends 'base.html.twig' %}
-{% block title %}Admin — MyBabyGuessr{% endblock %}
+{% block title %}Admin — Vue d'ensemble — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
 
-    {# ── En-tête ── #}
-    <div class="flex items-center justify-between mb-8">
-        <div>
-            <h1 class="text-2xl font-bold" style="color: var(--color-ink)">Panneau admin</h1>
-            <p class="text-sm mt-1" style="color: var(--color-muted)">MyBabyGuessr — accès restreint</p>
-        </div>
-        <span class="text-xs font-bold px-3 py-1.5 rounded-full"
-              style="background-color: rgba(196,113,74,0.12); color: var(--color-brand)">
-            ROLE_ADMIN
-        </span>
-    </div>
+    {% include 'admin/_nav.html.twig' %}
 
-    {# ── Stat cards ── #}
-    <div class="grid gap-4 mb-10" style="display:grid;grid-template-columns:repeat(3,1fr)">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
 
-        <div class="card text-center py-6">
-            <div class="text-4xl font-bold mb-1" style="color: var(--color-brand)">{{ users|length }}</div>
-            <div class="text-sm font-semibold" style="color: var(--color-muted)">Utilisateurs</div>
-        </div>
-
-        <div class="card text-center py-6">
-            <div class="text-4xl font-bold mb-1" style="color: var(--color-brand)">{{ games|length }}</div>
-            <div class="text-sm font-semibold" style="color: var(--color-muted)">Baby Guessr</div>
-            <div class="text-xs mt-1.5 flex justify-center gap-3" style="color: var(--color-muted)">
-                {% if gamesByStatus.open is defined %}
-                <span>{{ gamesByStatus.open }} ouvert{{ gamesByStatus.open > 1 ? 's' : '' }}</span>
-                {% endif %}
-                {% if gamesByStatus.closed is defined %}
-                <span>{{ gamesByStatus.closed }} fermé{{ gamesByStatus.closed > 1 ? 's' : '' }}</span>
-                {% endif %}
-                {% if gamesByStatus.revealed is defined %}
-                <span>{{ gamesByStatus.revealed }} révélé{{ gamesByStatus.revealed > 1 ? 's' : '' }}</span>
-                {% endif %}
+        {# ── En-tête ── #}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem">
+            <div>
+                <h1 class="text-2xl font-bold" style="color:var(--color-ink)">Vue d'ensemble</h1>
+                <p style="font-size:0.875rem;color:var(--color-muted);margin-top:0.25rem">MyBabyGuessr — panneau d'administration</p>
             </div>
+            <span style="font-size:0.75rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:999px;background:rgba(196,113,74,0.12);color:var(--color-brand)">
+                ROLE_ADMIN
+            </span>
         </div>
 
-        <div class="card text-center py-6">
-            <div class="text-4xl font-bold mb-1" style="color: var(--color-brand)">{{ totalGuesses }}</div>
-            <div class="text-sm font-semibold" style="color: var(--color-muted)">Participations</div>
+        {# ── KPI Cards ── #}
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem">
+
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-muted);margin-bottom:0.5rem">Utilisateurs</div>
+                <div style="font-size:2rem;font-weight:800;color:var(--color-brand);line-height:1">{{ totalUsers }}</div>
+                <div style="font-size:0.8125rem;color:var(--color-muted);margin-top:0.375rem">
+                    {{ verifiedCount }} vérifiés
+                    {% if totalUsers > 0 %}
+                    <span style="color:var(--color-ink);font-weight:600">· {{ ((verifiedCount / totalUsers) * 100)|round }}%</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-muted);margin-bottom:0.5rem">Jeux</div>
+                <div style="font-size:2rem;font-weight:800;color:var(--color-brand);line-height:1">{{ totalGames }}</div>
+                <div style="font-size:0.8125rem;color:var(--color-muted);margin-top:0.375rem;display:flex;gap:0.75rem;flex-wrap:wrap">
+                    {% if gamesByStatus.open is defined %}<span>{{ gamesByStatus.open }} ouvert{{ gamesByStatus.open > 1 ? 's' }}</span>{% endif %}
+                    {% if gamesByStatus.closed is defined %}<span>{{ gamesByStatus.closed }} fermé{{ gamesByStatus.closed > 1 ? 's' }}</span>{% endif %}
+                    {% if gamesByStatus.revealed is defined %}<span>{{ gamesByStatus.revealed }} révélé{{ gamesByStatus.revealed > 1 ? 's' }}</span>{% endif %}
+                </div>
+            </div>
+
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-muted);margin-bottom:0.5rem">Participations</div>
+                <div style="font-size:2rem;font-weight:800;color:var(--color-brand);line-height:1">{{ totalGuesses }}</div>
+                <div style="font-size:0.8125rem;color:var(--color-muted);margin-top:0.375rem">
+                    Moy. <span style="color:var(--color-ink);font-weight:600">{{ avgGuessesPerGame }}</span> / jeu
+                </div>
+            </div>
+
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-muted);margin-bottom:0.5rem">Réinitial. MDP</div>
+                <div style="font-size:2rem;font-weight:800;color:var(--color-brand);line-height:1">{{ recentResets }}</div>
+                <div style="font-size:0.8125rem;color:var(--color-muted);margin-top:0.375rem">30 derniers jours</div>
+            </div>
+
         </div>
 
-    </div>
+        {# ── Trend charts ── #}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
 
-    {# ── Utilisateurs ── #}
-    <div class="card mb-8">
-        <h2 class="text-base font-bold mb-4" style="color: var(--color-ink)">
-            Utilisateurs
-            <span class="text-sm font-normal ml-2" style="color: var(--color-muted)">({{ users|length }})</span>
-        </h2>
-        <div style="overflow-x:auto">
-            <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
-                <thead>
-                    <tr style="border-bottom:1px solid var(--color-line)">
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">#</th>
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Nom</th>
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Email</th>
-                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Vérifié</th>
-                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Jeux</th>
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Rôles</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr style="border-bottom:1px solid var(--color-line){% if loop.last %};border-bottom:none{% endif %}">
-                        <td style="padding:10px 12px;color:var(--color-muted)">{{ user.id }}</td>
-                        <td style="padding:10px 12px;font-weight:600;color:var(--color-ink)">
-                            {{ user.firstName }} {{ user.lastName }}
-                        </td>
-                        <td style="padding:10px 12px;color:var(--color-ink)">{{ user.email }}</td>
-                        <td style="padding:10px 12px;text-align:center">
-                            {% if user.verified %}
-                            <span style="color:#276749">✓</span>
-                            {% else %}
-                            <span style="color:#9ca3af">—</span>
-                            {% endif %}
-                        </td>
-                        <td style="padding:10px 12px;text-align:center;color:var(--color-ink)">
-                            {{ user.games|length }}
-                        </td>
-                        <td style="padding:10px 12px">
-                            {% for role in user.roles %}
-                            {% if role != 'ROLE_USER' %}
-                            <span class="text-xs font-bold px-2 py-0.5 rounded-full"
-                                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
-                                {{ role }}
-                            </span>
-                            {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
+            {# Games trend #}
+            {% set maxG = 0 %}
+            {% for k, v in gamesTrend %}{% if v > maxG %}{% set maxG = v %}{% endif %}{% endfor %}
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.8125rem;font-weight:700;color:var(--color-ink);margin-bottom:1rem">
+                    Jeux créés — 7 derniers jours
+                </div>
+                <div style="display:flex;align-items:flex-end;height:72px;gap:4px">
+                    {% for day, cnt in gamesTrend %}
+                    <div title="{{ day }}: {{ cnt }} jeu{{ cnt > 1 ? 'x' }}"
+                         style="flex:1;background:var(--color-brand);opacity:{{ cnt > 0 ? '0.75' : '0.12' }};
+                                height:{{ maxG > 0 ? ((cnt / maxG) * 72)|round : 3 }}px;
+                                min-height:3px;border-radius:3px 3px 0 0">
+                    </div>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    {# ── Baby Guessr ── #}
-    <div class="card">
-        <h2 class="text-base font-bold mb-4" style="color: var(--color-ink)">
-            Baby Guessr
-            <span class="text-sm font-normal ml-2" style="color: var(--color-muted)">({{ games|length }})</span>
-        </h2>
-        <div style="overflow-x:auto">
-            <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
-                <thead>
-                    <tr style="border-bottom:1px solid var(--color-line)">
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Titre</th>
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Créateur</th>
-                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Statut</th>
-                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Participants</th>
-                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Créé le</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set statusColors = {
-                        'open':     'background-color:rgba(196,113,74,0.12);color:var(--color-brand)',
-                        'closed':   'background-color:#f3f4f6;color:#6b7280',
-                        'revealed': 'background-color:rgba(39,103,73,0.10);color:#276749'
-                    } %}
-                    {% for game in games %}
-                    <tr style="border-bottom:1px solid var(--color-line){% if loop.last %};border-bottom:none{% endif %}">
-                        <td style="padding:10px 12px;font-weight:600;color:var(--color-ink)">
-                            {{ game.displayTitle }}
-                        </td>
-                        <td style="padding:10px 12px;color:var(--color-ink)">
-                            {{ game.user.firstName }} {{ game.user.lastName }}
-                            <div class="text-xs" style="color:var(--color-muted)">{{ game.user.email }}</div>
-                        </td>
-                        <td style="padding:10px 12px;text-align:center">
-                            <span class="text-xs font-bold px-2 py-0.5 rounded-full"
-                                  style="{{ statusColors[game.status.value] }}">
-                                {{ game.status.value }}
-                            </span>
-                        </td>
-                        <td style="padding:10px 12px;text-align:center;color:var(--color-ink)">
-                            {{ game.guesses|length }}
-                        </td>
-                        <td style="padding:10px 12px;color:var(--color-muted)">
-                            {{ game.createdAt|date('d/m/Y') }}
-                        </td>
-                    </tr>
+                </div>
+                <div style="display:flex;gap:4px;margin-top:4px">
+                    {% for day, cnt in gamesTrend %}
+                    <div style="flex:1;text-align:center;font-size:0.5625rem;color:var(--color-muted)">{{ day|date('d') }}</div>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+                </div>
+                <div style="font-size:0.75rem;color:var(--color-muted);margin-top:0.625rem;font-weight:600">
+                    Total 7j : {{ gamesTrend|reduce((carry, v) => carry + v, 0) }}
+                </div>
+            </div>
 
+            {# Guesses trend #}
+            {% set maxQ = 0 %}
+            {% for k, v in guessesTrend %}{% if v > maxQ %}{% set maxQ = v %}{% endif %}{% endfor %}
+            <div class="card" style="padding:1.25rem 1.5rem">
+                <div style="font-size:0.8125rem;font-weight:700;color:var(--color-ink);margin-bottom:1rem">
+                    Participations — 7 derniers jours
+                </div>
+                <div style="display:flex;align-items:flex-end;height:72px;gap:4px">
+                    {% for day, cnt in guessesTrend %}
+                    <div title="{{ day }}: {{ cnt }} participation{{ cnt > 1 ? 's' }}"
+                         style="flex:1;background:var(--color-brand);opacity:{{ cnt > 0 ? '0.75' : '0.12' }};
+                                height:{{ maxQ > 0 ? ((cnt / maxQ) * 72)|round : 3 }}px;
+                                min-height:3px;border-radius:3px 3px 0 0">
+                    </div>
+                    {% endfor %}
+                </div>
+                <div style="display:flex;gap:4px;margin-top:4px">
+                    {% for day, cnt in guessesTrend %}
+                    <div style="flex:1;text-align:center;font-size:0.5625rem;color:var(--color-muted)">{{ day|date('d') }}</div>
+                    {% endfor %}
+                </div>
+                <div style="font-size:0.75rem;color:var(--color-muted);margin-top:0.625rem;font-weight:600">
+                    Total 7j : {{ guessesTrend|reduce((carry, v) => carry + v, 0) }}
+                </div>
+            </div>
+
+        </div>
+
+        {# ── Activity feed ── #}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+
+            {# Recent games #}
+            <div class="card" style="padding:0">
+                <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--color-line)">
+                    <span style="font-size:0.875rem;font-weight:700;color:var(--color-ink)">Derniers jeux</span>
+                </div>
+                {% if recentGames is empty %}
+                <div style="padding:1.5rem;text-align:center;color:var(--color-muted);font-size:0.875rem">Aucun jeu</div>
+                {% else %}
+                {% for row in recentGames %}
+                <div style="padding:0.75rem 1.25rem;{% if not loop.last %}border-bottom:1px solid var(--color-line);{% endif %}display:flex;align-items:center;justify-content:space-between;gap:0.75rem">
+                    <div style="min-width:0">
+                        <div style="font-size:0.8125rem;font-weight:600;color:var(--color-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                            {{ row.display_title }}
+                        </div>
+                        <div style="font-size:0.75rem;color:var(--color-muted)">
+                            {{ row.first_name }} · {{ row.created_at|date('d/m/Y') }}
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0">
+                        <span style="font-size:0.6875rem;color:var(--color-muted)">{{ row.guess_count }} part.</span>
+                        <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;
+                              {% if row.status == 'revealed' %}background:rgba(39,103,73,0.10);color:#276749
+                              {% elseif row.status == 'closed' %}background:#f3f4f6;color:#6b7280
+                              {% else %}background:rgba(196,113,74,0.12);color:var(--color-brand){% endif %}">
+                            {{ row.status }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div style="padding:0.625rem 1.25rem;border-top:1px solid var(--color-line)">
+                    <a href="{{ path('app_admin_games', {'_locale': app.request.locale}) }}"
+                       style="font-size:0.75rem;font-weight:700;color:var(--color-brand);text-decoration:none">
+                        Voir tous les jeux →
+                    </a>
+                </div>
+            </div>
+
+            {# Recent guesses #}
+            <div class="card" style="padding:0">
+                <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--color-line)">
+                    <span style="font-size:0.875rem;font-weight:700;color:var(--color-ink)">Dernières participations</span>
+                </div>
+                {% if recentGuesses is empty %}
+                <div style="padding:1.5rem;text-align:center;color:var(--color-muted);font-size:0.875rem">Aucune participation</div>
+                {% else %}
+                {% for row in recentGuesses %}
+                <div style="padding:0.75rem 1.25rem;{% if not loop.last %}border-bottom:1px solid var(--color-line);{% endif %}">
+                    <div style="font-size:0.8125rem;font-weight:600;color:var(--color-ink)">{{ row.player_name }}</div>
+                    <div style="font-size:0.75rem;color:var(--color-muted)">
+                        {{ row.display_title }} · {{ row.created_at|date('d/m H:i') }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div style="padding:0.625rem 1.25rem;border-top:1px solid var(--color-line)">
+                    <a href="{{ path('app_admin_logs', {'_locale': app.request.locale}) }}"
+                       style="font-size:0.75rem;font-weight:700;color:var(--color-brand);text-decoration:none">
+                        Voir toute l'activité →
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
 {% endblock %}

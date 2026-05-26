@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin — Utilisateurs — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
+
+    {% include 'admin/_nav.html.twig' %}
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+
+        {# ── En-tête ── #}
+        <div style="margin-bottom:1.75rem">
+            <h1 class="text-2xl font-bold" style="color:var(--color-ink)">Utilisateurs</h1>
+            <p style="font-size:0.875rem;color:var(--color-muted);margin-top:0.25rem">Tous les comptes enregistrés</p>
+        </div>
+
+        {# ── Stat boxes ── #}
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+
+            <div class="card" style="padding:1.25rem;text-align:center">
+                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ users|length }}</div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Total</div>
+            </div>
+
+            <div class="card" style="padding:1.25rem;text-align:center">
+                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ totalVerified }}</div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">
+                    Vérifiés
+                    {% if users|length > 0 %}
+                    <span style="color:var(--color-ink)">({{ ((totalVerified / users|length) * 100)|round }}%)</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card" style="padding:1.25rem;text-align:center">
+                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ totalAdmins }}</div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Admins</div>
+            </div>
+
+        </div>
+
+        {# ── Table ── #}
+        <div class="card" style="padding:0;overflow:hidden">
+            <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">#</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Nom</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Email</th>
+                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Vérifié</th>
+                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Jeux</th>
+                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Rôles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                            <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ user.id }}</td>
+                            <td style="padding:0.75rem 1rem">
+                                <span style="font-weight:600;color:var(--color-ink)">{{ user.firstName }} {{ user.lastName }}</span>
+                            </td>
+                            <td style="padding:0.75rem 1rem;color:var(--color-ink)">{{ user.email }}</td>
+                            <td style="padding:0.75rem 1rem;text-align:center">
+                                {% if user.verified %}
+                                <span style="color:#276749;font-weight:700">✓</span>
+                                {% else %}
+                                <span style="color:#d1d5db">—</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding:0.75rem 1rem;text-align:center">
+                                <span style="font-weight:600;color:var(--color-ink)">{{ user.games|length }}</span>
+                            </td>
+                            <td style="padding:0.75rem 1rem">
+                                {% for role in user.roles %}
+                                {% if role != 'ROLE_USER' %}
+                                <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;background:rgba(196,113,74,0.12);color:var(--color-brand)">
+                                    {{ role }}
+                                </span>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

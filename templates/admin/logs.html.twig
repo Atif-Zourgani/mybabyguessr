@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin — Activité — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
+
+    {% include 'admin/_nav.html.twig' %}
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+
+        {# ── En-tête ── #}
+        <div style="margin-bottom:1.75rem">
+            <h1 class="text-2xl font-bold" style="color:var(--color-ink)">Activité</h1>
+            <p style="font-size:0.875rem;color:var(--color-muted);margin-top:0.25rem">Flux d'activité récente sur la plateforme</p>
+        </div>
+
+        {# ── Tabs ── #}
+        <div x-data="{ tab: 'guesses' }">
+
+            <div style="display:flex;gap:0.25rem;border-bottom:1px solid var(--color-line);margin-bottom:1.5rem">
+                <button @click="tab = 'guesses'" type="button"
+                        :style="tab === 'guesses' ? 'color:var(--color-brand);border-bottom:2px solid var(--color-brand);' : 'color:var(--color-muted);border-bottom:2px solid transparent;'"
+                        style="padding:0.5rem 1rem;font-size:0.875rem;font-weight:700;background:none;border:none;border-radius:0;cursor:pointer;margin-bottom:-1px;transition:color 0.15s">
+                    Participations
+                    <span style="font-size:0.6875rem;padding:0.125rem 0.4375rem;border-radius:999px;background:rgba(196,113,74,0.10);color:var(--color-brand);margin-left:0.375rem">{{ recentGuesses|length }}</span>
+                </button>
+                <button @click="tab = 'games'" type="button"
+                        :style="tab === 'games' ? 'color:var(--color-brand);border-bottom:2px solid var(--color-brand);' : 'color:var(--color-muted);border-bottom:2px solid transparent;'"
+                        style="padding:0.5rem 1rem;font-size:0.875rem;font-weight:700;background:none;border:none;border-radius:0;cursor:pointer;margin-bottom:-1px;transition:color 0.15s">
+                    Jeux créés
+                    <span style="font-size:0.6875rem;padding:0.125rem 0.4375rem;border-radius:999px;background:rgba(196,113,74,0.10);color:var(--color-brand);margin-left:0.375rem">{{ recentGames|length }}</span>
+                </button>
+                <button @click="tab = 'reveals'" type="button"
+                        :style="tab === 'reveals' ? 'color:var(--color-brand);border-bottom:2px solid var(--color-brand);' : 'color:var(--color-muted);border-bottom:2px solid transparent;'"
+                        style="padding:0.5rem 1rem;font-size:0.875rem;font-weight:700;background:none;border:none;border-radius:0;cursor:pointer;margin-bottom:-1px;transition:color 0.15s">
+                    Révélations
+                    <span style="font-size:0.6875rem;padding:0.125rem 0.4375rem;border-radius:999px;background:rgba(196,113,74,0.10);color:var(--color-brand);margin-left:0.375rem">{{ recentReveals|length }}</span>
+                </button>
+            </div>
+
+            {# ── Participations ── #}
+            <div x-show="tab === 'guesses'">
+                <div class="card" style="padding:0;overflow:hidden">
+                    <div style="overflow-x:auto">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Joueur</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Jeu</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Organisateur</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recentGuesses is empty %}
+                                <tr><td colspan="4" style="padding:2rem;text-align:center;color:var(--color-muted)">Aucune participation</td></tr>
+                                {% else %}
+                                {% for row in recentGuesses %}
+                                <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                                    <td style="padding:0.75rem 1rem">
+                                        <div style="font-weight:600;color:var(--color-ink)">{{ row.player_name }}</div>
+                                        {% if row.player_email %}
+                                        <div style="font-size:0.6875rem;color:var(--color-muted)">{{ row.player_email }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;font-weight:600;color:var(--color-ink)">{{ row.display_title }}</td>
+                                    <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ row.first_name }} {{ row.last_name }}</td>
+                                    <td style="padding:0.75rem 1rem;color:var(--color-muted);white-space:nowrap">{{ row.created_at|date('d/m/Y H:i') }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {# ── Jeux créés ── #}
+            <div x-show="tab === 'games'" x-cloak>
+                <div class="card" style="padding:0;overflow:hidden">
+                    <div style="overflow-x:auto">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Titre</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Créateur</th>
+                                    <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Statut</th>
+                                    <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Part.</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Créé le</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recentGames is empty %}
+                                <tr><td colspan="5" style="padding:2rem;text-align:center;color:var(--color-muted)">Aucun jeu</td></tr>
+                                {% else %}
+                                {% for row in recentGames %}
+                                <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                                    <td style="padding:0.75rem 1rem;font-weight:600;color:var(--color-ink)">{{ row.display_title }}</td>
+                                    <td style="padding:0.75rem 1rem">
+                                        <div style="font-weight:600;color:var(--color-ink)">{{ row.first_name }} {{ row.last_name }}</div>
+                                        <div style="font-size:0.6875rem;color:var(--color-muted)">{{ row.email }}</div>
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;text-align:center">
+                                        <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;
+                                              {% if row.status == 'revealed' %}background:rgba(39,103,73,0.10);color:#276749
+                                              {% elseif row.status == 'closed' %}background:#f3f4f6;color:#6b7280
+                                              {% else %}background:rgba(196,113,74,0.12);color:var(--color-brand){% endif %}">
+                                            {{ row.status }}
+                                        </span>
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;text-align:center;font-weight:600;color:var(--color-ink)">{{ row.guess_count }}</td>
+                                    <td style="padding:0.75rem 1rem;color:var(--color-muted);white-space:nowrap">{{ row.created_at|date('d/m/Y H:i') }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {# ── Révélations ── #}
+            <div x-show="tab === 'reveals'" x-cloak>
+                <div class="card" style="padding:0;overflow:hidden">
+                    <div style="overflow-x:auto">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Jeu</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Organisateur</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Réponses</th>
+                                    <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Part.</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Révélé le</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recentReveals is empty %}
+                                <tr><td colspan="5" style="padding:2rem;text-align:center;color:var(--color-muted)">Aucune révélation</td></tr>
+                                {% else %}
+                                {% for row in recentReveals %}
+                                <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                                    <td style="padding:0.75rem 1rem;font-weight:600;color:var(--color-ink)">{{ row.display_title }}</td>
+                                    <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ row.first_name }} {{ row.last_name }}</td>
+                                    <td style="padding:0.75rem 1rem">
+                                        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                                            {% if row.answer_gender %}
+                                            <span style="font-size:0.6875rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;
+                                                  {% if row.answer_gender == 'boy' %}background:rgba(59,130,246,0.10);color:#2563eb{% else %}background:rgba(236,72,153,0.10);color:#db2777{% endif %}">
+                                                {{ row.answer_gender == 'boy' ? '♂ Garçon' : '♀ Fille' }}
+                                            </span>
+                                            {% endif %}
+                                            {% if row.answer_name %}
+                                            <span style="font-size:0.6875rem;font-weight:600;color:var(--color-ink)">{{ row.answer_name }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;text-align:center;font-weight:600;color:var(--color-ink)">{{ row.guess_count }}</td>
+                                    <td style="padding:0.75rem 1rem;color:var(--color-muted);white-space:nowrap">{{ row.updated_at|date('d/m/Y H:i') }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

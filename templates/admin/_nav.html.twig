@@ -1,0 +1,22 @@
+{% set _cur = app.request.attributes.get('_route') %}
+{% set _loc = app.request.locale %}
+{% set _items = [
+    {route: 'app_admin_index',    label: 'Vue d\'ensemble'},
+    {route: 'app_admin_users',    label: 'Utilisateurs'},
+    {route: 'app_admin_games',    label: 'Jeux'},
+    {route: 'app_admin_logs',     label: 'Activité'},
+    {route: 'app_admin_security', label: 'Sécurité'},
+] %}
+
+<div style="border-bottom:1px solid var(--color-line);background:var(--color-cream);margin-bottom:2rem">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6"
+         style="display:flex;gap:0.25rem;overflow-x:auto;padding-top:0.5rem;padding-bottom:0.5rem;scrollbar-width:none">
+        {% for item in _items %}
+        <a href="{{ path(item.route, {'_locale': _loc}) }}"
+           style="flex-shrink:0;display:inline-flex;align-items:center;padding:0.4375rem 0.875rem;border-radius:0.5rem;font-size:0.8125rem;font-weight:700;text-decoration:none;
+                  {% if _cur == item.route %}color:var(--color-brand);background:rgba(196,113,74,0.12);{% else %}color:var(--color-muted);{% endif %}">
+            {{ item.label }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
