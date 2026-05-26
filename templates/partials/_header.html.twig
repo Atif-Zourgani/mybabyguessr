@@ -28,25 +28,68 @@
             {% if app.request.attributes.has('_route') %}
                 {% set _route  = app.request.attributes.get('_route') %}
                 {% set _params = app.request.attributes.get('_route_params') %}
-                <nav aria-label="{{ app.request.locale == 'fr' ? 'Langue' : (app.request.locale == 'es' ? 'Idioma' : 'Language') }}"
-                     class="flex items-center gap-1 text-sm font-bold">
-                    <a href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}"
-                       hreflang="fr"
-                       {% if app.request.locale == 'fr' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
-                        FR
-                    </a>
-                    <span class="text-line" aria-hidden="true">|</span>
-                    <a href="{{ url(_route, _params|merge({'_locale': 'en'})) }}"
-                       hreflang="en"
-                       {% if app.request.locale == 'en' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
-                        EN
-                    </a>
-                    <span class="text-line" aria-hidden="true">|</span>
-                    <a href="{{ url(_route, _params|merge({'_locale': 'es'})) }}"
-                       hreflang="es"
-                       {% if app.request.locale == 'es' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
-                        ES
-                    </a>
+                {% set _langs = [
+                    {'code': 'fr', 'label': 'Français'},
+                    {'code': 'en', 'label': 'English'},
+                    {'code': 'es', 'label': 'Español'}
+                ] %}
+                <nav aria-label="{{ 'nav.lang_' ~ app.request.locale|default('fr')|trans }}"
+                     x-data="{ open: false }"
+                     @click.away="open = false"
+                     @keydown.escape="open = false"
+                     class="relative">
+
+                    <button @click="open = !open"
+                            :aria-expanded="open"
+                            type="button"
+                            class="flex items-center gap-1.5 text-sm font-bold rounded-lg px-2.5 py-1.5 transition-colors"
+                            style="color:var(--color-ink);border:1px solid var(--color-border);background:var(--color-cream)">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span>{{ app.request.locale|upper }}</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                             aria-hidden="true"
+                             :style="open ? 'transform:rotate(180deg)' : ''"
+                             style="transition:transform 0.15s ease">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+
+                    <div x-show="open"
+                         x-cloak
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-1"
+                         class="absolute right-0 mt-1 rounded-lg overflow-hidden"
+                         style="top:100%;min-width:148px;background:var(--color-cream);border:1px solid var(--color-border);box-shadow:0 4px 20px rgba(0,0,0,0.10);z-index:50">
+                        {% for lang in _langs %}
+                        <a href="{{ url(_route, _params|merge({'_locale': lang.code})) }}"
+                           hreflang="{{ lang.code }}"
+                           {% if app.request.locale == lang.code %}aria-current="true"{% endif %}
+                           class="flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors"
+                           style="text-decoration:none;color:var(--color-ink);{% if app.request.locale == lang.code %}background:rgba(196,113,74,0.10);{% endif %}">
+                            {% if app.request.locale == lang.code %}
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                 stroke="var(--color-brand)" stroke-width="3"
+                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            {% else %}
+                            <span style="width:13px" aria-hidden="true"></span>
+                            {% endif %}
+                            {{ lang.label }}
+                        </a>
+                        {% endfor %}
+                    </div>
+
                 </nav>
             {% endif %}
 
