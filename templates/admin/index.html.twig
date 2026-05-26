@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+
+    {# ── En-tête ── #}
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-bold" style="color: var(--color-ink)">Panneau admin</h1>
+            <p class="text-sm mt-1" style="color: var(--color-muted)">MyBabyGuessr — accès restreint</p>
+        </div>
+        <span class="text-xs font-bold px-3 py-1.5 rounded-full"
+              style="background-color: rgba(196,113,74,0.12); color: var(--color-brand)">
+            ROLE_ADMIN
+        </span>
+    </div>
+
+    {# ── Stat cards ── #}
+    <div class="grid gap-4 mb-10" style="display:grid;grid-template-columns:repeat(3,1fr)">
+
+        <div class="card text-center py-6">
+            <div class="text-4xl font-bold mb-1" style="color: var(--color-brand)">{{ users|length }}</div>
+            <div class="text-sm font-semibold" style="color: var(--color-muted)">Utilisateurs</div>
+        </div>
+
+        <div class="card text-center py-6">
+            <div class="text-4xl font-bold mb-1" style="color: var(--color-brand)">{{ games|length }}</div>
+            <div class="text-sm font-semibold" style="color: var(--color-muted)">Baby Guessr</div>
+            <div class="text-xs mt-1.5 flex justify-center gap-3" style="color: var(--color-muted)">
+                {% if gamesByStatus.open is defined %}
+                <span>{{ gamesByStatus.open }} ouvert{{ gamesByStatus.open > 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if gamesByStatus.closed is defined %}
+                <span>{{ gamesByStatus.closed }} fermé{{ gamesByStatus.closed > 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if gamesByStatus.revealed is defined %}
+                <span>{{ gamesByStatus.revealed }} révélé{{ gamesByStatus.revealed > 1 ? 's' : '' }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card text-center py-6">
+            <div class="text-4xl font-bold mb-1" style="color: var(--color-brand)">{{ totalGuesses }}</div>
+            <div class="text-sm font-semibold" style="color: var(--color-muted)">Participations</div>
+        </div>
+
+    </div>
+
+    {# ── Utilisateurs ── #}
+    <div class="card mb-8">
+        <h2 class="text-base font-bold mb-4" style="color: var(--color-ink)">
+            Utilisateurs
+            <span class="text-sm font-normal ml-2" style="color: var(--color-muted)">({{ users|length }})</span>
+        </h2>
+        <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
+                <thead>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">#</th>
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Nom</th>
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Email</th>
+                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Vérifié</th>
+                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Jeux</th>
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Rôles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr style="border-bottom:1px solid var(--color-line){% if loop.last %};border-bottom:none{% endif %}">
+                        <td style="padding:10px 12px;color:var(--color-muted)">{{ user.id }}</td>
+                        <td style="padding:10px 12px;font-weight:600;color:var(--color-ink)">
+                            {{ user.firstName }} {{ user.lastName }}
+                        </td>
+                        <td style="padding:10px 12px;color:var(--color-ink)">{{ user.email }}</td>
+                        <td style="padding:10px 12px;text-align:center">
+                            {% if user.verified %}
+                            <span style="color:#276749">✓</span>
+                            {% else %}
+                            <span style="color:#9ca3af">—</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding:10px 12px;text-align:center;color:var(--color-ink)">
+                            {{ user.games|length }}
+                        </td>
+                        <td style="padding:10px 12px">
+                            {% for role in user.roles %}
+                            {% if role != 'ROLE_USER' %}
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full"
+                                  style="background-color:rgba(196,113,74,0.12);color:var(--color-brand)">
+                                {{ role }}
+                            </span>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# ── Baby Guessr ── #}
+    <div class="card">
+        <h2 class="text-base font-bold mb-4" style="color: var(--color-ink)">
+            Baby Guessr
+            <span class="text-sm font-normal ml-2" style="color: var(--color-muted)">({{ games|length }})</span>
+        </h2>
+        <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
+                <thead>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Titre</th>
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Créateur</th>
+                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Statut</th>
+                        <th style="text-align:center;padding:8px 12px;color:var(--color-muted);font-weight:600">Participants</th>
+                        <th style="text-align:left;padding:8px 12px;color:var(--color-muted);font-weight:600">Créé le</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set statusColors = {
+                        'open':     'background-color:rgba(196,113,74,0.12);color:var(--color-brand)',
+                        'closed':   'background-color:#f3f4f6;color:#6b7280',
+                        'revealed': 'background-color:rgba(39,103,73,0.10);color:#276749'
+                    } %}
+                    {% for game in games %}
+                    <tr style="border-bottom:1px solid var(--color-line){% if loop.last %};border-bottom:none{% endif %}">
+                        <td style="padding:10px 12px;font-weight:600;color:var(--color-ink)">
+                            {{ game.displayTitle }}
+                        </td>
+                        <td style="padding:10px 12px;color:var(--color-ink)">
+                            {{ game.user.firstName }} {{ game.user.lastName }}
+                            <div class="text-xs" style="color:var(--color-muted)">{{ game.user.email }}</div>
+                        </td>
+                        <td style="padding:10px 12px;text-align:center">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full"
+                                  style="{{ statusColors[game.status.value] }}">
+                                {{ game.status.value }}
+                            </span>
+                        </td>
+                        <td style="padding:10px 12px;text-align:center;color:var(--color-ink)">
+                            {{ game.guesses|length }}
+                        </td>
+                        <td style="padding:10px 12px;color:var(--color-muted)">
+                            {{ game.createdAt|date('d/m/Y') }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

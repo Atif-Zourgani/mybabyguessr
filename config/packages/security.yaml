@@ -41,10 +41,9 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        - { path: '^/(fr|en)/dashboard', roles: ROLE_USER }
-        - { path: '^/(fr|en)/games',     roles: ROLE_USER }
-        # Future protected routes:
-        # - { path: '^/(fr|en)/profile', roles: ROLE_USER }
+        - { path: '^/(fr|en|es|pt|de|it)/admin',          roles: ROLE_ADMIN }
+        - { path: '^/(fr|en|es|pt|de|it)/dashboard',     roles: ROLE_USER }
+        - { path: '^/(fr|en|es|pt|de|it)/games',         roles: ROLE_USER }
 
 when@test:
     security:
