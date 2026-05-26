@@ -5,7 +5,14 @@
 {% set dateFormat = app.request.locale == 'fr' ? 'd/m/Y' : 'm/d/Y' %}
 
 {% block body %}
-<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12" style="position:relative">
+
+    <img src="{{ asset('images/illustration/papillon2.png') }}" alt="" aria-hidden="true"
+         style="position:absolute;top:0;right:0;width:32px;opacity:0.70;pointer-events:none;z-index:0">
+    <img src="{{ asset('images/illustration/etoile.png') }}" alt="" aria-hidden="true"
+         style="position:absolute;top:0;left:0;width:26px;opacity:0.65;pointer-events:none;z-index:0">
+    <img src="{{ asset('images/illustration/singe.png') }}" alt="" aria-hidden="true"
+         style="position:absolute;bottom:0;right:0;width:65px;opacity:0.72;pointer-events:none;z-index:0">
 
     {# ── Retour ───────────────────────────────────────────────── #}
     <a href="{{ path('app_dashboard', {'_locale': app.request.locale}) }}"
@@ -139,6 +146,7 @@
 
                 {# ── Modale de confirmation ──────────────────────── #}
                 <div x-show="confirm"
+                     x-cloak
                      x-transition:enter="transition ease-out duration-150"
                      x-transition:enter-start="opacity-0"
                      x-transition:enter-end="opacity-100"
@@ -148,6 +156,7 @@
                 </div>
 
                 <div x-show="confirm"
+                     x-cloak
                      x-transition:enter="transition ease-out duration-200"
                      x-transition:enter-start="opacity-0 scale-95"
                      x-transition:enter-end="opacity-100 scale-100"

@@ -24,9 +24,29 @@
 {% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
 {% block twitter_image %}{{ game.image ? absolute_url(asset(game.image)) : absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-play { position:absolute; pointer-events:none; z-index:2; }
+.deco-play-papillon { top:20px; left:20px; width:34px; opacity:0.76; }
+.deco-play-soleil   { top:6px; right:10px; width:86px; opacity:0.70; }
+.deco-play-lion     { bottom:-10px; right:10px; width:72px; opacity:0.88; }
+@media (min-width:640px) {
+    .deco-play-papillon { top:24px; left:calc(50% - 258px); width:42px; }
+    .deco-play-soleil   { top:8px; left:calc(50% + 192px); width:98px; }
+    .deco-play-lion     { bottom:-10px; left:calc(50% + 218px); width:100px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
-<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12">
-<div class="card w-full max-w-md">
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12"
+         style="position:relative;overflow:hidden">
+
+    <img src="{{ asset('images/illustration/papillon3.png') }}" alt="" aria-hidden="true" class="deco-play deco-play-papillon">
+    <img src="{{ asset('images/illustration/soleil.png') }}"    alt="" aria-hidden="true" class="deco-play deco-play-soleil">
+    <img src="{{ asset('images/illustration/lion.png') }}"      alt="" aria-hidden="true" class="deco-play deco-play-lion">
+
+<div class="card w-full max-w-md" style="position:relative;z-index:1">
 
     {# ── Logo ─────────────────────────────────────────────────── #}
     <div class="flex justify-center mb-6">

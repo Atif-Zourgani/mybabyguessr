@@ -2,6 +2,18 @@
 {% block title %}{{ 'games.reveal_share.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-revs { position:absolute; pointer-events:none; z-index:2; }
+.deco-revs-soleil   { top:4px;  right:8px;  width:72px; opacity:0.68; }
+.deco-revs-feuille  { bottom:10px; left:8px; width:36px; opacity:0.72; transform:rotate(-20deg); }
+@media (min-width:640px) {
+    .deco-revs-soleil  { top:6px;  left:calc(50% + 228px); width:84px; }
+    .deco-revs-feuille { bottom:12px; left:calc(50% - 316px); width:42px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
 {% set revealUrl = url('app_game_reveal_public', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) %}
 {% set waText    = 'games.reveal_share.whatsapp_text'|trans({'%game%': game.displayTitle}) ~ "\n\n" ~ revealUrl %}
@@ -9,10 +21,14 @@
 
 <div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12"
      id="share-page"
+     style="position:relative;overflow:hidden"
      data-share-url="{{ revealUrl }}"
      data-share-title="{{ game.displayTitle|e('html_attr') }}"
      data-copy-label="{{ 'games.reveal_share.btn_copy'|trans|e('html_attr') }}"
      data-copied-label="{{ 'games.reveal_share.btn_copied'|trans|e('html_attr') }}">
+
+    <img src="{{ asset('images/illustration/soleil.png') }}"        alt="" aria-hidden="true" class="deco-revs deco-revs-soleil">
+    <img src="{{ asset('images/illustration/feuille_orange.png') }}" alt="" aria-hidden="true" class="deco-revs deco-revs-feuille">
 
     {# ── En-tête ──────────────────────────────────────────────── #}
     <div class="text-center mb-8">

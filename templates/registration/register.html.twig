@@ -3,9 +3,29 @@
 {% block title %}{{ 'register.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-reg { position:absolute; pointer-events:none; z-index:2; }
+.deco-reg-papillon { top:20px; left:24px; width:36px; opacity:0.78; }
+.deco-reg-etoile   { top:16px; right:24px; width:30px; opacity:0.72; }
+.deco-reg-singe    { bottom:0; right:12px; width:65px; opacity:0.88; }
+@media (min-width:640px) {
+    .deco-reg-papillon { top:24px; left:calc(50% - 252px); width:44px; }
+    .deco-reg-etoile   { top:18px; left:calc(50% + 200px); width:38px; }
+    .deco-reg-singe    { bottom:0; left:calc(50% + 208px); width:95px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
-<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12">
-    <div class="card w-full max-w-md">
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12"
+         style="position:relative;overflow:hidden">
+
+    <img src="{{ asset('images/illustration/papillon3.png') }}" alt="" aria-hidden="true" class="deco-reg deco-reg-papillon">
+    <img src="{{ asset('images/illustration/etoile.png') }}"   alt="" aria-hidden="true" class="deco-reg deco-reg-etoile">
+    <img src="{{ asset('images/illustration/singe.png') }}"    alt="" aria-hidden="true" class="deco-reg deco-reg-singe">
+
+    <div class="card w-full max-w-md" style="position:relative;z-index:1">
 
         {# Logo #}
         <div class="flex justify-center mb-6">

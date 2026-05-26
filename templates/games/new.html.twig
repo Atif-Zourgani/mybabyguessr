@@ -3,8 +3,23 @@
 {% block title %}{{ 'games.new.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-new { position:absolute; pointer-events:none; z-index:2; }
+.deco-new-liontete  { top:-2px; right:8px;  width:52px; opacity:0.80; }
+.deco-new-papillon  { top:20px; left:10px;  width:28px; opacity:0.74; }
+@media (min-width:640px) {
+    .deco-new-liontete { top:-4px; left:calc(50% + 232px); width:62px; }
+    .deco-new-papillon { top:24px; left:calc(50% - 318px); width:34px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12" style="position:relative;overflow:hidden">
+
+    <img src="{{ asset('images/illustration/lion_tete.png') }}" alt="" aria-hidden="true" class="deco-new deco-new-liontete">
+    <img src="{{ asset('images/illustration/papillon3.png') }}" alt="" aria-hidden="true" class="deco-new deco-new-papillon">
 
     <a href="{{ path('app_dashboard', {'_locale': app.request.locale}) }}"
        class="inline-flex items-center gap-1 text-sm font-bold hover:text-brand mb-8"

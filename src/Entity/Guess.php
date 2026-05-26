@@ -40,6 +40,15 @@ class Guess
     #[ORM\Column(nullable: true)]
     private ?int $guessHeight = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $nameAttempt1 = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $nameAttempt2 = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $nameAttempt3 = null;
+
     #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
     private int $nameHintsUsed = 0;
 
@@ -151,6 +160,15 @@ class Guess
 
         return $this;
     }
+
+    public function getNameAttempt1(): ?string { return $this->nameAttempt1; }
+    public function setNameAttempt1(?string $v): static { $this->nameAttempt1 = $v; return $this; }
+
+    public function getNameAttempt2(): ?string { return $this->nameAttempt2; }
+    public function setNameAttempt2(?string $v): static { $this->nameAttempt2 = $v; return $this; }
+
+    public function getNameAttempt3(): ?string { return $this->nameAttempt3; }
+    public function setNameAttempt3(?string $v): static { $this->nameAttempt3 = $v; return $this; }
 
     public function getNameHintsUsed(): int
     {

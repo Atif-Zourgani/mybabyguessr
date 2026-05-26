@@ -3,9 +3,29 @@
 {% block title %}{{ 'play.done.title'|trans }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-done { position:absolute; pointer-events:none; z-index:2; }
+.deco-done-papillon { top:16px; right:12px; width:32px; opacity:0.75; }
+.deco-done-etoile   { top:20px; left:14px;  width:22px; opacity:0.85; }
+.deco-done-elephant { bottom:-8px; left:8px; width:68px; opacity:0.80; }
+@media (min-width:640px) {
+    .deco-done-papillon { top:20px; left:calc(50% + 198px); width:40px; }
+    .deco-done-etoile   { top:24px; left:calc(50% - 250px); width:26px; }
+    .deco-done-elephant { bottom:-10px; left:calc(50% - 260px); width:80px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
-<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12">
-<div class="card w-full max-w-md">
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12"
+         style="position:relative;overflow:hidden">
+
+    <img src="{{ asset('images/illustration/papillon1.png') }}" alt="" aria-hidden="true" class="deco-done deco-done-papillon">
+    <img src="{{ asset('images/illustration/etoile.png') }}"    alt="" aria-hidden="true" class="deco-done deco-done-etoile">
+    <img src="{{ asset('images/illustration/elephant.png') }}"  alt="" aria-hidden="true" class="deco-done deco-done-elephant">
+
+<div class="card w-full max-w-md" style="position:relative;z-index:1">
 
     {# ── Icône succès ─────────────────────────────────────────── #}
     <div class="flex justify-center mb-6">

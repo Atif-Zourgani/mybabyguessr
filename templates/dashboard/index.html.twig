@@ -8,12 +8,14 @@
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
 
     {# ── Bienvenue ────────────────────────────────────────── #}
-    <div class="mb-10 sm:mb-14">
-        <h1 class="text-3xl sm:text-4xl mb-1">
+    <div class="mb-10 sm:mb-14" style="position:relative">
+        <img src="{{ asset('images/illustration/soleil.png') }}" alt="" aria-hidden="true"
+             style="position:absolute;top:-8px;right:0;width:70px;opacity:0.75;pointer-events:none;z-index:0">
+        <h1 class="text-3xl sm:text-4xl mb-1" style="position:relative;z-index:1">
             {{ 'dashboard.welcome'|trans }},
             <span style="color: var(--color-brand)">{{ app.user.firstName }}</span> !
         </h1>
-        <p class="text-lg" style="color: var(--color-muted)">
+        <p class="text-lg" style="color: var(--color-muted); position:relative;z-index:1">
             {% if games|length > 0 %}
                 {{ 'dashboard.active_games'|trans({'%count%': games|length}) }}
             {% else %}
@@ -109,10 +111,14 @@
                         </p>
                     </div>
 
-                    <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
-                       class="btn btn-primary w-full sm:w-auto px-10">
-                        {{ 'dashboard.games.btn_create_first'|trans }}
-                    </a>
+                    <div class="flex justify-center items-end gap-6">
+                        <a href="{{ path('app_game_new', {'_locale': app.request.locale}) }}"
+                           class="btn btn-primary px-10">
+                            {{ 'dashboard.games.btn_create_first'|trans }}
+                        </a>
+                        <img src="{{ asset('images/illustration/girafe.png') }}" alt="" aria-hidden="true"
+                             style="width:72px;opacity:0.90;pointer-events:none;flex-shrink:0">
+                    </div>
                 </div>
 
             {# ── Liste des Baby Guessr ─────────────────────── #}
@@ -120,8 +126,10 @@
                 <div class="p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
                      style="background-color: var(--color-cream);">
 
+                    {% set papillons = ['papillon1.png', 'papillon2.png', 'papillon3.png'] %}
                     {% for game in games %}
-                    <div class="card-panel transition duration-200 hover:shadow-xl">
+                    {% set papillon = papillons[loop.index0 % 3] %}
+                    <div class="card-panel transition duration-200 hover:shadow-xl" style="position:relative;overflow:hidden">
 
                         {# En-tête cliquable → page show #}
                         <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"
@@ -173,7 +181,9 @@
                         </a>
 
                         {# Footer — fond cream #}
-                        <div style="background-color: var(--color-cream);">
+                        <div style="background-color: var(--color-cream); position:relative; overflow:hidden">
+                            <img src="{{ asset('images/illustration/' ~ papillon) }}" alt="" aria-hidden="true"
+                                 style="position:absolute;bottom:2px;right:6px;width:30px;opacity:0.55;pointer-events:none;z-index:0">
 
                             {# Actions pleine largeur #}
                             <div class="grid grid-cols-2">
@@ -208,6 +218,11 @@
 
         </div>
     </section>
+
+    <div class="flex justify-end mt-6 pr-2" style="pointer-events:none" aria-hidden="true">
+        <img src="{{ asset('images/illustration/singe.png') }}" alt=""
+             style="width:80px;opacity:0.72">
+    </div>
 
 </div>
 {% endblock %}

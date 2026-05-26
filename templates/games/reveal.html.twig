@@ -2,11 +2,27 @@
 {% block title %}{{ 'games.reveal.title'|trans }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-rev { position:absolute; pointer-events:none; z-index:2; }
+.deco-rev-etoile { top:18px; right:10px; width:24px; opacity:0.85; }
+.deco-rev-singe  { bottom:-4px; right:6px; width:62px; opacity:0.78; }
+@media (min-width:640px) {
+    .deco-rev-etoile { top:22px; left:calc(50% + 272px); width:28px; }
+    .deco-rev-singe  { bottom:-6px; left:calc(50% + 230px); width:74px; }
+}
+</style>
+{% endblock %}
+
 {% set currentGender = game.answerGender ? game.answerGender.value : 'boy' %}
 
 {% block body %}
 <div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12"
+     style="position:relative;overflow:hidden"
      x-data="{ gender: '{{ currentGender }}' }">
+
+    <img src="{{ asset('images/illustration/etoile.png') }}" alt="" aria-hidden="true" class="deco-rev deco-rev-etoile">
+    <img src="{{ asset('images/illustration/singe.png') }}"  alt="" aria-hidden="true" class="deco-rev deco-rev-singe">
 
     {# ── Retour ───────────────────────────────────────────────── #}
     <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"

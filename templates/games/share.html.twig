@@ -3,6 +3,18 @@
 {% block title %}{{ 'games.share.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-share { position:absolute; pointer-events:none; z-index:2; }
+.deco-share-girafe   { top:-4px;  right:6px;  width:54px; opacity:0.72; }
+.deco-share-papillon { top:18px;  left:10px;  width:28px; opacity:0.75; }
+@media (min-width:640px) {
+    .deco-share-girafe   { top:-6px;  left:calc(50% + 238px); width:66px; }
+    .deco-share-papillon { top:22px;  left:calc(50% - 318px); width:34px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
 {% set shareUrl = url('app_game_play', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) %}
 {% set waMessage = 'games.share.whatsapp_text'|trans ~ "\n\n" ~ shareUrl %}
@@ -10,10 +22,14 @@
 
 <div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12"
      id="share-page"
+     style="position:relative;overflow:hidden"
      data-share-url="{{ shareUrl }}"
      data-share-title="{{ game.displayTitle|e('html_attr') }}"
      data-copy-label="{{ 'games.share.btn_copy'|trans|e('html_attr') }}"
      data-copied-label="{{ 'games.share.btn_copied'|trans|e('html_attr') }}">
+
+    <img src="{{ asset('images/illustration/girafe.png') }}"   alt="" aria-hidden="true" class="deco-share deco-share-girafe">
+    <img src="{{ asset('images/illustration/papillon2.png') }}" alt="" aria-hidden="true" class="deco-share deco-share-papillon">
 
     {# ── En-tête succès ───────────────────────────── #}
     <div class="text-center mb-8">

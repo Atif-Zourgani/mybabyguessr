@@ -3,9 +3,29 @@
 {% block title %}{{ 'login.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block stylesheets %}
+<style>
+.deco-login { position:absolute; pointer-events:none; z-index:2; }
+.deco-login-papillon { top:20px; left:20px; width:34px; opacity:0.75; }
+.deco-login-feuille  { top:14px; right:20px; width:30px; opacity:0.68; transform:rotate(20deg); }
+.deco-login-elephant { bottom:-20px; left:14px; width:68px; opacity:0.88; }
+@media (min-width:640px) {
+    .deco-login-papillon { top:24px; left:calc(50% - 252px); width:42px; }
+    .deco-login-feuille  { top:20px; left:calc(50% + 204px); width:36px; transform:rotate(20deg); }
+    .deco-login-elephant { bottom:-20px; left:calc(50% - 310px); width:100px; }
+}
+</style>
+{% endblock %}
+
 {% block body %}
-<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12">
-    <div class="card w-full max-w-md">
+<section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12"
+         style="position:relative;overflow:hidden">
+
+    <img src="{{ asset('images/illustration/papillon1.png') }}"    alt="" aria-hidden="true" class="deco-login deco-login-papillon">
+    <img src="{{ asset('images/illustration/feuille_orange.png') }}" alt="" aria-hidden="true" class="deco-login deco-login-feuille">
+    <img src="{{ asset('images/illustration/elephant.png') }}"     alt="" aria-hidden="true" class="deco-login deco-login-elephant">
+
+    <div class="card w-full max-w-md" style="position:relative;z-index:1">
 
         {# Logo #}
         <div class="flex justify-center mb-6">

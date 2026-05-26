@@ -10,9 +10,11 @@ use App\Repository\GameRepository;
 use App\Repository\GuessRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PlayController extends AbstractController
 {
@@ -103,6 +105,63 @@ class PlayController extends AbstractController
         ], new Response('', $hasErrors ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
+    #[Route('/play/{slug}/{token}/hint/{attempt}', name: 'app_game_hint', methods: ['POST'])]
+    public function hint(
+        string $slug,
+        string $token,
+        int $attempt,
+        Request $request,
+        GameRepository $gameRepository,
+        TranslatorInterface $translator,
+    ): JsonResponse {
+        $game = $gameRepository->findOneByToken($token);
+
+        if ($game === null || !$game->isGuessName() || $game->getNameMode()?->value !== 'hints') {
+            return new JsonResponse(['error' => 'invalid'], 400);
+        }
+
+        if ($game->getStatus() !== GameStatus::Open) {
+            return new JsonResponse(['error' => 'closed'], 403);
+        }
+
+        if (!$request->getSession()->has('player_' . $token)) {
+            return new JsonResponse(['error' => 'no_session'], 401);
+        }
+
+        if (!in_array($attempt, [1, 2, 3], true)) {
+            return new JsonResponse(['error' => 'invalid_attempt'], 400);
+        }
+
+        $hintsKey     = 'hints_' . $token;
+        $hints        = $request->getSession()->get($hintsKey, []);
+        $alreadyDone  = count(array_filter([
+            $hints['attempt1'] ?? null,
+            $hints['attempt2'] ?? null,
+            $hints['attempt3'] ?? null,
+        ]));
+
+        if ($attempt !== $alreadyDone + 1) {
+            return new JsonResponse(['error' => 'out_of_order'], 400);
+        }
+
+        $name = mb_substr(trim(strip_tags($request->request->get('name', ''))), 0, 100);
+        if ($name === '') {
+            return new JsonResponse(['error' => 'empty_name'], 422);
+        }
+
+        $hints['attempt' . $attempt] = $name;
+        $request->getSession()->set($hintsKey, $hints);
+
+        if ($attempt >= 3) {
+            return new JsonResponse(['done' => true]);
+        }
+
+        $answerName = $game->getAnswerName() ?? '';
+        $clue = $this->computeHintClueText($answerName, $name, $attempt + 1, $translator);
+
+        return new JsonResponse(['clue' => $clue, 'done' => false]);
+    }
+
     #[Route('/play/{slug}/{token}/go', name: 'app_game_guess', methods: ['GET', 'POST'])]
     public function guess(
         string $slug,
@@ -110,6 +169,7 @@ class PlayController extends AbstractController
         Request $request,
         GameRepository $gameRepository,
         EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
     ): Response {
         $game = $gameRepository->findOneByToken($token);
 
@@ -143,10 +203,11 @@ class PlayController extends AbstractController
 
         if ($request->isMethod('GET')) {
             return $this->render('games/play_guess.html.twig', [
-                'game'     => $game,
-                'player'   => $player,
-                'errors'   => [],
-                'formData' => [],
+                'game'       => $game,
+                'player'     => $player,
+                'errors'     => [],
+                'formData'   => [],
+                'hintsState' => $this->buildHintsState($game, $token, $request, $translator),
             ]);
         }
 
@@ -170,10 +231,17 @@ class PlayController extends AbstractController
         }
 
         if ($game->isGuessName()) {
-            $guessName        = mb_substr(trim(strip_tags($request->request->get('guess_name', ''))), 0, 100);
-            $formData['name'] = $guessName;
-            if ($guessName === '') {
-                $errors['name'] = true;
+            if ($game->getNameMode()?->value === 'hints') {
+                $hints = $request->getSession()->get('hints_' . $token, []);
+                if (empty($hints['attempt1']) || empty($hints['attempt2']) || empty($hints['attempt3'])) {
+                    $errors['name'] = true;
+                }
+            } else {
+                $guessName        = mb_substr(trim(strip_tags($request->request->get('guess_name', ''))), 0, 100);
+                $formData['name'] = $guessName;
+                if ($guessName === '') {
+                    $errors['name'] = true;
+                }
             }
         }
 
@@ -225,10 +293,11 @@ class PlayController extends AbstractController
 
         if (!empty($errors)) {
             return $this->render('games/play_guess.html.twig', [
-                'game'     => $game,
-                'player'   => $player,
-                'errors'   => $errors,
-                'formData' => $formData,
+                'game'       => $game,
+                'player'     => $player,
+                'errors'     => $errors,
+                'formData'   => $formData,
+                'hintsState' => $this->buildHintsState($game, $token, $request, $translator),
             ], new Response('', Response::HTTP_UNPROCESSABLE_ENTITY));
         }
 
@@ -241,7 +310,19 @@ class PlayController extends AbstractController
             $guess->setGuessGender(AnswerGender::from($formData['gender']));
         }
         if ($game->isGuessName()) {
-            $guess->setGuessName($formData['name']);
+            if ($game->getNameMode()?->value === 'hints') {
+                $hints = $request->getSession()->get('hints_' . $token, []);
+                $a1 = $hints['attempt1'] ?? null;
+                $a2 = $hints['attempt2'] ?? null;
+                $a3 = $hints['attempt3'] ?? null;
+                $guess->setNameAttempt1($a1);
+                $guess->setNameAttempt2($a2);
+                $guess->setNameAttempt3($a3);
+                $guess->setGuessName($a3 ?? $a2 ?? $a1);
+                $guess->setNameHintsUsed(count(array_filter([$a1, $a2, $a3])));
+            } else {
+                $guess->setGuessName($formData['name']);
+            }
         }
         if ($game->isGuessDate() && $guessDateParsed !== null) {
             $guess->setGuessDate($guessDateParsed);
@@ -291,6 +372,80 @@ class PlayController extends AbstractController
             'game'    => $game,
             'winners' => $this->computeRevealWinners($game, $guesses),
         ]);
+    }
+
+    private function buildHintsState(Game $game, string $token, Request $request, TranslatorInterface $translator): array
+    {
+        $empty = ['clues' => [], 'proposals' => [], 'step' => 1, 'completed' => false];
+
+        if (!$game->isGuessName() || $game->getNameMode()?->value !== 'hints') {
+            return $empty;
+        }
+
+        $answer = $game->getAnswerName();
+        if ($answer === null) {
+            return $empty;
+        }
+
+        $hints    = $request->getSession()->get('hints_' . $token, []);
+        $a1       = $hints['attempt1'] ?? null;
+        $a2       = $hints['attempt2'] ?? null;
+        $a3       = $hints['attempt3'] ?? null;
+        $proposals = array_values(array_filter([$a1, $a2, $a3]));
+
+        $clues   = [$this->computeHintClueText($answer, null, 1, $translator)];
+        if ($a1 !== null) $clues[] = $this->computeHintClueText($answer, $a1, 2, $translator);
+        if ($a2 !== null) $clues[] = $this->computeHintClueText($answer, $a2, 3, $translator);
+
+        $done = count($proposals) >= 3;
+
+        return [
+            'clues'     => array_slice($clues, 0, $done ? 3 : count($proposals) + 1),
+            'proposals' => $proposals,
+            'step'      => $done ? 3 : count($proposals) + 1,
+            'completed' => $done,
+        ];
+    }
+
+    private function computeHintClueText(string $answer, ?string $prev, int $clueNumber, TranslatorInterface $translator): string
+    {
+        return match ($clueNumber) {
+            1 => $this->hint1Text($answer, $translator),
+            2 => $this->hint2Text($answer, $prev ?? '', $translator),
+            3 => $this->hint3Text($answer, $prev ?? '', $translator),
+            default => '',
+        };
+    }
+
+    private function hint1Text(string $answer, TranslatorInterface $translator): string
+    {
+        $last = mb_strtolower(mb_substr($answer, -1));
+        $vowels = ['a','e','i','o','u','y','à','â','ä','á','ã','é','è','ê','ë','î','ï','í','ì','ô','ö','ó','ò','ù','û','ü','ú','ÿ','ý'];
+        $key = in_array($last, $vowels) ? 'play.guess.hint1_vowel' : 'play.guess.hint1_consonant';
+        return $translator->trans($key);
+    }
+
+    private function hint2Text(string $answer, string $prev, TranslatorInterface $translator): string
+    {
+        $al = mb_strlen($answer);
+        $pl = mb_strlen($prev);
+        $key = $al > $pl ? 'play.guess.hint2_longer' : ($al < $pl ? 'play.guess.hint2_shorter' : 'play.guess.hint2_same');
+        return $translator->trans($key);
+    }
+
+    private function hint3Text(string $answer, string $prev, TranslatorInterface $translator): string
+    {
+        $normalize = static function (string $s): string {
+            $c = mb_strtolower(mb_substr($s, 0, 1));
+            return strtr($c, ['à'=>'a','â'=>'a','ä'=>'a','á'=>'a','ã'=>'a','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e',
+                               'î'=>'i','ï'=>'i','í'=>'i','ì'=>'i','ô'=>'o','ö'=>'o','ó'=>'o','ò'=>'o',
+                               'ù'=>'u','û'=>'u','ü'=>'u','ú'=>'u','ÿ'=>'y','ý'=>'y','ç'=>'c','ñ'=>'n']);
+        };
+        $af = $normalize($answer);
+        $pf = $normalize($prev);
+        $letter = mb_strtoupper(mb_substr($prev, 0, 1));
+        $key = $af < $pf ? 'play.guess.hint3_before' : ($af > $pf ? 'play.guess.hint3_after' : 'play.guess.hint3_same');
+        return $translator->trans($key, ['%letter%' => $letter]);
     }
 
     private function computeRevealWinners(Game $game, array $guesses): array
