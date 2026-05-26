@@ -1,42 +1,288 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}{{ 'footer.terms'|trans }} — MyBabyGuessr{% endblock %}
+{% set locale = app.request.locale %}
+{% block title %}{% if locale == 'fr' %}Conditions d'utilisation{% elseif locale == 'de' %}Nutzungsbedingungen{% elseif locale == 'es' %}Términos de uso{% elseif locale == 'pt' %}Termos de uso{% elseif locale == 'it' %}Termini di utilizzo{% else %}Terms of Service{% endif %} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
 <section class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
 
-    <h1 class="text-3xl sm:text-4xl mb-8" style="color: var(--color-ink)">
-        {{ 'footer.terms'|trans }}
-    </h1>
-
-    <div class="card p-6 sm:p-10 prose" style="color: var(--color-muted); max-width: none;">
-
-        {# ── TODO : rédiger les vraies conditions d'utilisation ── #}
-        {# Sections à couvrir :                                      #}
-        {#   1. Présentation du service                              #}
-        {#   2. Accès et création de compte                          #}
-        {#   3. Utilisation autorisée / interdictions                #}
-        {#   4. Contenu utilisateur (images, titres)                 #}
-        {#   5. Responsabilités et limitations                       #}
-        {#   6. Disponibilité du service                             #}
-        {#   7. Modifications des CGU                                #}
-        {#   8. Droit applicable et juridiction                      #}
-
-        <p class="text-sm italic" style="color: var(--color-muted)">
-            {% if app.request.locale == 'fr' %}
-                Cette page est en cours de rédaction et sera disponible avant le lancement public.
-            {% else %}
-                This page is being written and will be available before the public launch.
-            {% endif %}
+    {# ── En-tête ── #}
+    <div style="margin-bottom:2rem">
+        {% if locale == 'fr' %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Conditions d'utilisation</h1>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Dernière mise à jour : 27 mai 2026</p>
+        {% else %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Terms of Service</h1>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Last updated: May 27, 2026</p>
+        {% if locale != 'en' %}
+        <p style="margin-top:0.75rem;font-size:0.8125rem;padding:0.625rem 1rem;border-radius:0.5rem;background:rgba(196,113,74,0.08);color:var(--color-muted)">
+            Ces conditions sont également disponibles
+            <a href="{{ path('app_terms', {'_locale': 'fr'}) }}" style="color:var(--color-brand);font-weight:700">en français</a>.
+            In case of conflict, the French version prevails.
         </p>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    {# ── Contenu ── #}
+    <div class="card" style="padding:1.75rem 1.5rem sm:padding:2.5rem 2rem">
+
+        {% if locale == 'fr' %}
+
+        {# ══════════════ VERSION FRANÇAISE ══════════════ #}
+
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Les présentes conditions générales d'utilisation (CGU) régissent l'accès et l'utilisation du service MyBabyGuessr, accessible à l'adresse <strong>mybabyguessr.com</strong>. En utilisant ce service, vous acceptez sans réserve les présentes conditions.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 1 &mdash; Présentation du service</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            MyBabyGuessr est un service en ligne permettant aux futurs parents de créer un jeu de pronostics autour de la naissance de leur enfant. Les proches peuvent participer en devinant le prénom, le sexe, la date de naissance, le poids et/ou la taille du bébé, via un simple lien d'invitation, sans création de compte.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 2 &mdash; Éditeur et hébergeur</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le service est édité par :<br>
+            <strong style="color:var(--color-ink)">Atif Zourgani</strong> — particulier domicilié en France<br>
+            Contact : <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Hébergement assuré par :<br>
+            <strong style="color:var(--color-ink)">o2switch</strong><br>
+            222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France<br>
+            <a href="https://www.o2switch.fr" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">www.o2switch.fr</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 3 &mdash; Accès au service</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le service est librement accessible depuis tout navigateur internet connecté. La <strong>création d'un jeu</strong> nécessite la création d'un compte utilisateur (email + mot de passe). La <strong>participation à un jeu existant</strong> ne nécessite aucun compte : seul le lien d'invitation partagé par l'organisateur est requis.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            L'accès au service est réservé aux personnes physiques majeures ou aux mineurs disposant d'une autorisation parentale.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 4 &mdash; Création et gestion du compte</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            4.1 &mdash; Pour créer un jeu, l'utilisateur doit s'inscrire avec une adresse email valide, un prénom, un nom et un mot de passe. Un email de vérification est envoyé lors de l'inscription.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            4.2 &mdash; Chaque utilisateur est responsable de la confidentialité de ses identifiants. Toute utilisation non autorisée du compte doit être signalée sans délai à l'adresse <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            4.3 &mdash; La suppression du compte peut être demandée à tout moment par email. Elle entraîne la suppression définitive de l'ensemble des jeux et données associées.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            4.4 &mdash; Les comptes inactifs depuis plus de 24 mois pourront être supprimés après information préalable par email.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 5 &mdash; Description du service</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            5.1 &mdash; L'<strong style="color:var(--color-ink)">organisateur</strong> crée un jeu en sélectionnant les catégories à deviner (sexe, prénom, date, poids, taille), en définissant un titre, une date prévue d'accouchement et, optionnellement, une photo de couverture.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            5.2 &mdash; Le <strong style="color:var(--color-ink)">joueur</strong> accède au jeu via le lien unique partagé par l'organisateur et soumet ses pronostics. Il peut choisir de laisser son adresse email pour être notifié des résultats.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            5.3 &mdash; L'organisateur peut à tout moment fermer les pronostics, révéler les vraies réponses et envoyer une notification aux joueurs ayant laissé leur email.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            5.4 &mdash; Le service est fourni en l'état. Aucune garantie de résultat particulier n'est donnée quant aux fonctionnalités disponibles.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 6 &mdash; Contenus utilisateurs</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            6.1 &mdash; L'utilisateur peut télécharger une photo de couverture pour son jeu. En effectuant cet upload, il certifie disposer de tous les droits nécessaires sur cette image et que celle-ci ne porte pas atteinte aux droits de tiers.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            6.2 &mdash; MyBabyGuessr n'acquiert aucun droit de propriété sur les contenus téléchargés. L'utilisateur conserve l'intégralité de ses droits sur ses images.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            6.3 &mdash; Les images sont utilisées exclusivement dans le cadre de l'affichage du jeu aux participants invités et ne sont pas partagées avec des tiers.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            6.4 &mdash; Tout contenu illicite, contraire aux bonnes mœurs ou portant atteinte aux droits d'un tiers pourra être supprimé sans préavis.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 7 &mdash; Comportements interdits</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">Il est notamment interdit de :</p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Utiliser le service à des fins commerciales, publicitaires ou de démarchage ;</li>
+            <li>Tenter d'accéder aux données d'autres utilisateurs ou de contourner les mécanismes de sécurité ;</li>
+            <li>Publier des contenus haineux, offensants, discriminatoires ou illégaux ;</li>
+            <li>Automatiser l'accès au service (scraping, robots, scripts) sans autorisation écrite préalable ;</li>
+            <li>Tenter de nuire à l'intégrité ou à la disponibilité des infrastructures techniques ;</li>
+            <li>Usurper l'identité d'une autre personne ou d'une entité ;</li>
+            <li>Diffuser des liens vers des contenus malveillants.</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Tout manquement à ces règles pourra entraîner la suspension ou la suppression immédiate du compte concerné.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 8 &mdash; Propriété intellectuelle</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le nom « MyBabyGuessr », le logo, le design visuel, la charte graphique et le code source du service sont la propriété exclusive d'Atif Zourgani et sont protégés par les lois relatives à la propriété intellectuelle. Toute reproduction, représentation, diffusion ou utilisation, même partielle, sans autorisation écrite préalable est strictement interdite.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 9 &mdash; Responsabilité</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            MyBabyGuessr est un service à usage familial et récréatif. L'éditeur s'efforce de maintenir le service accessible et fonctionnel mais ne peut être tenu responsable :
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Des interruptions de service d'origine technique ou liées à l'hébergeur ;</li>
+            <li>Des contenus publiés par les utilisateurs ;</li>
+            <li>De pertes de données résultant d'un événement imprévisible ou de force majeure ;</li>
+            <li>De dommages indirects résultant de l'utilisation ou de l'impossibilité d'utiliser le service.</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 10 &mdash; Disponibilité</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le service est fourni sans garantie de disponibilité continue. Des opérations de maintenance peuvent être effectuées, avec ou sans préavis selon leur urgence. L'éditeur s'efforce d'informer les utilisateurs à l'avance des interruptions planifiées importantes.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 11 &mdash; Modification des CGU</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Les présentes conditions peuvent être modifiées à tout moment. En cas de modification substantielle affectant les droits des utilisateurs, ceux-ci seront informés par email au moins 15 jours avant l'entrée en vigueur des nouvelles conditions. La poursuite de l'utilisation du service après cette date vaut acceptation des nouvelles conditions.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 12 &mdash; Droit applicable et juridiction</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Les présentes conditions générales d'utilisation sont soumises au droit français. En cas de litige relatif à leur interprétation ou à leur exécution, les parties s'engagent à rechercher une solution amiable avant tout recours contentieux. À défaut d'accord, les tribunaux français seront seuls compétents.
+        </p>
+
+        {% else %}
+
+        {# ══════════════ VERSION ANGLAISE (défaut pour ES, PT, DE, IT) ══════════════ #}
+
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            These Terms of Service govern your access to and use of the MyBabyGuessr service, available at <strong>mybabyguessr.com</strong>. By using this service, you agree to these terms without reservation.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 1 &mdash; About MyBabyGuessr</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            MyBabyGuessr is an online service that allows expectant parents to create a baby guessing game. Friends and family can participate by guessing the name, gender, due date, weight and/or height of the baby, via a simple invitation link — no account required to play.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 2 &mdash; Publisher and Hosting</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            The service is published by:<br>
+            <strong style="color:var(--color-ink)">Atif Zourgani</strong> — individual, based in France<br>
+            Contact: <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Hosted by:<br>
+            <strong style="color:var(--color-ink)">o2switch</strong><br>
+            222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France<br>
+            <a href="https://www.o2switch.fr" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">www.o2switch.fr</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 3 &mdash; Access</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            The service is freely accessible from any web browser. <strong>Creating a game</strong> requires registering an account (email + password). <strong>Participating in a game</strong> requires no account — only the invitation link shared by the organizer.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            The service is intended for adults, or minors with parental authorization.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 4 &mdash; User Account</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            4.1 &mdash; Creating a game requires registering with a valid email address, first name, last name, and password. A verification email is sent upon registration.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            4.2 &mdash; You are solely responsible for the confidentiality of your credentials. Any unauthorized use of your account must be reported immediately to <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            4.3 &mdash; You may request account deletion at any time by email. Deletion is permanent and removes all associated games and data.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            4.4 &mdash; Accounts inactive for more than 24 months may be deleted after prior email notice.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 5 &mdash; How the Service Works</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            5.1 &mdash; The <strong style="color:var(--color-ink)">organizer</strong> creates a game by selecting categories (gender, name, date, weight, height), setting a title, an expected due date, and optionally uploading a cover photo.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            5.2 &mdash; <strong style="color:var(--color-ink)">Players</strong> access the game via the unique link shared by the organizer and submit their guesses. They may optionally provide an email address to receive the reveal notification.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            5.3 &mdash; The organizer can close the game at any time, reveal the true answers, and notify players who provided their email address.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            5.4 &mdash; The service is provided as-is, without warranty of any specific result or feature availability.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 6 &mdash; User Content</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            6.1 &mdash; You may upload a cover photo for your game. By doing so, you certify that you hold all necessary rights to that image and that it does not infringe any third-party rights.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            6.2 &mdash; MyBabyGuessr acquires no ownership over uploaded content. You retain all rights to your images.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            6.3 &mdash; Images are used solely to display the game to invited participants and are not shared with third parties.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.5rem">
+            6.4 &mdash; Any unlawful or offensive content will be removed without notice.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 7 &mdash; Prohibited Uses</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">You may not:</p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Use the service for commercial, advertising, or solicitation purposes;</li>
+            <li>Attempt to access other users' data or bypass security mechanisms;</li>
+            <li>Post hateful, offensive, discriminatory, or illegal content;</li>
+            <li>Automate access to the service (scraping, bots, scripts) without prior written authorization;</li>
+            <li>Attempt to harm the integrity or availability of the technical infrastructure;</li>
+            <li>Impersonate another person or entity;</li>
+            <li>Share links to malicious content.</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Any breach of these rules may result in immediate account suspension or deletion.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 8 &mdash; Intellectual Property</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            The name "MyBabyGuessr", the logo, visual design, and source code are the exclusive property of Atif Zourgani and are protected by intellectual property laws. Any reproduction, distribution, or use, even partial, without prior written authorization is strictly prohibited.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 9 &mdash; Liability</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            MyBabyGuessr is a family and recreational service. The publisher strives to keep the service accessible and functional but cannot be held liable for:
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Service interruptions of technical origin or related to the hosting provider;</li>
+            <li>Content published by users;</li>
+            <li>Data loss resulting from unforeseeable events or force majeure;</li>
+            <li>Indirect damages resulting from use or inability to use the service.</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 10 &mdash; Availability</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            The service is provided without guarantee of continuous availability. Maintenance operations may be performed with or without advance notice depending on urgency. The publisher will endeavor to provide advance notice of significant planned interruptions.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 11 &mdash; Changes to These Terms</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            These terms may be updated at any time. For material changes affecting user rights, registered users will be notified by email at least 15 days before the new terms take effect. Continued use of the service after that date constitutes acceptance of the updated terms.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Article 12 &mdash; Governing Law</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            These terms are governed by French law. In the event of a dispute, the parties agree to seek an amicable resolution before initiating legal proceedings. Failing that, the competent French courts shall have exclusive jurisdiction.
+        </p>
+
+        {% endif %}
 
     </div>
 
-    <div class="mt-8 text-center">
-        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
-           class="btn btn-secondary">
-            {% if app.request.locale == 'fr' %}Retour à l'accueil{% elseif app.request.locale == 'es' %}Volver al inicio{% elseif app.request.locale == 'pt' %}Voltar ao início{% elseif app.request.locale == 'de' %}Zurück zur Startseite{% elseif app.request.locale == 'it' %}Torna alla home{% else %}Back to home{% endif %}
+    {# ── Navigation ── #}
+    <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+        <a href="{{ path('app_home', {'_locale': locale}) }}" class="btn btn-secondary">
+            {% if locale == 'fr' %}← Retour à l'accueil{% elseif locale == 'de' %}← Zurück zur Startseite{% elseif locale == 'es' %}← Volver al inicio{% elseif locale == 'pt' %}← Voltar ao início{% elseif locale == 'it' %}← Torna alla home{% else %}← Back to home{% endif %}
+        </a>
+        <a href="{{ path('app_privacy', {'_locale': locale}) }}"
+           style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
+            {% if locale == 'fr' %}Politique de confidentialité →{% elseif locale == 'de' %}Datenschutzrichtlinie →{% elseif locale == 'es' %}Política de privacidad →{% elseif locale == 'pt' %}Política de privacidade →{% elseif locale == 'it' %}Informativa sulla privacy →{% else %}Privacy Policy →{% endif %}
         </a>
     </div>
 

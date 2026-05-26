@@ -1,41 +1,338 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}{{ 'footer.privacy'|trans }} — MyBabyGuessr{% endblock %}
+{% set locale = app.request.locale %}
+{% block title %}{% if locale == 'fr' %}Politique de confidentialité{% elseif locale == 'de' %}Datenschutzrichtlinie{% elseif locale == 'es' %}Política de privacidad{% elseif locale == 'pt' %}Política de privacidade{% elseif locale == 'it' %}Informativa sulla privacy{% else %}Privacy Policy{% endif %} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
 <section class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
 
-    <h1 class="text-3xl sm:text-4xl mb-8" style="color: var(--color-ink)">
-        {{ 'footer.privacy'|trans }}
-    </h1>
-
-    <div class="card p-6 sm:p-10 prose" style="color: var(--color-muted); max-width: none;">
-
-        {# ── TODO : rédiger la vraie politique de confidentialité ── #}
-        {# Sections à couvrir :                                        #}
-        {#   1. Responsable du traitement                              #}
-        {#   2. Données collectées et finalités                        #}
-        {#   3. Durée de conservation                                  #}
-        {#   4. Partage des données (hébergeur, sous-traitants)        #}
-        {#   5. Droits RGPD (accès, rectification, suppression)        #}
-        {#   6. Cookies                                                #}
-        {#   7. Contact (adresse email)                                #}
-
-        <p class="text-sm italic" style="color: var(--color-muted)">
-            {% if app.request.locale == 'fr' %}
-                Cette page est en cours de rédaction et sera disponible avant le lancement public.
-            {% else %}
-                This page is being written and will be available before the public launch.
-            {% endif %}
+    {# ── En-tête ── #}
+    <div style="margin-bottom:2rem">
+        {% if locale == 'fr' %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Politique de confidentialité</h1>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Dernière mise à jour : 27 mai 2026</p>
+        {% else %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Privacy Policy</h1>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Last updated: May 27, 2026</p>
+        {% if locale != 'en' %}
+        <p style="margin-top:0.75rem;font-size:0.8125rem;padding:0.625rem 1rem;border-radius:0.5rem;background:rgba(196,113,74,0.08);color:var(--color-muted)">
+            Cette politique est également disponible
+            <a href="{{ path('app_privacy', {'_locale': 'fr'}) }}" style="color:var(--color-brand);font-weight:700">en français</a>.
+            In case of conflict, the French version prevails.
         </p>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    {# ── Contenu ── #}
+    <div class="card" style="padding:1.75rem 1.5rem">
+
+        {% if locale == 'fr' %}
+
+        {# ══════════════ VERSION FRANÇAISE ══════════════ #}
+
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            La présente politique de confidentialité décrit comment MyBabyGuessr collecte, utilise et protège vos données personnelles, conformément au <strong>Règlement Général sur la Protection des Données (RGPD — UE 2016/679)</strong> et à la loi Informatique et Libertés.
+        </p>
+
+        {# Section #}
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">1. Responsable du traitement</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            <strong style="color:var(--color-ink)">Atif Zourgani</strong> — particulier domicilié en France<br>
+            Email : <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">2. Données collectées</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem"><strong style="color:var(--color-ink)">Pour les comptes organisateurs</strong> (inscription requise) :</p>
+        <ul style="margin:0 0 1rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Adresse email (identifiant de connexion)</li>
+            <li>Prénom et nom de famille</li>
+            <li>Mot de passe (hashé avec bcrypt — jamais stocké en clair)</li>
+            <li>Photo de couverture des jeux (upload optionnel)</li>
+            <li>Données des jeux créés (titre, catégories, date prévue)</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem"><strong style="color:var(--color-ink)">Pour les joueurs</strong> (aucun compte requis) :</p>
+        <ul style="margin:0 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Prénom (requis pour participer)</li>
+            <li>Adresse email (<em>facultative</em> — renseignée uniquement si le joueur souhaite être notifié du résultat)</li>
+            <li>Pronostics soumis (sexe, prénom, date, poids, taille selon les catégories activées)</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">3. Finalités et bases légales</h2>
+        <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-top:0.25rem">
+                <thead>
+                    <tr style="border-bottom:2px solid var(--color-line)">
+                        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-ink);font-weight:700">Données</th>
+                        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-ink);font-weight:700">Finalité</th>
+                        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-ink);font-weight:700">Base légale</th>
+                    </tr>
+                </thead>
+                <tbody style="color:var(--color-muted)">
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Email + mot de passe</td>
+                        <td style="padding:0.5rem 0.75rem">Authentification et connexion</td>
+                        <td style="padding:0.5rem 0.75rem">Exécution du contrat</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Prénom, nom</td>
+                        <td style="padding:0.5rem 0.75rem">Personnalisation et affichage</td>
+                        <td style="padding:0.5rem 0.75rem">Exécution du contrat</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Email joueur</td>
+                        <td style="padding:0.5rem 0.75rem">Notification des résultats du reveal</td>
+                        <td style="padding:0.5rem 0.75rem">Consentement libre et explicite</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Photo de couverture</td>
+                        <td style="padding:0.5rem 0.75rem">Affichage du jeu aux participants</td>
+                        <td style="padding:0.5rem 0.75rem">Exécution du contrat</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem 0.75rem">Token de réinitialisation MDP</td>
+                        <td style="padding:0.5rem 0.75rem">Récupération sécurisée du compte</td>
+                        <td style="padding:0.5rem 0.75rem">Exécution du contrat</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">4. Durée de conservation</h2>
+        <ul style="margin:0 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li><strong style="color:var(--color-ink)">Données de compte</strong> : conservées jusqu'à la suppression du compte, puis purgées dans les 30 jours.</li>
+            <li><strong style="color:var(--color-ink)">Données de jeux et pronostics</strong> : liées au compte, supprimées en même temps.</li>
+            <li><strong style="color:var(--color-ink)">Email des joueurs</strong> : conservé jusqu'à la suppression du jeu par l'organisateur ou la suppression de son compte.</li>
+            <li><strong style="color:var(--color-ink)">Tokens de réinitialisation</strong> : supprimés automatiquement 7 jours après leur création.</li>
+            <li><strong style="color:var(--color-ink)">Images uploadées</strong> : supprimées lors de la suppression du jeu ou du compte.</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">5. Hébergement et destinataires</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Vos données sont hébergées exclusivement par <strong style="color:var(--color-ink)">o2switch</strong> (222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France), prestataire d'hébergement web agissant en tant que sous-traitant.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Vos données personnelles ne sont <strong>ni vendues, ni louées, ni cédées</strong> à des tiers à des fins commerciales ou publicitaires. Aucun service d'analyse tiers (Google Analytics, etc.) n'est utilisé sur ce service.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">6. Transferts hors Union européenne</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Toutes les données sont hébergées en France. <strong>Aucun transfert vers un pays situé hors de l'Union européenne</strong> n'est effectué.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">7. Vos droits (RGPD)</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li><strong style="color:var(--color-ink)">Droit d'accès</strong> : obtenir une copie des données vous concernant.</li>
+            <li><strong style="color:var(--color-ink)">Droit de rectification</strong> : faire corriger des données inexactes ou incomplètes.</li>
+            <li><strong style="color:var(--color-ink)">Droit à l'effacement</strong> (« droit à l'oubli ») : demander la suppression de vos données.</li>
+            <li><strong style="color:var(--color-ink)">Droit à la portabilité</strong> : recevoir vos données dans un format structuré et lisible par machine.</li>
+            <li><strong style="color:var(--color-ink)">Droit d'opposition</strong> : vous opposer à un traitement basé sur l'intérêt légitime.</li>
+            <li><strong style="color:var(--color-ink)">Droit à la limitation</strong> : demander la suspension temporaire d'un traitement.</li>
+            <li><strong style="color:var(--color-ink)">Droit de retrait du consentement</strong> : retirer à tout moment un consentement préalablement donné.</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:1rem">
+            Pour exercer l'un de ces droits, contactez-nous à l'adresse : <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand);font-weight:600">contact@mybabyguessr.com</a><br>
+            Nous répondrons à votre demande dans un délai maximum de <strong>30 jours</strong>.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Vous pouvez également introduire une réclamation auprès de l'autorité de contrôle compétente :<br>
+            <strong style="color:var(--color-ink)">CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) — <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">www.cnil.fr</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">8. Cookies et traceurs</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le service utilise uniquement les cookies strictement nécessaires à son fonctionnement :
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li>
+                <strong style="color:var(--color-ink)">Cookie de session</strong> (<code>PHPSESSID</code>) : indispensable au fonctionnement de l'espace connecté. Attributs <code>HttpOnly</code> et <code>Secure</code> activés. Supprimé à la fermeture du navigateur ou à la déconnexion.
+            </li>
+            <li>
+                <strong style="color:var(--color-ink)">Cookie « Se souvenir de moi »</strong> (optionnel) : conserve votre session pendant 7 jours si vous cochez cette option lors de la connexion. Vous pouvez le désactiver en vous déconnectant.
+            </li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            <strong>Aucun cookie de tracking, d'analyse ou publicitaire tiers</strong> n'est déposé sur ce service. Aucun consentement supplémentaire n'est requis.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">9. Sécurité des données</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Nous mettons en œuvre des mesures techniques et organisationnelles adaptées pour protéger vos données contre toute accès non autorisé, perte ou altération :
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li>Mots de passe hashés avec l'algorithme <strong>bcrypt</strong> (jamais stockés en clair)</li>
+            <li>Connexion chiffrée via <strong>HTTPS/TLS</strong></li>
+            <li>Accès aux données administratives restreint aux comptes autorisés</li>
+            <li>Liens de jeu générés avec des tokens aléatoires de 32 caractères hexadécimaux (imprévisibles)</li>
+            <li>Tokens de réinitialisation de mot de passe à usage unique et à expiration automatique</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">10. Contact</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Pour toute question relative à la protection de vos données personnelles ou à l'exercice de vos droits :<br>
+            <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand);font-weight:600">contact@mybabyguessr.com</a>
+        </p>
+
+        {% else %}
+
+        {# ══════════════ VERSION ANGLAISE ══════════════ #}
+
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            This Privacy Policy describes how MyBabyGuessr collects, uses and protects your personal data, in accordance with the <strong>General Data Protection Regulation (GDPR — EU 2016/679)</strong>.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">1. Data Controller</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            <strong style="color:var(--color-ink)">Atif Zourgani</strong> — individual, based in France<br>
+            Email: <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">2. Data We Collect</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem"><strong style="color:var(--color-ink)">For organizer accounts</strong> (registration required):</p>
+        <ul style="margin:0 0 1rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>Email address (login identifier)</li>
+            <li>First name and last name</li>
+            <li>Password (hashed with bcrypt — never stored in plain text)</li>
+            <li>Game cover photo (optional upload)</li>
+            <li>Game data (title, categories, due date)</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem"><strong style="color:var(--color-ink)">For players</strong> (no account required):</p>
+        <ul style="margin:0 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li>First name (required to participate)</li>
+            <li>Email address (<em>optional</em> — only provided if the player wishes to receive the reveal notification)</li>
+            <li>Submitted guesses (gender, name, date, weight, height depending on enabled categories)</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">3. Purposes and Legal Bases</h2>
+        <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-top:0.25rem">
+                <thead>
+                    <tr style="border-bottom:2px solid var(--color-line)">
+                        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-ink);font-weight:700">Data</th>
+                        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-ink);font-weight:700">Purpose</th>
+                        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-ink);font-weight:700">Legal basis</th>
+                    </tr>
+                </thead>
+                <tbody style="color:var(--color-muted)">
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Email + password</td>
+                        <td style="padding:0.5rem 0.75rem">Authentication and login</td>
+                        <td style="padding:0.5rem 0.75rem">Performance of contract</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">First name, last name</td>
+                        <td style="padding:0.5rem 0.75rem">Personalization and display</td>
+                        <td style="padding:0.5rem 0.75rem">Performance of contract</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Player email</td>
+                        <td style="padding:0.5rem 0.75rem">Reveal result notification</td>
+                        <td style="padding:0.5rem 0.75rem">Free and explicit consent</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
+                        <td style="padding:0.5rem 0.75rem">Cover photo</td>
+                        <td style="padding:0.5rem 0.75rem">Displaying the game to participants</td>
+                        <td style="padding:0.5rem 0.75rem">Performance of contract</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem 0.75rem">Password reset token</td>
+                        <td style="padding:0.5rem 0.75rem">Secure account recovery</td>
+                        <td style="padding:0.5rem 0.75rem">Performance of contract</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">4. Data Retention</h2>
+        <ul style="margin:0 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li><strong style="color:var(--color-ink)">Account data</strong>: retained until account deletion, then purged within 30 days.</li>
+            <li><strong style="color:var(--color-ink)">Games and guesses</strong>: linked to the account, deleted at the same time.</li>
+            <li><strong style="color:var(--color-ink)">Player emails</strong>: retained until the game or account is deleted by the organizer.</li>
+            <li><strong style="color:var(--color-ink)">Password reset tokens</strong>: automatically deleted 7 days after creation.</li>
+            <li><strong style="color:var(--color-ink)">Uploaded images</strong>: deleted when the game or account is deleted.</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">5. Hosting and Recipients</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Your data is hosted exclusively by <strong style="color:var(--color-ink)">o2switch</strong> (222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France), a web hosting provider acting as a data processor.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            Your personal data is <strong>never sold, rented or shared</strong> with third parties for commercial or advertising purposes. No third-party analytics service (Google Analytics, etc.) is used on this service.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">6. International Transfers</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            All data is hosted in France. <strong>No transfer to countries outside the European Union</strong> is performed.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">7. Your Rights (GDPR)</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">Under the GDPR, you have the following rights regarding your personal data:</p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li><strong style="color:var(--color-ink)">Right of access</strong>: obtain a copy of your data.</li>
+            <li><strong style="color:var(--color-ink)">Right to rectification</strong>: correct inaccurate or incomplete data.</li>
+            <li><strong style="color:var(--color-ink)">Right to erasure</strong> ("right to be forgotten"): request deletion of your data.</li>
+            <li><strong style="color:var(--color-ink)">Right to data portability</strong>: receive your data in a structured, machine-readable format.</li>
+            <li><strong style="color:var(--color-ink)">Right to object</strong>: object to processing based on legitimate interest.</li>
+            <li><strong style="color:var(--color-ink)">Right to restriction</strong>: request temporary suspension of a processing activity.</li>
+            <li><strong style="color:var(--color-ink)">Right to withdraw consent</strong>: withdraw any previously given consent at any time.</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:1rem">
+            To exercise any of these rights, contact us at: <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand);font-weight:600">contact@mybabyguessr.com</a><br>
+            We will respond to your request within <strong>30 days</strong>.
+        </p>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            You may also lodge a complaint with your national supervisory authority. In France: <strong style="color:var(--color-ink)">CNIL</strong> — <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">www.cnil.fr</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">8. Cookies</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            The service uses only strictly necessary cookies:
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li>
+                <strong style="color:var(--color-ink)">Session cookie</strong> (<code>PHPSESSID</code>): required for logged-in functionality. Set with <code>HttpOnly</code> and <code>Secure</code> flags. Deleted on browser close or logout.
+            </li>
+            <li>
+                <strong style="color:var(--color-ink)">"Remember me" cookie</strong> (optional): keeps you logged in for 7 days if you check that option at login. You can remove it by logging out.
+            </li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
+            <strong>No tracking, analytics or third-party advertising cookies</strong> are used. No additional consent is required.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">9. Data Security</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            We implement appropriate technical and organizational measures to protect your data against unauthorized access, loss or alteration:
+        </p>
+        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li>Passwords hashed with <strong>bcrypt</strong> (never stored in plain text)</li>
+            <li>Encrypted connection via <strong>HTTPS/TLS</strong></li>
+            <li>Admin access restricted to authorized accounts</li>
+            <li>Game links generated with 32-character random hexadecimal tokens</li>
+            <li>Single-use, auto-expiring password reset tokens</li>
+        </ul>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">10. Contact</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            For any questions about this privacy policy or to exercise your rights:<br>
+            <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand);font-weight:600">contact@mybabyguessr.com</a>
+        </p>
+
+        {% endif %}
 
     </div>
 
-    <div class="mt-8 text-center">
-        <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
-           class="btn btn-secondary">
-            {% if app.request.locale == 'fr' %}Retour à l'accueil{% elseif app.request.locale == 'es' %}Volver al inicio{% elseif app.request.locale == 'pt' %}Voltar ao início{% elseif app.request.locale == 'de' %}Zurück zur Startseite{% elseif app.request.locale == 'it' %}Torna alla home{% else %}Back to home{% endif %}
+    {# ── Navigation ── #}
+    <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+        <a href="{{ path('app_home', {'_locale': locale}) }}" class="btn btn-secondary">
+            {% if locale == 'fr' %}← Retour à l'accueil{% elseif locale == 'de' %}← Zurück zur Startseite{% elseif locale == 'es' %}← Volver al inicio{% elseif locale == 'pt' %}← Voltar ao início{% elseif locale == 'it' %}← Torna alla home{% else %}← Back to home{% endif %}
+        </a>
+        <a href="{{ path('app_terms', {'_locale': locale}) }}"
+           style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
+            {% if locale == 'fr' %}Conditions d'utilisation →{% elseif locale == 'de' %}Nutzungsbedingungen →{% elseif locale == 'es' %}Términos de uso →{% elseif locale == 'pt' %}Termos de uso →{% elseif locale == 'it' %}Termini di utilizzo →{% else %}Terms of Service →{% endif %}
         </a>
     </div>
 
