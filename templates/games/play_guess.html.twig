@@ -19,10 +19,12 @@
 .ply-tr   { top:12px;    right:8px;  width:38px; opacity:0.78; }
 .ply-br   { bottom:10px; right:8px;  width:74px; opacity:0.88; }
 .ply-bl   { bottom:10px; left:8px;   width:70px; opacity:0.84; }
+.ply-lg   { width:57px; }
 @media (min-width:640px) {
     .ply-tr { top:20px;    left:calc(50% + 230px); width:48px; }
     .ply-br { bottom:16px; left:calc(50% + 226px); width:92px; }
     .ply-bl { bottom:16px; right:calc(50% + 226px); width:86px; }
+    .ply-lg { width:72px; }
 }
 </style>
 {% endblock %}
@@ -112,7 +114,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0">
     <img src="{{ asset('images/illustration/papillon1.png') }}" alt="" aria-hidden="true"
-         class="ply-deco ply-tr"
+         class="ply-deco ply-tr ply-lg"
          x-show="showIntro"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
@@ -134,7 +136,7 @@
 
     {# Prénom libre : papillon #}
     <img src="{{ asset('images/illustration/papillon2.png') }}" alt="" aria-hidden="true"
-         class="ply-deco ply-tr"
+         class="ply-deco ply-tr ply-lg"
          x-show="!showIntro && currentStep === 'name' && !isHintsMode"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
@@ -167,7 +169,7 @@
 
     {# Hints essai 3 : papillon #}
     <img src="{{ asset('images/illustration/papillon3.png') }}" alt="" aria-hidden="true"
-         class="ply-deco ply-tr"
+         class="ply-deco ply-tr ply-lg"
          x-show="!showIntro && currentStep === 'name' && isHintsMode && !hintsCompleted && hintsStep === 3"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
@@ -212,7 +214,7 @@
 
     {# Taille : étoile #}
     <img src="{{ asset('images/illustration/etoile.png') }}" alt="" aria-hidden="true"
-         class="ply-deco ply-tr"
+         class="ply-deco ply-tr ply-lg"
          x-show="!showIntro && currentStep === 'height'"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
