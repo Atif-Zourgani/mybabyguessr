@@ -401,6 +401,7 @@ flash:
 nav:
     lang_fr: Français
     lang_en: English
+    lang_es: Español
 
 footer:
     privacy: Politique de confidentialité

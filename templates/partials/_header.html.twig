@@ -28,7 +28,7 @@
             {% if app.request.attributes.has('_route') %}
                 {% set _route  = app.request.attributes.get('_route') %}
                 {% set _params = app.request.attributes.get('_route_params') %}
-                <nav aria-label="{{ app.request.locale == 'fr' ? 'Langue' : 'Language' }}"
+                <nav aria-label="{{ app.request.locale == 'fr' ? 'Langue' : (app.request.locale == 'es' ? 'Idioma' : 'Language') }}"
                      class="flex items-center gap-1 text-sm font-bold">
                     <a href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}"
                        hreflang="fr"
@@ -40,6 +40,12 @@
                        hreflang="en"
                        {% if app.request.locale == 'en' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
                         EN
+                    </a>
+                    <span class="text-line" aria-hidden="true">|</span>
+                    <a href="{{ url(_route, _params|merge({'_locale': 'es'})) }}"
+                       hreflang="es"
+                       {% if app.request.locale == 'es' %}aria-current="true" class="lang-active"{% else %}class="lang-inactive"{% endif %}>
+                        ES
                     </a>
                 </nav>
             {% endif %}

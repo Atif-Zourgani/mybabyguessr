@@ -11,9 +11,7 @@
 
     {# ── SEO ──────────────────────────────────────────────── #}
     <title>{% block title %}MyBabyGuessr{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ app.request.locale == 'fr'
-        ? 'Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.'
-        : 'Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.' }}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% if app.request.locale == 'fr' %}Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.{% elseif app.request.locale == 'es' %}Crea tu juego de pronósticos bebé en minutos. Familia y amigos adivinan el nombre, la fecha de nacimiento, el peso y el sexo — sin crear cuenta. Solo comparte un enlace.{% else %}Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.{% endif %}{% endblock %}">
     <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
 
     {# ── Canonical & hreflang ─────────────────────────────── #}
@@ -23,18 +21,17 @@
         {% set _params = app.request.attributes.get('_route_params') %}
         <link rel="alternate" hreflang="fr"        href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}">
         <link rel="alternate" hreflang="en"        href="{{ url(_route, _params|merge({'_locale': 'en'})) }}">
+        <link rel="alternate" hreflang="es"        href="{{ url(_route, _params|merge({'_locale': 'es'})) }}">
         <link rel="alternate" hreflang="x-default" href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}">
     {% endif %}
 
     {# ── Open Graph ───────────────────────────────────────── #}
-    {% set _og_locale     = app.request.locale == 'fr' ? 'fr_FR' : 'en_GB' %}
+    {% set _og_locale     = app.request.locale == 'fr' ? 'fr_FR' : (app.request.locale == 'es' ? 'es_ES' : 'en_GB') %}
     {% set _og_locale_alt = app.request.locale == 'fr' ? 'en_GB' : 'fr_FR' %}
     <meta property="og:type"             content="website">
     <meta property="og:url"              content="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
     <meta property="og:title"            content="{% block og_title %}MyBabyGuessr{% endblock %}">
-    <meta property="og:description"      content="{% block og_description %}{{ app.request.locale == 'fr'
-        ? 'Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.'
-        : 'Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.' }}{% endblock %}">
+    <meta property="og:description"      content="{% block og_description %}{% if app.request.locale == 'fr' %}Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.{% elseif app.request.locale == 'es' %}Crea tu juego de pronósticos bebé en minutos. Familia y amigos adivinan el nombre, la fecha de nacimiento, el peso y el sexo — sin crear cuenta. Solo comparte un enlace.{% else %}Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.{% endif %}{% endblock %}">
     {% block og_image %}
     <meta property="og:image"        content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
     <meta property="og:image:width"  content="1024">
@@ -84,7 +81,7 @@
 
     {# ── Skip link accessibilité ──────────────────────────── #}
     <a class="skip-link" href="#main-content">
-        {{ app.request.locale == 'fr' ? 'Aller au contenu principal' : 'Skip to main content' }}
+        {{ app.request.locale == 'fr' ? 'Aller au contenu principal' : (app.request.locale == 'es' ? 'Ir al contenido principal' : 'Skip to main content') }}
     </a>
 
     {% include 'partials/_header.html.twig' %}
