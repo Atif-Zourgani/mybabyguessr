@@ -29,9 +29,9 @@
                 {% set _route  = app.request.attributes.get('_route') %}
                 {% set _params = app.request.attributes.get('_route_params') %}
                 {% set _langs = [
-                    {'code': 'fr', 'label': 'Français', 'flag': '🇫🇷'},
-                    {'code': 'en', 'label': 'English',  'flag': '🇬🇧'},
-                    {'code': 'es', 'label': 'Español',  'flag': '🇪🇸'}
+                    {'code': 'fr', 'label': 'Français', 'flag': 'fr'},
+                    {'code': 'en', 'label': 'English',  'flag': 'gb'},
+                    {'code': 'es', 'label': 'Español',  'flag': 'es'}
                 ] %}
                 <nav aria-label="{{ 'nav.lang_' ~ app.request.locale|default('fr')|trans }}"
                      x-data="{ open: false }"
@@ -46,7 +46,7 @@
                             type="button"
                             class="flex items-center gap-1.5 text-sm font-bold rounded-lg px-2.5 py-1.5 transition-colors"
                             style="color:var(--color-ink);border:1px solid var(--color-border);background:var(--color-cream)">
-                        <span style="font-size:1.1rem;line-height:1" aria-hidden="true">{{ _currentFlag }}</span>
+                        <span class="fi fi-{{ _currentFlag }}" style="width:20px;height:15px;border-radius:2px" aria-hidden="true"></span>
                         <span>{{ app.request.locale|upper }}</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
@@ -73,7 +73,7 @@
                            {% if app.request.locale == lang.code %}aria-current="true"{% endif %}
                            class="flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors"
                            style="text-decoration:none;color:var(--color-ink);{% if app.request.locale == lang.code %}background:rgba(196,113,74,0.10);{% endif %}">
-                            <span style="font-size:1.1rem;line-height:1;width:20px;display:inline-block;text-align:center" aria-hidden="true">{{ lang.flag }}</span>
+                            <span class="fi fi-{{ lang.flag }}" style="width:20px;height:15px;border-radius:2px;flex-shrink:0" aria-hidden="true"></span>
                             {{ lang.label }}
                             {% if app.request.locale == lang.code %}
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
