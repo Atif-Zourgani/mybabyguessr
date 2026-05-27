@@ -15,6 +15,7 @@ Alpine.data('gameForm', () => ({
     showNameError: false,
     submitting: false,
     imagePreview: null,
+    imageError: null,
 
     get stepSequence() {
         const s = ['categories'];
@@ -78,7 +79,20 @@ Alpine.data('gameForm', () => ({
 
     handleImageChange(event) {
         const file = event.target.files[0];
-        if (!file) { this.imagePreview = null; return; }
+        this.imageError = null;
+        this.imagePreview = null;
+        if (!file) return;
+        const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!allowed.includes(file.type)) {
+            this.imageError = 'type';
+            event.target.value = '';
+            return;
+        }
+        if (file.size > 4 * 1024 * 1024) {
+            this.imageError = 'size';
+            event.target.value = '';
+            return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => { this.imagePreview = e.target.result; };
         reader.readAsDataURL(file);

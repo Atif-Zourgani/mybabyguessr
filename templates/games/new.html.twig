@@ -30,7 +30,9 @@
     <div x-data="gameForm"
          data-error-category="{{ 'games.new.error_category'|trans|e('html_attr') }}"
          data-error-name-mode="{{ 'games.new.error_name_mode'|trans|e('html_attr') }}"
-         data-error-name-required="{{ 'games.new.error_name_required'|trans|e('html_attr') }}">
+         data-error-name-required="{{ 'games.new.error_name_required'|trans|e('html_attr') }}"
+         data-error-image-type="{{ 'games.new.error_image_type'|trans|e('html_attr') }}"
+         data-error-image-size="{{ 'games.new.error_image_size'|trans|e('html_attr') }}">
 
         {# ── Indicateur de progression ────────────────────────── #}
         <div class="flex items-center justify-between mb-6">
@@ -353,6 +355,17 @@
                                class="w-full text-sm rounded-xl border-2 px-4 py-3 cursor-pointer transition-colors"
                                style="border-color: var(--color-line); color: var(--color-muted)">
                         <p class="text-xs mt-1.5" style="color: var(--color-muted)">{{ 'games.new.step4.image_help'|trans }}</p>
+
+                        {# Erreur image #}
+                        <div x-show="imageError"
+                             class="mt-2 text-sm font-semibold"
+                             style="color: #c0392b"
+                             x-cloak>
+                            <span x-show="imageError === 'type'"
+                                  x-text="$el.closest('[data-error-image-type]').dataset.errorImageType"></span>
+                            <span x-show="imageError === 'size'"
+                                  x-text="$el.closest('[data-error-image-size]').dataset.errorImageSize"></span>
+                        </div>
 
                         {# Aperçu de l'image #}
                         <div x-show="imagePreview"

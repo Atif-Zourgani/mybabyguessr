@@ -318,6 +318,8 @@ games:
         error_category: "Sélectionnez au moins une catégorie pour continuer."
         error_name_mode: "Choisissez un mode pour le prénom pour continuer."
         error_name_required: "Entrez le vrai prénom pour générer les indices."
+        error_image_type: "Format non accepté. Utilisez JPG, PNG ou WebP."
+        error_image_size: "Image trop volumineuse. Maximum 4 Mo."
         success: "Votre Baby Guessr est prêt ! Partagez le lien avec vos proches."
     share:
         closed_warning: "La participation est fermée. Rouvrez la partie pour partager le lien avec vos joueurs."

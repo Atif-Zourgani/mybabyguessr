@@ -318,6 +318,8 @@ games:
         error_category: "Selecciona al menos una categoría para continuar."
         error_name_mode: "Elige un modo para el nombre para continuar."
         error_name_required: "Escribe el nombre real para generar las pistas."
+        error_image_type: "Formato no aceptado. Usa JPG, PNG o WebP."
+        error_image_size: "Imagen demasiado grande. Máximo 4 MB."
         success: "¡Tu Baby Guessr está listo! Comparte el enlace con tus seres queridos."
     share:
         closed_warning: "La participación está cerrada. Reabre el juego para compartir el enlace con tus jugadores."

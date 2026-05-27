@@ -87,10 +87,11 @@ class GameController extends AbstractController
             $imageFile = $request->files->get('imageFile');
             if ($imageFile !== null && $imageFile->isValid()) {
                 $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-                if (
-                    in_array($imageFile->getMimeType(), $allowedMimes, true)
-                    && $imageFile->getSize() <= 4 * 1024 * 1024
-                ) {
+                if (!in_array($imageFile->getMimeType(), $allowedMimes, true)) {
+                    $this->addFlash('error', 'games.new.error_image_type');
+                } elseif ($imageFile->getSize() > 4 * 1024 * 1024) {
+                    $this->addFlash('error', 'games.new.error_image_size');
+                } else {
                     try {
                         $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/games';
                         $ext        = $imageFile->guessExtension() ?? 'jpg';
