@@ -28,26 +28,18 @@
     <div class="card-panel mb-6">
 
         {% if game.image %}
-        <div style="height: 11rem; overflow: hidden;">
+        <div style="height:11rem;overflow:hidden">
             <img src="{{ asset(game.image) }}" alt=""
-                 style="width:100%;height:100%;object-fit:cover;display:block;">
+                 style="width:100%;height:100%;object-fit:cover;display:block">
+        </div>
+        {% else %}
+        <div style="height:11rem;overflow:hidden;background:rgba(196,113,74,0.06);display:flex;align-items:center;justify-content:center">
+            <img src="{{ asset('images/logo-mybabyguessr.png') }}" alt="MyBabyGuessr"
+                 style="height:5rem;width:auto;opacity:0.55">
         </div>
         {% endif %}
 
         <div class="flex items-start gap-4 px-5 sm:px-7 py-5">
-
-            {% if not game.image %}
-            <div class="shrink-0 flex items-center justify-center rounded-xl"
-                 style="width:3rem;height:3rem;background-color:rgba(196,113,74,0.10)">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M20 12V22H4V12" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M22 7H2V12H22V7Z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 22V7" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" stroke="var(--color-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            {% endif %}
 
             <div class="flex-1 min-w-0">
                 <h1 class="text-2xl font-bold leading-tight" style="color: var(--color-ink)">

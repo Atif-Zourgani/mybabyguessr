@@ -140,21 +140,11 @@
                             {# Thumbnail #}
                             <div class="shrink-0 rounded-xl flex items-center justify-center"
                                  style="width: 4.5rem; height: 4.5rem; overflow: hidden; background-color: rgba(196,113,74,0.10);">
-                                {% if game.image %}
-                                    <img src="{{ asset(game.image) }}"
-                                         alt=""
-                                         width="72" height="72"
-                                         loading="lazy"
-                                         style="width: 100%; height: 100%; object-fit: cover; display: block;">
-                                {% else %}
-                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M20 12V22H4V12" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M22 7H2V12H22V7Z" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M12 22V7" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M12 7H7.5C6.84 7 6.2 6.74 5.73 6.27C5.26 5.8 5 5.16 5 4.5C5 3.84 5.26 3.2 5.73 2.73C6.2 2.26 6.84 2 7.5 2C11 2 12 7 12 7Z" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M12 7H16.5C17.16 7 17.8 6.74 18.27 6.27C18.74 5.8 19 5.16 19 4.5C19 3.84 18.74 3.2 18.27 2.73C17.8 2.26 17.16 2 16.5 2C13 2 12 7 12 7Z" stroke="var(--color-brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                {% endif %}
+                                <img src="{{ game.image ? asset(game.image) : asset('images/logo-mybabyguessr.png') }}"
+                                     alt="{{ game.image ? '' : 'MyBabyGuessr' }}"
+                                     width="72" height="72"
+                                     loading="lazy"
+                                     style="width:100%;height:100%;object-fit:{{ game.image ? 'cover' : 'contain' }};display:block;padding:{{ game.image ? '0' : '10px' }};box-sizing:border-box">
                             </div>
 
                             {# Titre + date #}

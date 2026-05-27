@@ -19,12 +19,12 @@
             </div>
         </div>
 
-        {% if game.image %}
-        <div class="w-16 h-16 rounded-xl mx-auto mb-4 overflow-hidden">
-            <img src="{{ asset(game.image) }}" alt=""
-                 style="width:100%;height:100%;object-fit:cover;display:block;">
+        <div class="w-16 h-16 rounded-xl mx-auto mb-4 overflow-hidden"
+             style="background:rgba(196,113,74,0.08)">
+            <img src="{{ game.image ? asset(game.image) : asset('images/logo-mybabyguessr.png') }}"
+                 alt="{{ game.image ? '' : 'MyBabyGuessr' }}"
+                 style="width:100%;height:100%;object-fit:{{ game.image ? 'cover' : 'contain' }};display:block;padding:{{ game.image ? '0' : '10px' }};box-sizing:border-box">
         </div>
-        {% endif %}
 
         <h1 class="text-xl font-bold mb-3" style="color: var(--color-ink)">
             {{ game.displayTitle }}
