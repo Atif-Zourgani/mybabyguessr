@@ -198,10 +198,26 @@ class AdminController extends AbstractController
              ORDER BY gm.updated_at DESC LIMIT 30"
         );
 
+        $errorLogs = $conn->fetchAllAssociative(
+            "SELECT status_code, url, message, user_email, created_at
+             FROM app_error_log
+             ORDER BY created_at DESC LIMIT 100"
+        );
+
+        $errorStats = $conn->fetchAllAssociative(
+            "SELECT status_code, COUNT(*) as cnt
+             FROM app_error_log
+             WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+             GROUP BY status_code
+             ORDER BY cnt DESC"
+        );
+
         return $this->render('admin/logs.html.twig', [
             'recentGuesses' => $recentGuesses,
             'recentGames'   => $recentGames,
             'recentReveals' => $recentReveals,
+            'errorLogs'     => $errorLogs,
+            'errorStats'    => $errorStats,
         ]);
     }
 

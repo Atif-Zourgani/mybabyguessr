@@ -1,0 +1,98 @@
+{% set loc = app.request.locale %}
+<!DOCTYPE html>
+<html lang="{{ loc }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F8F3EE">
+    <title>
+        {% if loc == 'fr' %}Page introuvable
+        {% elseif loc == 'es' %}Página no encontrada
+        {% elseif loc == 'pt' %}Página não encontrada
+        {% elseif loc == 'de' %}Seite nicht gefunden
+        {% elseif loc == 'it' %}Pagina non trovata
+        {% else %}Page not found{% endif %}
+        — MyBabyGuessr
+    </title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon"             href="{{ asset('images/logo-mybabyguessr.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-mybabyguessr.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    {{ importmap('app') }}
+    <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin:0; font-family:'Nunito',sans-serif; background:#F8F3EE; color:#2C1F15; min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased; }
+    .e-hdr { background:#F8F3EE; border-bottom:1px solid #D9CFC9; padding:0 1rem; height:3.5rem; display:flex; align-items:center; flex-shrink:0; }
+    .e-main { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2.5rem 1.5rem 2rem; text-align:center; }
+    .e-wrap { max-width:22rem; width:100%; }
+    .e-code { display:inline-block; font-size:0.6875rem; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:#7A6A5F; margin-bottom:0.5rem; }
+    .e-h1 { font-size:clamp(1.5rem,5vw,1.875rem); font-weight:800; color:#2C1F15; margin:0 0 0.875rem; line-height:1.2; }
+    .e-desc { font-size:0.9375rem; color:#7A6A5F; line-height:1.65; margin:0 0 2rem; }
+    .e-actions { display:flex; flex-direction:column; gap:0.75rem; align-items:center; }
+    .btn-p { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; background:#C4714A; color:#fff; font-weight:700; font-size:1rem; padding:0.75rem 1.75rem; min-height:2.75rem; border-radius:0.75rem; border:none; cursor:pointer; text-decoration:none; font-family:'Nunito',sans-serif; transition:background-color 0.2s; }
+    .btn-p:hover { background:#7A4E3B; color:#fff; text-decoration:none; }
+    .e-ftr { padding:1.5rem; text-align:center; }
+    .e-ftr p { margin:0; font-size:0.75rem; color:#7A6A5F; }
+    </style>
+</head>
+<body>
+
+<header class="e-hdr" role="banner">
+    <a href="/" aria-label="MyBabyGuessr" style="text-decoration:none;display:inline-flex;align-items:center">
+        <img src="{{ asset('images/logo-mybabyguessr-wide.png') }}"
+             alt="MyBabyGuessr"
+             width="1536" height="1024"
+             style="height:2.25rem;width:auto">
+    </a>
+</header>
+
+<main class="e-main" id="main-content" tabindex="-1">
+    <div class="e-wrap">
+
+        <img src="{{ asset('images/illustration/girafe.png') }}"
+             alt="" aria-hidden="true"
+             width="200" height="200"
+             style="width:7rem;height:7rem;object-fit:contain;margin:0 auto 1.75rem;display:block">
+
+        <p class="e-code">404</p>
+
+        <h1 class="e-h1">
+            {% if loc == 'fr' %}Cette page a disparu&nbsp;!
+            {% elseif loc == 'es' %}¡Esta página ha desaparecido!
+            {% elseif loc == 'pt' %}Esta página desapareceu!
+            {% elseif loc == 'de' %}Diese Seite ist verschwunden!
+            {% elseif loc == 'it' %}Questa pagina è sparita!
+            {% else %}This page has disappeared!{% endif %}
+        </h1>
+
+        <p class="e-desc">
+            {% if loc == 'fr' %}On a bien cherché&hellip; mais cette page n'existe pas ou plus. Rien de grave&nbsp;!
+            {% elseif loc == 'es' %}Hemos buscado bien&hellip; pero esta página ya no existe.
+            {% elseif loc == 'pt' %}Procurámos bem&hellip; mas esta página já não existe.
+            {% elseif loc == 'de' %}Wir haben gesucht&hellip; aber diese Seite existiert nicht mehr.
+            {% elseif loc == 'it' %}Abbiamo cercato bene&hellip; ma questa pagina non esiste più.
+            {% else %}We've looked everywhere&hellip; but this page no longer exists.{% endif %}
+        </p>
+
+        <div class="e-actions">
+            <a href="/" class="btn-p">
+                &larr;&nbsp;{% if loc == 'fr' %}Retourner à l'accueil
+                {% elseif loc == 'es' %}Volver al inicio
+                {% elseif loc == 'pt' %}Voltar ao início
+                {% elseif loc == 'de' %}Zurück zur Startseite
+                {% elseif loc == 'it' %}Torna alla home
+                {% else %}Back to home{% endif %}
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="e-ftr" role="contentinfo">
+    <p>&copy; {{ 'now'|date('Y') }} MyBabyGuessr</p>
+</footer>
+
+</body>
+</html>

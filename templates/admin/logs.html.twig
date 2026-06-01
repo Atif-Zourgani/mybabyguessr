@@ -16,7 +16,7 @@
         </div>
 
         {# ── Tabs ── #}
-        <div x-data="{ tab: 'guesses' }">
+        <div x-data="{ tab: 'guesses' }" x-init="if (window.location.hash === '#errors') tab = 'errors'">
 
             <div style="display:flex;gap:0.25rem;border-bottom:1px solid var(--color-line);margin-bottom:1.5rem">
                 <button @click="tab = 'guesses'" type="button"
@@ -36,6 +36,14 @@
                         style="padding:0.5rem 1rem;font-size:0.875rem;font-weight:700;background:none;border:none;border-radius:0;cursor:pointer;margin-bottom:-1px;transition:color 0.15s">
                     Révélations
                     <span style="font-size:0.6875rem;padding:0.125rem 0.4375rem;border-radius:999px;background:rgba(196,113,74,0.10);color:var(--color-brand);margin-left:0.375rem">{{ recentReveals|length }}</span>
+                </button>
+                <button @click="tab = 'errors'" type="button"
+                        :style="tab === 'errors' ? 'color:#b91c1c;border-bottom:2px solid #b91c1c;' : 'color:var(--color-muted);border-bottom:2px solid transparent;'"
+                        style="padding:0.5rem 1rem;font-size:0.875rem;font-weight:700;background:none;border:none;border-radius:0;cursor:pointer;margin-bottom:-1px;transition:color 0.15s">
+                    Erreurs
+                    {% if errorLogs|length > 0 %}
+                    <span style="font-size:0.6875rem;padding:0.125rem 0.4375rem;border-radius:999px;background:rgba(185,28,28,0.10);color:#b91c1c;margin-left:0.375rem">{{ errorLogs|length }}</span>
+                    {% endif %}
                 </button>
             </div>
 
@@ -164,6 +172,89 @@
                         </table>
                     </div>
                 </div>
+            </div>
+
+            {# ── Erreurs applicatives ── #}
+            <div x-show="tab === 'errors'" x-cloak>
+
+                {# Stats 30 jours #}
+                {% if errorStats is not empty %}
+                <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem">
+                    {% for stat in errorStats %}
+                    <div style="background:#fff;border-radius:0.75rem;padding:0.625rem 1rem;display:flex;align-items:center;gap:0.625rem;box-shadow:0 2px 8px rgba(44,31,21,0.06)">
+                        <span style="font-size:0.6875rem;font-weight:700;padding:0.1875rem 0.5rem;border-radius:999px;
+                              {% if stat.status_code >= 500 %}background:rgba(185,28,28,0.10);color:#b91c1c
+                              {% else %}background:rgba(180,83,9,0.10);color:#b45309{% endif %}">
+                            {{ stat.status_code }}
+                        </span>
+                        <span style="font-size:0.875rem;font-weight:700;color:var(--color-ink)">{{ stat.cnt }}</span>
+                        <span style="font-size:0.75rem;color:var(--color-muted)">sur 30 jours</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="card" style="padding:0;overflow:hidden">
+                    <div style="overflow-x:auto">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
+                                    <th style="text-align:center;padding:0.625rem 0.75rem;font-weight:700;color:var(--color-muted);white-space:nowrap">Code</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">URL</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Message</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Utilisateur</th>
+                                    <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted);white-space:nowrap">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if errorLogs is empty %}
+                                <tr>
+                                    <td colspan="5" style="padding:2.5rem;text-align:center;color:var(--color-muted)">
+                                        Aucune erreur enregistrée — tout va bien !
+                                    </td>
+                                </tr>
+                                {% else %}
+                                {% for row in errorLogs %}
+                                <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
+                                    <td style="padding:0.75rem 0.75rem;text-align:center">
+                                        <span style="font-size:0.6875rem;font-weight:700;padding:0.1875rem 0.5rem;border-radius:999px;
+                                              {% if row.status_code >= 500 %}background:rgba(185,28,28,0.10);color:#b91c1c
+                                              {% else %}background:rgba(180,83,9,0.10);color:#b45309{% endif %}">
+                                            {{ row.status_code }}
+                                        </span>
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;max-width:14rem">
+                                        <span style="display:block;font-size:0.75rem;color:var(--color-ink);word-break:break-all;font-family:monospace">
+                                            {{ row.url|length > 80 ? row.url[:80] ~ '…' : row.url }}
+                                        </span>
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;max-width:18rem">
+                                        {% if row.message %}
+                                        <span style="font-size:0.75rem;color:var(--color-muted)">
+                                            {{ row.message|length > 100 ? row.message[:100] ~ '…' : row.message }}
+                                        </span>
+                                        {% else %}
+                                        <span style="color:var(--color-line)">—</span>
+                                        {% endif %}
+                                    </td>
+                                    <td style="padding:0.75rem 1rem">
+                                        {% if row.user_email %}
+                                        <span style="font-size:0.75rem;color:var(--color-muted)">{{ row.user_email }}</span>
+                                        {% else %}
+                                        <span style="font-size:0.75rem;color:var(--color-line)">anonyme</span>
+                                        {% endif %}
+                                    </td>
+                                    <td style="padding:0.75rem 1rem;color:var(--color-muted);white-space:nowrap;font-size:0.75rem">
+                                        {{ row.created_at|date('d/m H:i') }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
         </div>
