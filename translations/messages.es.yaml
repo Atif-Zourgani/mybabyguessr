@@ -412,3 +412,21 @@ nav:
 footer:
     privacy: Política de privacidad
     terms: Condiciones de uso
+    mentions: Aviso legal
+
+profile:
+    nav: "Mi perfil"
+    info_saved: "Información actualizada."
+    info_invalid: "Nombre y apellido requeridos (2-100 caracteres)."
+    email_saved: "Dirección de email actualizada con éxito."
+    email_wrong_password: "Contraseña incorrecta."
+    email_invalid: "Dirección de email no válida."
+    password_saved: "Contraseña cambiada con éxito."
+    password_wrong_current: "La contraseña actual es incorrecta."
+    password_mismatch: "Las contraseñas no coinciden."
+    password_invalid: "8+ caracteres, 1 mayúscula, 1 carácter especial."
+    delete_wrong_password: "Contraseña incorrecta. Cuenta no eliminada."
+    email_pending: "Se ha enviado un enlace de confirmación a tu nueva dirección. Válido 1 hora."
+    email_cancelled: "Cambio de email cancelado."
+    email_token_invalid: "Enlace inválido o expirado. Haz una nueva solicitud desde tu perfil."
+    email_same: "Esta ya es tu dirección de email actual."

@@ -44,6 +44,7 @@ security:
         - { path: '^/(fr|en|es|pt|de|it)/admin',          roles: ROLE_ADMIN }
         - { path: '^/(fr|en|es|pt|de|it)/dashboard',     roles: ROLE_USER }
         - { path: '^/(fr|en|es|pt|de|it)/games',         roles: ROLE_USER }
+        - { path: '^/(fr|en|es|pt|de|it)/profile',      roles: ROLE_USER }
 
 when@test:
     security:

@@ -22,6 +22,11 @@ class EmailVerificationSubscriber implements EventSubscriberInterface
         'app_check_email',
         'app_reset_password',
         'app_root',
+        'app_profile',
+        'app_profile_info',
+        'app_profile_email',
+        'app_profile_password',
+        'app_profile_delete',
     ];
 
     public function __construct(

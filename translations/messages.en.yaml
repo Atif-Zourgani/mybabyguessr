@@ -412,3 +412,21 @@ nav:
 footer:
     privacy: Privacy Policy
     terms: Terms of Use
+    mentions: Legal Notice
+
+profile:
+    nav: "My profile"
+    info_saved: "Information updated."
+    info_invalid: "First and last name required (2-100 characters)."
+    email_saved: "Email address updated successfully."
+    email_wrong_password: "Incorrect password."
+    email_invalid: "Invalid email address."
+    password_saved: "Password changed successfully."
+    password_wrong_current: "Current password is incorrect."
+    password_mismatch: "Passwords do not match."
+    password_invalid: "8+ characters, 1 uppercase, 1 special character."
+    delete_wrong_password: "Incorrect password. Account not deleted."
+    email_pending: "A confirmation link has been sent to your new address. Valid for 1 hour."
+    email_cancelled: "Email change cancelled."
+    email_token_invalid: "Invalid or expired link. Please make a new request from your profile."
+    email_same: "This is already your current email address."

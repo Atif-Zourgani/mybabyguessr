@@ -412,3 +412,21 @@ nav:
 footer:
     privacy: Datenschutzerklärung
     terms: Nutzungsbedingungen
+    mentions: Impressum
+
+profile:
+    nav: "Mein Profil"
+    info_saved: "Informationen aktualisiert."
+    info_invalid: "Vor- und Nachname erforderlich (2-100 Zeichen)."
+    email_saved: "E-Mail-Adresse erfolgreich aktualisiert."
+    email_wrong_password: "Falsches Passwort."
+    email_invalid: "Ungültige E-Mail-Adresse."
+    password_saved: "Passwort erfolgreich geändert."
+    password_wrong_current: "Das aktuelle Passwort ist falsch."
+    password_mismatch: "Die Passwörter stimmen nicht überein."
+    password_invalid: "8+ Zeichen, 1 Großbuchstabe, 1 Sonderzeichen."
+    delete_wrong_password: "Falsches Passwort. Konto nicht gelöscht."
+    email_pending: "Ein Bestätigungslink wurde an Ihre neue Adresse gesendet. Gültig 1 Stunde."
+    email_cancelled: "E-Mail-Änderung abgebrochen."
+    email_token_invalid: "Ungültiger oder abgelaufener Link. Stellen Sie eine neue Anfrage in Ihrem Profil."
+    email_same: "Dies ist bereits Ihre aktuelle E-Mail-Adresse."

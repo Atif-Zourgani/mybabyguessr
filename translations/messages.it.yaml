@@ -412,3 +412,21 @@ nav:
 footer:
     privacy: Informativa sulla privacy
     terms: Termini di utilizzo
+    mentions: Note legali
+
+profile:
+    nav: "Il mio profilo"
+    info_saved: "Informazioni aggiornate."
+    info_invalid: "Nome e cognome richiesti (2-100 caratteri)."
+    email_saved: "Indirizzo email aggiornato con successo."
+    email_wrong_password: "Password errata."
+    email_invalid: "Indirizzo email non valido."
+    password_saved: "Password cambiata con successo."
+    password_wrong_current: "La password attuale non è corretta."
+    password_mismatch: "Le password non corrispondono."
+    password_invalid: "8+ caratteri, 1 maiuscola, 1 carattere speciale."
+    delete_wrong_password: "Password errata. Account non eliminato."
+    email_pending: "Un link di conferma è stato inviato al nuovo indirizzo. Valido 1 ora."
+    email_cancelled: "Modifica email annullata."
+    email_token_invalid: "Link non valido o scaduto. Fai una nuova richiesta dal tuo profilo."
+    email_same: "Questo è già il tuo indirizzo email attuale."

@@ -1,0 +1,122 @@
+﻿{% extends 'base.html.twig' %}
+{% set locale = app.request.locale %}
+{% block title %}{% if locale == 'fr' %}Mentions légales{% elseif locale == 'de' %}Impressum{% elseif locale == 'es' %}Aviso legal{% elseif locale == 'pt' %}Aviso legal{% elseif locale == 'it' %}Note legali{% else %}Legal Notice{% endif %} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<section class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
+
+    {# ── En-tête ── #}
+    <div style="margin-bottom:2rem">
+        {% if locale == 'fr' %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Mentions légales</h1>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Dernière mise à jour : 2 juin 2026</p>
+        {% else %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Legal Notice</h1>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Last updated: June 2, 2026</p>
+        {% if locale != 'en' %}
+        <p style="margin-top:0.75rem;font-size:0.8125rem;padding:0.625rem 1rem;border-radius:0.5rem;background:rgba(196,113,74,0.08);color:var(--color-muted)">
+            Ces mentions sont également disponibles
+            <a href="{{ path('app_mentions', {'_locale': 'fr'}) }}" style="color:var(--color-brand);font-weight:700">en français</a>.
+            In case of conflict, the French version prevails.
+        </p>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    {# ── Contenu ── #}
+    <div class="card" style="padding:1.75rem 1.5rem">
+
+        {% if locale == 'fr' %}
+
+        {# ══════════════ VERSION FRANÇAISE ══════════════ #}
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:0 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Éditeur du site</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            <strong style="color:var(--color-ink)">Atif Mickaël Zourgani</strong><br>
+            Particulier domicilié en France<br>
+            Directeur de la publication : Atif Mickaël Zourgani<br>
+            Contact : <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Hébergeur</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            <strong style="color:var(--color-ink)">o2switch</strong><br>
+            222-224 Boulevard Gustave Flaubert<br>
+            63000 Clermont-Ferrand, France<br>
+            <a href="https://www.o2switch.fr" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">www.o2switch.fr</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Propriété intellectuelle</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le nom « MyBabyGuessr », le logo, le design visuel et le code source du service sont la propriété exclusive d'Atif Mickaël Zourgani et sont protégés par les lois relatives à la propriété intellectuelle. Toute reproduction, représentation ou diffusion, même partielle, sans autorisation écrite préalable est strictement interdite.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Données personnelles</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Pour toute information relative au traitement de vos données personnelles, consultez notre
+            <a href="{{ path('app_privacy', {'_locale': 'fr'}) }}" style="color:var(--color-brand);font-weight:600">Politique de confidentialité</a>.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Droit applicable</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Le présent site est soumis au droit français. En cas de litige, les tribunaux français seront seuls compétents.
+        </p>
+
+        {% else %}
+
+        {# ══════════════ VERSION ANGLAISE (défaut pour ES, PT, DE, IT) ══════════════ #}
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:0 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Publisher</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            <strong style="color:var(--color-ink)">Atif Mickaël Zourgani</strong><br>
+            Individual, based in France<br>
+            Publication director: Atif Mickaël Zourgani<br>
+            Contact: <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Hosting Provider</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            <strong style="color:var(--color-ink)">o2switch</strong><br>
+            222-224 Boulevard Gustave Flaubert<br>
+            63000 Clermont-Ferrand, France<br>
+            <a href="https://www.o2switch.fr" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">www.o2switch.fr</a>
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Intellectual Property</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            The name "MyBabyGuessr", the logo, visual design and source code are the exclusive property of Atif Mickaël Zourgani and are protected by intellectual property laws. Any reproduction, distribution or use, even partial, without prior written authorization is strictly prohibited.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Personal Data</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            For information about how we handle your personal data, please read our
+            <a href="{{ path('app_privacy', {'_locale': app.request.locale}) }}" style="color:var(--color-brand);font-weight:600">Privacy Policy</a>.
+        </p>
+
+        <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">Governing Law</h2>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            This website is governed by French law. In the event of a dispute, the competent French courts shall have exclusive jurisdiction.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    {# ── Navigation ── #}
+    <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+        <a href="{{ path('app_home', {'_locale': locale}) }}" class="btn btn-secondary">
+            {% if locale == 'fr' %}← Retour à l'accueil{% elseif locale == 'de' %}← Zurück zur Startseite{% elseif locale == 'es' %}← Volver al inicio{% elseif locale == 'pt' %}← Voltar ao início{% elseif locale == 'it' %}← Torna alla home{% else %}← Back to home{% endif %}
+        </a>
+        <div style="display:flex;gap:1.5rem">
+            <a href="{{ path('app_privacy', {'_locale': locale}) }}" style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
+                {% if locale == 'fr' %}Confidentialité{% elseif locale == 'de' %}Datenschutz{% elseif locale == 'es' %}Privacidad{% elseif locale == 'pt' %}Privacidade{% elseif locale == 'it' %}Privacy{% else %}Privacy{% endif %}
+            </a>
+            <a href="{{ path('app_terms', {'_locale': locale}) }}" style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
+                {% if locale == 'fr' %}CGU{% elseif locale == 'de' %}Nutzungsbedingungen{% elseif locale == 'es' %}Términos{% elseif locale == 'pt' %}Termos{% elseif locale == 'it' %}Termini{% else %}Terms{% endif %}
+            </a>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

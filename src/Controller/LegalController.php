@@ -19,4 +19,10 @@ class LegalController extends AbstractController
     {
         return $this->render('legal/terms.html.twig');
     }
+
+    #[Route('/mentions-legales', name: 'app_mentions')]
+    public function mentions(): Response
+    {
+        return $this->render('legal/mentions.html.twig');
+    }
 }

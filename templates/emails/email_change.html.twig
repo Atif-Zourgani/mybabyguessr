@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ locale == 'fr' ? 'Confirmez votre nouvelle adresse email' : 'Confirm your new email address' }}</title>
+    <style>
+        body { margin:0; padding:0; background-color:#F8F3EE; font-family:'Helvetica Neue',Arial,sans-serif; }
+        * { box-sizing:border-box; }
+        @media only screen and (max-width:620px) {
+            .email-container { width:100% !important; }
+            .email-body { padding:32px 24px !important; }
+        }
+    </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F8F3EE;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F3EE;">
+    <tr>
+        <td align="center" style="padding:40px 20px;">
+            <table class="email-container" width="600" cellpadding="0" cellspacing="0"
+                   style="max-width:600px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(44,31,21,0.08);">
+
+                <tr>
+                    <td align="center" style="background-color:#F8F3EE;padding:32px 40px;border-bottom:1px solid #D9CFC9;">
+                        <img src="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}"
+                             alt="MyBabyGuessr" width="160"
+                             style="display:block;margin:0 auto;width:160px;height:auto;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td height="6" style="background-color:#C4714A;font-size:0;line-height:0;">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td class="email-body" style="padding:48px 40px 32px;">
+
+                        <h1 style="margin:0 0 16px;font-size:24px;font-weight:700;color:#2C1F15;line-height:1.3;">
+                            {% if locale == 'fr' %}Bonjour {{ user.firstName }}&nbsp;!{% else %}Hello {{ user.firstName }}!{% endif %}
+                        </h1>
+
+                        <p style="margin:0 0 16px;font-size:16px;color:#7A6A5F;line-height:1.6;">
+                            {% if locale == 'fr' %}
+                                Une demande de changement d'adresse email a été effectuée sur votre compte <strong style="color:#2C1F15;">MyBabyGuessr</strong>.
+                            {% else %}
+                                An email address change was requested for your <strong style="color:#2C1F15;">MyBabyGuessr</strong> account.
+                            {% endif %}
+                        </p>
+
+                        <div style="background-color:#F8F3EE;border-radius:10px;padding:16px 20px;margin:0 0 24px;">
+                            <p style="margin:0 0 4px;font-size:13px;color:#7A6A5F;">
+                                {% if locale == 'fr' %}Nouvelle adresse :{% else %}New address:{% endif %}
+                            </p>
+                            <p style="margin:0;font-size:16px;font-weight:700;color:#2C1F15;">{{ newEmail }}</p>
+                        </div>
+
+                        <p style="margin:0 0 24px;font-size:15px;color:#7A6A5F;line-height:1.6;">
+                            {% if locale == 'fr' %}
+                                Cliquez sur le bouton ci-dessous pour confirmer cette nouvelle adresse. <strong style="color:#2C1F15;">Votre adresse actuelle reste active jusqu'à confirmation.</strong>
+                            {% else %}
+                                Click the button below to confirm this new address. <strong style="color:#2C1F15;">Your current address remains active until confirmation.</strong>
+                            {% endif %}
+                        </p>
+
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="center" style="padding:8px 0 32px;">
+                                    <a href="{{ verifyUrl }}"
+                                       style="display:inline-block;background-color:#C4714A;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:10px;">
+                                        {% if locale == 'fr' %}Confirmer ma nouvelle adresse{% else %}Confirm my new address{% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p style="margin:0 0 16px;font-size:14px;color:#7A6A5F;line-height:1.5;background-color:#F8F3EE;border-radius:8px;padding:14px 16px;">
+                            {% if locale == 'fr' %}
+                                ⏱ Ce lien expire dans <strong style="color:#2C1F15;">1 heure</strong>. Passé ce délai, refaites la demande depuis votre profil.
+                            {% else %}
+                                ⏱ This link expires in <strong style="color:#2C1F15;">1 hour</strong>. After that, make a new request from your profile.
+                            {% endif %}
+                        </p>
+
+                        <p style="margin:0 0 8px;font-size:13px;color:#7A6A5F;">
+                            {% if locale == 'fr' %}Si le bouton ne fonctionne pas :{% else %}If the button doesn't work:{% endif %}
+                        </p>
+                        <p style="margin:0 0 24px;font-size:12px;word-break:break-all;">
+                            <a href="{{ verifyUrl }}" style="color:#C4714A;">{{ verifyUrl }}</a>
+                        </p>
+
+                        <hr style="border:none;border-top:1px solid #D9CFC9;margin:0 0 24px;">
+
+                        <p style="margin:0;font-size:13px;color:#7A6A5F;line-height:1.5;">
+                            {% if locale == 'fr' %}
+                                Si vous n'êtes pas à l'origine de cette demande, ignorez cet email. Votre adresse actuelle n'a pas été modifiée.
+                            {% else %}
+                                If you didn't request this change, ignore this email. Your current address has not been changed.
+                            {% endif %}
+                        </p>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="background-color:#F8F3EE;padding:24px 40px;border-top:1px solid #D9CFC9;">
+                        <p style="margin:0;font-size:13px;color:#7A6A5F;">
+                            © {{ "now"|date("Y") }} MyBabyGuessr &mdash;
+                            <a href="https://mybabyguessr.com" style="color:#C4714A;text-decoration:none;">mybabyguessr.com</a>
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

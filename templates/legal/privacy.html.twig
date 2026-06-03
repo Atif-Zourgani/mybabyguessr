@@ -10,10 +10,10 @@
     <div style="margin-bottom:2rem">
         {% if locale == 'fr' %}
         <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Politique de confidentialité</h1>
-        <p style="font-size:0.875rem;color:var(--color-muted)">Dernière mise à jour : 27 mai 2026</p>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Dernière mise à jour : 2 juin 2026</p>
         {% else %}
         <h1 class="text-3xl sm:text-4xl font-bold mb-3" style="color:var(--color-ink)">Privacy Policy</h1>
-        <p style="font-size:0.875rem;color:var(--color-muted)">Last updated: May 27, 2026</p>
+        <p style="font-size:0.875rem;color:var(--color-muted)">Last updated: June 2, 2026</p>
         {% if locale != 'en' %}
         <p style="margin-top:0.75rem;font-size:0.8125rem;padding:0.625rem 1rem;border-radius:0.5rem;background:rgba(196,113,74,0.08);color:var(--color-muted)">
             Cette politique est également disponible
@@ -38,7 +38,7 @@
         {# Section #}
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">1. Responsable du traitement</h2>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            <strong style="color:var(--color-ink)">Atif Zourgani</strong> — particulier domicilié en France<br>
+            <strong style="color:var(--color-ink)">Atif Mickaël Zourgani</strong> — particulier domicilié en France<br>
             Email : <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
         </p>
 
@@ -89,10 +89,15 @@
                         <td style="padding:0.5rem 0.75rem">Affichage du jeu aux participants</td>
                         <td style="padding:0.5rem 0.75rem">Exécution du contrat</td>
                     </tr>
-                    <tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
                         <td style="padding:0.5rem 0.75rem">Token de réinitialisation MDP</td>
                         <td style="padding:0.5rem 0.75rem">Récupération sécurisée du compte</td>
                         <td style="padding:0.5rem 0.75rem">Exécution du contrat</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem 0.75rem">Données de navigation (Google Analytics)</td>
+                        <td style="padding:0.5rem 0.75rem">Mesure d'audience, amélioration du service</td>
+                        <td style="padding:0.5rem 0.75rem">Consentement</td>
                     </tr>
                 </tbody>
             </table>
@@ -103,21 +108,28 @@
             <li><strong style="color:var(--color-ink)">Données de compte</strong> : conservées jusqu'à la suppression du compte, puis purgées dans les 30 jours.</li>
             <li><strong style="color:var(--color-ink)">Données de jeux et pronostics</strong> : liées au compte, supprimées en même temps.</li>
             <li><strong style="color:var(--color-ink)">Email des joueurs</strong> : conservé jusqu'à la suppression du jeu par l'organisateur ou la suppression de son compte.</li>
-            <li><strong style="color:var(--color-ink)">Tokens de réinitialisation</strong> : supprimés automatiquement 7 jours après leur création.</li>
+            <li><strong style="color:var(--color-ink)">Tokens de réinitialisation</strong> : supprimés automatiquement 1 heure après leur création.</li>
             <li><strong style="color:var(--color-ink)">Images uploadées</strong> : supprimées lors de la suppression du jeu ou du compte.</li>
+            <li><strong style="color:var(--color-ink)">Données Google Analytics</strong> : conservées 14 mois par Google (paramètre par défaut de rétention GA4).</li>
         </ul>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">5. Hébergement et destinataires</h2>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            Vos données sont hébergées exclusivement par <strong style="color:var(--color-ink)">o2switch</strong> (222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France), prestataire d'hébergement web agissant en tant que sous-traitant.
+            Vos données applicatives sont hébergées exclusivement par <strong style="color:var(--color-ink)">o2switch</strong> (222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France), prestataire d'hébergement web agissant en tant que sous-traitant.
         </p>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
-            Vos données personnelles ne sont <strong>ni vendues, ni louées, ni cédées</strong> à des tiers à des fins commerciales ou publicitaires. Aucun service d'analyse tiers (Google Analytics, etc.) n'est utilisé sur ce service.
+            Le service fait également appel à <strong style="color:var(--color-ink)">Google LLC</strong> (1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA) pour les services suivants :
+        </p>
+        <ul style="margin:0.5rem 0 0.75rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li><strong style="color:var(--color-ink)">Google Analytics 4</strong> — mesure d'audience et analyse des usages (uniquement avec votre consentement)</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Vos données personnelles ne sont <strong>ni vendues, ni louées, ni cédées</strong> à des tiers à des fins commerciales ou publicitaires.
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">6. Transferts hors Union européenne</h2>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            Toutes les données sont hébergées en France. <strong>Aucun transfert vers un pays situé hors de l'Union européenne</strong> n'est effectué.
+            Les données hébergées sur notre serveur sont stockées en France. Toutefois, l'utilisation de <strong>Google Analytics 4</strong> implique un transfert de données vers Google LLC, basé aux États-Unis. Ce transfert est encadré par les <strong>Clauses Contractuelles Types (CCT)</strong> approuvées par la Commission européenne, conformément à l'article 46 du RGPD. Vous pouvez consulter les engagements de Google en matière de protection des données sur <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">policies.google.com/privacy</a>.
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">7. Vos droits (RGPD)</h2>
@@ -131,7 +143,7 @@
             <li><strong style="color:var(--color-ink)">Droit à la portabilité</strong> : recevoir vos données dans un format structuré et lisible par machine.</li>
             <li><strong style="color:var(--color-ink)">Droit d'opposition</strong> : vous opposer à un traitement basé sur l'intérêt légitime.</li>
             <li><strong style="color:var(--color-ink)">Droit à la limitation</strong> : demander la suspension temporaire d'un traitement.</li>
-            <li><strong style="color:var(--color-ink)">Droit de retrait du consentement</strong> : retirer à tout moment un consentement préalablement donné.</li>
+            <li><strong style="color:var(--color-ink)">Droit de retrait du consentement</strong> : retirer à tout moment un consentement préalablement donné (y compris pour Google Analytics).</li>
         </ul>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:1rem">
             Pour exercer l'un de ces droits, contactez-nous à l'adresse : <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand);font-weight:600">contact@mybabyguessr.com</a><br>
@@ -143,19 +155,33 @@
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">8. Cookies et traceurs</h2>
-        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            Le service utilise uniquement les cookies strictement nécessaires à son fonctionnement :
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem">
+            <strong style="color:var(--color-ink)">Cookies strictement nécessaires</strong> (aucun consentement requis) :
         </p>
-        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+        <ul style="margin:0 0 1rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
             <li>
                 <strong style="color:var(--color-ink)">Cookie de session</strong> (<code>PHPSESSID</code>) : indispensable au fonctionnement de l'espace connecté. Attributs <code>HttpOnly</code> et <code>Secure</code> activés. Supprimé à la fermeture du navigateur ou à la déconnexion.
             </li>
             <li>
-                <strong style="color:var(--color-ink)">Cookie « Se souvenir de moi »</strong> (optionnel) : conserve votre session pendant 7 jours si vous cochez cette option lors de la connexion. Vous pouvez le désactiver en vous déconnectant.
+                <strong style="color:var(--color-ink)">Cookie « Se souvenir de moi »</strong> (optionnel) : conserve votre session pendant 7 jours si vous cochez cette option lors de la connexion. Vous pouvez le supprimer en vous déconnectant.
             </li>
         </ul>
-        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
-            <strong>Aucun cookie de tracking, d'analyse ou publicitaire tiers</strong> n'est déposé sur ce service. Aucun consentement supplémentaire n'est requis.
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem">
+            <strong style="color:var(--color-ink)">Cookies analytiques</strong> (déposés uniquement avec votre consentement) :
+        </p>
+        <ul style="margin:0 0 0.75rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li>
+                <strong style="color:var(--color-ink)">_ga</strong> : identifiant anonyme utilisé par Google Analytics pour distinguer les visiteurs. Durée : 2 ans.
+            </li>
+            <li>
+                <strong style="color:var(--color-ink)">_ga_XXXXXXXXXX</strong> : état de session Google Analytics 4. Durée : 2 ans.
+            </li>
+            <li>
+                <strong style="color:var(--color-ink)">_gid</strong> : distinguer les visiteurs sur une courte période. Durée : 24 heures.
+            </li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Les cookies analytiques ne sont déposés qu'<strong>après votre consentement explicite</strong> via la bannière de cookies affichée lors de votre première visite. Vous pouvez modifier ou retirer votre consentement à tout moment depuis le lien « Gérer mes cookies » en pied de page.
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">9. Sécurité des données</h2>
@@ -186,7 +212,7 @@
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">1. Data Controller</h2>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            <strong style="color:var(--color-ink)">Atif Zourgani</strong> — individual, based in France<br>
+            <strong style="color:var(--color-ink)">Atif Mickaël Zourgani</strong> — individual, based in France<br>
             Email: <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand)">contact@mybabyguessr.com</a>
         </p>
 
@@ -237,10 +263,15 @@
                         <td style="padding:0.5rem 0.75rem">Displaying the game to participants</td>
                         <td style="padding:0.5rem 0.75rem">Performance of contract</td>
                     </tr>
-                    <tr>
+                    <tr style="border-bottom:1px solid var(--color-line)">
                         <td style="padding:0.5rem 0.75rem">Password reset token</td>
                         <td style="padding:0.5rem 0.75rem">Secure account recovery</td>
                         <td style="padding:0.5rem 0.75rem">Performance of contract</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem 0.75rem">Browsing data (Google Analytics)</td>
+                        <td style="padding:0.5rem 0.75rem">Audience measurement, service improvement</td>
+                        <td style="padding:0.5rem 0.75rem">Consent</td>
                     </tr>
                 </tbody>
             </table>
@@ -251,21 +282,28 @@
             <li><strong style="color:var(--color-ink)">Account data</strong>: retained until account deletion, then purged within 30 days.</li>
             <li><strong style="color:var(--color-ink)">Games and guesses</strong>: linked to the account, deleted at the same time.</li>
             <li><strong style="color:var(--color-ink)">Player emails</strong>: retained until the game or account is deleted by the organizer.</li>
-            <li><strong style="color:var(--color-ink)">Password reset tokens</strong>: automatically deleted 7 days after creation.</li>
+            <li><strong style="color:var(--color-ink)">Password reset tokens</strong>: automatically deleted 1 hour after creation.</li>
             <li><strong style="color:var(--color-ink)">Uploaded images</strong>: deleted when the game or account is deleted.</li>
+            <li><strong style="color:var(--color-ink)">Google Analytics data</strong>: retained for 14 months by Google (default GA4 retention setting).</li>
         </ul>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">5. Hosting and Recipients</h2>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            Your data is hosted exclusively by <strong style="color:var(--color-ink)">o2switch</strong> (222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France), a web hosting provider acting as a data processor.
+            Your application data is hosted exclusively by <strong style="color:var(--color-ink)">o2switch</strong> (222-224 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France), a web hosting provider acting as a data processor.
         </p>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
-            Your personal data is <strong>never sold, rented or shared</strong> with third parties for commercial or advertising purposes. No third-party analytics service (Google Analytics, etc.) is used on this service.
+            The service also uses <strong style="color:var(--color-ink)">Google LLC</strong> (1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA) for the following:
+        </p>
+        <ul style="margin:0.5rem 0 0.75rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:1.9;list-style:disc">
+            <li><strong style="color:var(--color-ink)">Google Analytics 4</strong> — audience measurement and usage analysis (only with your consent)</li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Your personal data is <strong>never sold, rented or shared</strong> with third parties for commercial or advertising purposes.
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">6. International Transfers</h2>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            All data is hosted in France. <strong>No transfer to countries outside the European Union</strong> is performed.
+            Application data is stored in France. However, the use of <strong>Google Analytics 4</strong> involves data transfers to Google LLC, based in the United States. These transfers are governed by <strong>Standard Contractual Clauses (SCCs)</strong> approved by the European Commission, in accordance with Article 46 of the GDPR. You can review Google's data protection commitments at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand)">policies.google.com/privacy</a>.
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">7. Your Rights (GDPR)</h2>
@@ -277,7 +315,7 @@
             <li><strong style="color:var(--color-ink)">Right to data portability</strong>: receive your data in a structured, machine-readable format.</li>
             <li><strong style="color:var(--color-ink)">Right to object</strong>: object to processing based on legitimate interest.</li>
             <li><strong style="color:var(--color-ink)">Right to restriction</strong>: request temporary suspension of a processing activity.</li>
-            <li><strong style="color:var(--color-ink)">Right to withdraw consent</strong>: withdraw any previously given consent at any time.</li>
+            <li><strong style="color:var(--color-ink)">Right to withdraw consent</strong>: withdraw any previously given consent at any time (including for Google Analytics).</li>
         </ul>
         <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:1rem">
             To exercise any of these rights, contact us at: <a href="mailto:contact@mybabyguessr.com" style="color:var(--color-brand);font-weight:600">contact@mybabyguessr.com</a><br>
@@ -288,10 +326,10 @@
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">8. Cookies</h2>
-        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
-            The service uses only strictly necessary cookies:
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem">
+            <strong style="color:var(--color-ink)">Strictly necessary cookies</strong> (no consent required):
         </p>
-        <ul style="margin:0.625rem 0 0 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+        <ul style="margin:0 0 1rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
             <li>
                 <strong style="color:var(--color-ink)">Session cookie</strong> (<code>PHPSESSID</code>): required for logged-in functionality. Set with <code>HttpOnly</code> and <code>Secure</code> flags. Deleted on browser close or logout.
             </li>
@@ -299,8 +337,22 @@
                 <strong style="color:var(--color-ink)">"Remember me" cookie</strong> (optional): keeps you logged in for 7 days if you check that option at login. You can remove it by logging out.
             </li>
         </ul>
-        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-top:0.75rem">
-            <strong>No tracking, analytics or third-party advertising cookies</strong> are used. No additional consent is required.
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin-bottom:0.75rem">
+            <strong style="color:var(--color-ink)">Analytics cookies</strong> (deposited only with your consent):
+        </p>
+        <ul style="margin:0 0 0.75rem 1.25rem;font-size:0.9375rem;color:var(--color-muted);line-height:2;list-style:disc">
+            <li>
+                <strong style="color:var(--color-ink)">_ga</strong>: anonymous identifier used by Google Analytics to distinguish visitors. Duration: 2 years.
+            </li>
+            <li>
+                <strong style="color:var(--color-ink)">_ga_XXXXXXXXXX</strong>: Google Analytics 4 session state. Duration: 2 years.
+            </li>
+            <li>
+                <strong style="color:var(--color-ink)">_gid</strong>: distinguishes visitors over a short period. Duration: 24 hours.
+            </li>
+        </ul>
+        <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7">
+            Analytics cookies are only set <strong>after your explicit consent</strong> via the cookie banner shown on your first visit. You can change or withdraw your consent at any time via the "Manage cookies" link in the footer.
         </p>
 
         <h2 style="font-size:1rem;font-weight:800;color:var(--color-ink);margin:2rem 0 0.625rem;padding-bottom:0.5rem;border-bottom:1px solid var(--color-line)">9. Data Security</h2>

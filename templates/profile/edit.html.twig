@@ -1,0 +1,267 @@
+﻿{% extends 'base.html.twig' %}
+{% set locale = app.request.locale %}
+{% block title %}{% if locale == 'fr' %}Mon profil{% else %}My profile{% endif %} — MyBabyGuessr{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+
+    {# ── En-tête ── #}
+    <div class="mb-8">
+        <h1 class="text-3xl sm:text-4xl font-bold mb-1" style="color:var(--color-ink)">
+            {% if locale == 'fr' %}Mon profil{% else %}My profile{% endif %}
+        </h1>
+        <p style="color:var(--color-muted)">{{ app.user.email }}</p>
+    </div>
+
+    {# ── Flash messages ── #}
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="mb-6 px-4 py-3 rounded-xl text-sm font-semibold
+                {% if type == 'success' %}flash-success{% else %}flash-error{% endif %}">
+                {{ message|trans }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {# ══════════════════════════════════════════════ #}
+    {# SECTION 1 — Mes informations                  #}
+    {# ══════════════════════════════════════════════ #}
+    <section class="card mb-6" aria-labelledby="info-title">
+        <div class="px-5 sm:px-6 py-4 flex items-center gap-3" style="border-bottom:1px solid var(--color-line)">
+            <div class="w-1 h-4 rounded-full shrink-0" style="background:var(--color-brand)"></div>
+            <h2 id="info-title" class="text-xs font-bold uppercase tracking-widest" style="color:var(--color-ink)">
+                {% if locale == 'fr' %}Mes informations{% else %}My information{% endif %}
+            </h2>
+        </div>
+        <form method="post" action="{{ path('app_profile_info', {'_locale': locale}) }}"
+              class="px-5 sm:px-6 py-6 space-y-4" style="background:var(--color-cream)">
+            <input type="hidden" name="_token" value="{{ csrf_token('profile_info') }}">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="firstName" class="form-label">
+                        {% if locale == 'fr' %}Prénom{% else %}First name{% endif %}
+                    </label>
+                    <input type="text" id="firstName" name="firstName"
+                           value="{{ app.user.firstName }}"
+                           required minlength="2" maxlength="100"
+                           class="form-input mt-1">
+                </div>
+                <div>
+                    <label for="lastName" class="form-label">
+                        {% if locale == 'fr' %}Nom{% else %}Last name{% endif %}
+                    </label>
+                    <input type="text" id="lastName" name="lastName"
+                           value="{{ app.user.lastName }}"
+                           required minlength="2" maxlength="100"
+                           class="form-input mt-1">
+                </div>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button type="submit" class="btn btn-primary">
+                    {% if locale == 'fr' %}Enregistrer{% else %}Save{% endif %}
+                </button>
+            </div>
+        </form>
+    </section>
+
+    {# ══════════════════════════════════════════════ #}
+    {# SECTION 2 — Adresse email                     #}
+    {# ══════════════════════════════════════════════ #}
+    <section class="card mb-6" aria-labelledby="email-title">
+        <div class="px-5 sm:px-6 py-4 flex items-center gap-3" style="border-bottom:1px solid var(--color-line)">
+            <div class="w-1 h-4 rounded-full shrink-0" style="background:var(--color-brand)"></div>
+            <h2 id="email-title" class="text-xs font-bold uppercase tracking-widest" style="color:var(--color-ink)">
+                {% if locale == 'fr' %}Adresse email{% else %}Email address{% endif %}
+            </h2>
+        </div>
+        <div class="px-5 sm:px-6 py-6 space-y-5" style="background:var(--color-cream)">
+
+            {# ── Email actuel ── #}
+            <div class="text-sm px-3 py-2.5 rounded-lg" style="background:rgba(196,113,74,0.08);color:var(--color-ink)">
+                {% if locale == 'fr' %}Email actuel :{% else %}Current email:{% endif %}
+                <strong>{{ app.user.email }}</strong>
+            </div>
+
+            {# ── Changement en attente ── #}
+            {% if app.user.pendingEmail %}
+            <div class="rounded-xl px-4 py-4 space-y-3" style="background:#fefce8;border:1px solid #fde047">
+                <div class="flex items-start gap-3">
+                    <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="#ca8a04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold" style="color:#92400e">
+                            {% if locale == 'fr' %}Changement en attente de confirmation{% else %}Change pending confirmation{% endif %}
+                        </p>
+                        <p class="text-sm mt-1" style="color:#92400e">
+                            {% if locale == 'fr' %}
+                                Un lien a été envoyé à <strong>{{ app.user.pendingEmail }}</strong>. Cliquez dessus pour valider. Le lien expire dans 1 heure.
+                            {% else %}
+                                A link was sent to <strong>{{ app.user.pendingEmail }}</strong>. Click it to confirm. The link expires in 1 hour.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <form method="post" action="{{ path('app_profile_cancel_email', {'_locale': locale}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('profile_cancel_email') }}">
+                    <button type="submit" class="text-sm font-semibold underline" style="color:#92400e;background:none;border:none;cursor:pointer;padding:0">
+                        {% if locale == 'fr' %}Annuler ce changement{% else %}Cancel this change{% endif %}
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+            {# ── Formulaire de changement ── #}
+            <form method="post" action="{{ path('app_profile_email', {'_locale': locale}) }}" class="space-y-4">
+                <input type="hidden" name="_token" value="{{ csrf_token('profile_email') }}">
+                <p class="text-sm" style="color:var(--color-muted)">
+                    {% if locale == 'fr' %}
+                        Un lien de confirmation sera envoyé à la nouvelle adresse. Votre adresse actuelle reste active jusqu'à validation.
+                    {% else %}
+                        A confirmation link will be sent to the new address. Your current address remains active until confirmed.
+                    {% endif %}
+                </p>
+                <div>
+                    <label for="new_email" class="form-label">
+                        {% if locale == 'fr' %}Nouvelle adresse email{% else %}New email address{% endif %}
+                    </label>
+                    <input type="email" id="new_email" name="new_email"
+                           required maxlength="180" autocomplete="email"
+                           class="form-input mt-1">
+                </div>
+                <div>
+                    <label for="email_password" class="form-label">
+                        {% if locale == 'fr' %}Mot de passe actuel{% else %}Current password{% endif %}
+                    </label>
+                    <input type="password" id="email_password" name="current_password"
+                           required autocomplete="current-password"
+                           class="form-input mt-1">
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button type="submit" class="btn btn-primary">
+                        {% if locale == 'fr' %}Envoyer le lien de confirmation{% else %}Send confirmation link{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    {# SECTION 3 — Mot de passe                      #}
+    {# ══════════════════════════════════════════════ #}
+    <section class="card mb-6" aria-labelledby="pwd-title">
+        <div class="px-5 sm:px-6 py-4 flex items-center gap-3" style="border-bottom:1px solid var(--color-line)">
+            <div class="w-1 h-4 rounded-full shrink-0" style="background:var(--color-brand)"></div>
+            <h2 id="pwd-title" class="text-xs font-bold uppercase tracking-widest" style="color:var(--color-ink)">
+                {% if locale == 'fr' %}Mot de passe{% else %}Password{% endif %}
+            </h2>
+        </div>
+        <form method="post" action="{{ path('app_profile_password', {'_locale': locale}) }}"
+              class="px-5 sm:px-6 py-6 space-y-4" style="background:var(--color-cream)">
+            <input type="hidden" name="_token" value="{{ csrf_token('profile_password') }}">
+            <div>
+                <label for="current_password" class="form-label">
+                    {% if locale == 'fr' %}Mot de passe actuel{% else %}Current password{% endif %}
+                </label>
+                <input type="password" id="current_password" name="current_password"
+                       required autocomplete="current-password"
+                       class="form-input mt-1">
+            </div>
+            <div>
+                <label for="new_password" class="form-label">
+                    {% if locale == 'fr' %}Nouveau mot de passe{% else %}New password{% endif %}
+                </label>
+                <input type="password" id="new_password" name="new_password"
+                       required minlength="8" maxlength="128" autocomplete="new-password"
+                       class="form-input mt-1">
+                <p class="mt-1 text-xs" style="color:var(--color-muted)">
+                    {% if locale == 'fr' %}8 caractères min., 1 majuscule, 1 caractère spécial{% else %}8+ chars, 1 uppercase, 1 special character{% endif %}
+                </p>
+            </div>
+            <div>
+                <label for="confirm_password" class="form-label">
+                    {% if locale == 'fr' %}Confirmer le nouveau mot de passe{% else %}Confirm new password{% endif %}
+                </label>
+                <input type="password" id="confirm_password" name="confirm_password"
+                       required minlength="8" maxlength="128" autocomplete="new-password"
+                       class="form-input mt-1">
+            </div>
+            <div class="flex justify-end pt-2">
+                <button type="submit" class="btn btn-primary">
+                    {% if locale == 'fr' %}Changer le mot de passe{% else %}Change password{% endif %}
+                </button>
+            </div>
+        </form>
+    </section>
+
+    {# ══════════════════════════════════════════════ #}
+    {# SECTION 4 — Zone de danger                    #}
+    {# ══════════════════════════════════════════════ #}
+    <section class="card mb-8" aria-labelledby="delete-title"
+             x-data="{ confirm: false }">
+        <div class="px-5 sm:px-6 py-4 flex items-center gap-3" style="border-bottom:1px solid var(--color-line)">
+            <div class="w-1 h-4 rounded-full shrink-0" style="background:#dc2626"></div>
+            <h2 id="delete-title" class="text-xs font-bold uppercase tracking-widest" style="color:#dc2626">
+                {% if locale == 'fr' %}Zone de danger{% else %}Danger zone{% endif %}
+            </h2>
+        </div>
+        <div class="px-5 sm:px-6 py-6" style="background:var(--color-cream)">
+            <p class="text-sm mb-4" style="color:var(--color-muted)">
+                {% if locale == 'fr' %}
+                    La suppression de votre compte est <strong style="color:var(--color-ink)">définitive et irréversible</strong>.
+                    Tous vos jeux, pronostics et données associées seront supprimés.
+                {% else %}
+                    Deleting your account is <strong style="color:var(--color-ink)">permanent and irreversible</strong>.
+                    All your games, guesses and associated data will be deleted.
+                {% endif %}
+            </p>
+
+            {# Bouton initial #}
+            <button type="button"
+                    x-show="!confirm"
+                    @click="confirm = true"
+                    class="btn w-full sm:w-auto"
+                    style="background:#dc2626;color:#fff;border:none">
+                {% if locale == 'fr' %}Supprimer mon compte{% else %}Delete my account{% endif %}
+            </button>
+
+            {# Formulaire de confirmation #}
+            <form x-show="confirm"
+                  x-cloak
+                  method="post"
+                  action="{{ path('app_profile_delete', {'_locale': locale}) }}"
+                  class="space-y-4"
+                  x-transition>
+                <input type="hidden" name="_token" value="{{ csrf_token('profile_delete') }}">
+                <p class="text-sm font-semibold" style="color:#dc2626">
+                    {% if locale == 'fr' %}Confirmez en saisissant votre mot de passe :{% else %}Confirm by entering your password:{% endif %}
+                </p>
+                <input type="password" name="current_password"
+                       required autocomplete="current-password"
+                       placeholder="{% if locale == 'fr' %}Mot de passe{% else %}Password{% endif %}"
+                       class="form-input">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button type="submit"
+                            class="btn w-full sm:w-auto order-2 sm:order-1"
+                            style="background:#dc2626;color:#fff;border:none">
+                        {% if locale == 'fr' %}Confirmer la suppression{% else %}Confirm deletion{% endif %}
+                    </button>
+                    <button type="button"
+                            @click="confirm = false"
+                            class="btn btn-secondary w-full sm:w-auto order-1 sm:order-2">
+                        {% if locale == 'fr' %}Annuler{% else %}Cancel{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    {# ── Retour dashboard ── #}
+    <a href="{{ path('app_dashboard', {'_locale': locale}) }}" class="btn btn-secondary">
+        ← {% if locale == 'fr' %}Retour au tableau de bord{% else %}Back to dashboard{% endif %}
+    </a>
+
+</div>
+{% endblock %}

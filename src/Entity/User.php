@@ -52,6 +52,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $pendingEmail = null;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Game::class, orphanRemoval: true)]
     private Collection $games;
 
@@ -174,6 +177,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->isVerified = $isVerified;
 
+        return $this;
+    }
+
+    public function getPendingEmail(): ?string
+    {
+        return $this->pendingEmail;
+    }
+
+    public function setPendingEmail(?string $pendingEmail): static
+    {
+        $this->pendingEmail = $pendingEmail;
         return $this;
     }
 

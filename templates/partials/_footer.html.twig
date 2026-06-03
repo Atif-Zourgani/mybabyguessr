@@ -1,4 +1,4 @@
-<footer class="mt-auto py-8 text-center text-sm text-muted border-t border-line" role="contentinfo">
+﻿<footer class="mt-auto py-8 text-center text-sm text-muted border-t border-line" role="contentinfo">
     <img src="{{ asset('images/logo-mybabyguessr.png') }}"
          alt="MyBabyGuessr"
          width="1024" height="1024"
@@ -7,8 +7,9 @@
     <p class="mb-2">© {{ "now"|date("Y") }} MyBabyGuessr &mdash; {{ 'home.hero.subtitle'|trans }}</p>
     <nav aria-label="{{ app.request.locale == 'fr' ? 'Liens légaux' : (app.request.locale == 'es' ? 'Enlaces legales' : (app.request.locale == 'pt' ? 'Ligações legais' : (app.request.locale == 'de' ? 'Rechtliche Links' : (app.request.locale == 'it' ? 'Link legali' : 'Legal links')))) }}"
          class="flex justify-center gap-4 mt-2 text-xs">
-        <a href="{{ path('app_privacy', {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.privacy'|trans }}</a>
-        <a href="{{ path('app_terms',   {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.terms'|trans }}</a>
+        <a href="{{ path('app_privacy',  {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.privacy'|trans }}</a>
+        <a href="{{ path('app_terms',    {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.terms'|trans }}</a>
+        <a href="{{ path('app_mentions', {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.mentions'|trans }}</a>
     </nav>
     <p class="mt-3 text-xs" style="color: var(--color-muted)">
         Made by <a href="https://www.linkedin.com/in/atif-micka%C3%ABl/"
