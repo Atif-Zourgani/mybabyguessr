@@ -561,15 +561,111 @@
 
             {% if game.nameMode is not null and game.nameMode.value == 'hints' %}
 
-            {# Mode indices — à venir #}
-            <div class="card-panel px-6 py-10 text-center">
-                <p class="text-sm font-bold mb-1" style="color: var(--color-brand)">
-                    {{ 'games.show.name_hints_soon'|trans }}
-                </p>
-                <p class="text-sm" style="color: var(--color-muted)">
-                    {{ 'games.show.name_hints_soon_desc'|trans }}
-                </p>
+            {# ── Mode indices ── #}
+            {% set answerNorm = game.answerName ? game.answerName|lower|trim : null %}
+
+            {# Stat box révélation #}
+            {% if game.status.value == 'revealed' and game.answerName %}
+            {% set hintsWinners = [] %}
+            {% for g in guesses %}{% if g.guessName is not null and g.guessName|lower|trim == answerNorm %}{% set hintsWinners = hintsWinners|merge([g.playerName]) %}{% endif %}{% endfor %}
+            <div class="rounded-xl px-5 py-4 mb-4 flex items-center justify-between"
+                 style="background:rgba(196,113,74,0.10)">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-brand)">
+                        {{ locale == 'fr' ? 'Réponse' : (locale == 'es' ? 'Respuesta' : (locale == 'pt' ? 'Resposta' : (locale == 'de' ? 'Antwort' : (locale == 'it' ? 'Risposta' : 'Answer')))) }}
+                    </p>
+                    <p class="text-2xl font-bold mt-0.5" style="color:var(--color-ink)">{{ game.answerName }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-bold" style="color:var(--color-brand)">{{ hintsWinners|length }}</p>
+                    <p class="text-xs mt-0.5" style="color:var(--color-muted)">
+                        {{ locale == 'fr' ? (hintsWinners|length > 1 ? 'ont trouvé' : 'a trouvé') : (locale == 'es' ? (hintsWinners|length > 1 ? 'acertaron' : 'acertó') : (locale == 'pt' ? (hintsWinners|length > 1 ? 'acertaram' : 'acertou') : (locale == 'de' ? (hintsWinners|length > 1 ? 'hatten recht' : 'hatte recht') : (locale == 'it' ? (hintsWinners|length > 1 ? 'hanno indovinato' : 'ha indovinato') : (hintsWinners|length > 1 ? 'found it' : 'found it'))))) }}
+                    </p>
+                </div>
             </div>
+            {% endif %}
+
+            {% if guesses|length == 0 %}
+            <div class="card text-center py-10 text-sm" style="color:var(--color-muted)">
+                {{ 'games.show.no_data'|trans }}
+            </div>
+            {% else %}
+
+            <div class="card-panel" x-data="{ open: null }">
+
+                {# Header #}
+                <div class="px-5 py-3 flex items-center justify-between"
+                     style="border-bottom:1px solid var(--color-line)">
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">
+                        {{ locale == 'fr' ? 'Essais' : (locale == 'es' ? 'Intentos' : (locale == 'pt' ? 'Tentativas' : (locale == 'de' ? 'Versuche' : (locale == 'it' ? 'Tentativi' : 'Attempts')))) }}
+                    </p>
+                    {% if game.status.value == 'revealed' and game.answerName %}
+                    <p class="text-xs font-semibold" style="color:var(--color-brand)">
+                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : (locale == 'it' ? 'Risposta:' : 'Answer:')))) }}
+                        <span class="font-bold" style="color:var(--color-ink)">{{ game.answerName }}</span>
+                    </p>
+                    {% endif %}
+                </div>
+
+                {# Accordéon par joueur #}
+                {% for g in guesses %}
+                {% if g.nameAttempt1 is not null %}
+                {% set isWinner = answerNorm and g.guessName is not null and g.guessName|lower|trim == answerNorm and game.status.value == 'revealed' %}
+                {% set nbEssais = g.nameHintsUsed %}
+                <div style="{{ not loop.last ? 'border-bottom:1px solid var(--color-line)' : '' }}">
+
+                    {# Row cliquable #}
+                    <button @click="open = open === {{ loop.index }} ? null : {{ loop.index }}"
+                            class="w-full flex items-center justify-between px-5 py-4 text-left transition-colors hover:bg-[#F8F3EE]"
+                            style="{{ isWinner ? 'background:rgba(196,113,74,0.07)' : '' }}">
+                        <span class="text-sm font-semibold" style="color:var(--color-ink)">
+                            {{ g.playerName }}{% if isWinner %} ✓{% endif %}
+                        </span>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold"
+                                  style="background:{{ isWinner ? 'rgba(196,113,74,0.15)' : 'var(--color-cream)' }};color:{{ isWinner ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                {{ nbEssais }}{{ locale == 'fr' ? (nbEssais > 1 ? ' essais' : ' essai') : (locale == 'es' ? (nbEssais > 1 ? ' intentos' : ' intento') : (locale == 'pt' ? (nbEssais > 1 ? ' tentativas' : ' tentativa') : (locale == 'de' ? (nbEssais > 1 ? ' Versuche' : ' Versuch') : (locale == 'it' ? (nbEssais > 1 ? ' tentativi' : ' tentativo') : (nbEssais > 1 ? ' tries' : ' try'))))) }}
+                            </span>
+                            <svg class="w-4 h-4 shrink-0 transition-transform duration-200"
+                                 :style="open === {{ loop.index }} ? 'transform:rotate(180deg)' : ''"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </button>
+
+                    {# Détail tentatives #}
+                    <div x-show="open === {{ loop.index }}"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         class="px-5 pb-4 pt-2"
+                         style="border-top:1px solid var(--color-line)">
+                        {% set attempts = [g.nameAttempt1, g.nameAttempt2, g.nameAttempt3] %}
+                        {% for attempt in attempts %}
+                        {% if attempt is not null %}
+                        {% set isCorrect = answerNorm and attempt|lower|trim == answerNorm %}
+                        <div class="flex items-center gap-3 py-2">
+                            <span class="text-xs font-bold shrink-0"
+                                  style="width:4.5rem;color:var(--color-muted)">
+                                {{ locale == 'fr' ? 'Essai' : (locale == 'es' ? 'Intento' : (locale == 'pt' ? 'Tentativa' : (locale == 'de' ? 'Versuch' : (locale == 'it' ? 'Tentativo' : 'Try')))) }} {{ loop.index }}
+                            </span>
+                            <span class="text-sm font-semibold"
+                                  style="color:{{ isCorrect ? 'var(--color-brand)' : 'var(--color-ink)' }}">
+                                {{ attempt }}{% if isCorrect %} ✓{% endif %}
+                            </span>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+                {% endif %}
+                {% endfor %}
+
+            </div>
+            {% endif %}
 
             {% else %}
 
