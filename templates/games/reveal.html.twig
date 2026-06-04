@@ -201,7 +201,7 @@
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="20" opacity="0.3"/>
                             <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
                         </svg>
-                        {{ locale == 'fr' ? 'Envoi en cours…' : (locale == 'es' ? 'Enviando…' : (locale == 'pt' ? 'A enviar…' : (locale == 'de' ? 'Wird gesendet…' : (locale == 'it' ? 'Invio in corso…' : 'Sending…')))) }}
+                        {% set _l = app.request.locale %}{{ _l == 'fr' ? 'Envoi en cours…' : (_l == 'es' ? 'Enviando…' : (_l == 'pt' ? 'A enviar…' : (_l == 'de' ? 'Wird gesendet…' : (_l == 'it' ? 'Invio in corso…' : 'Sending…')))) }}
                     </span>
                 </button>
             </div>
