@@ -19,7 +19,7 @@
 {% block body %}
 <div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12"
      style="position:relative;overflow:hidden"
-     x-data="{ gender: '{{ currentGender }}' }">
+     x-data="{ gender: '{{ currentGender }}', loading: false }">
 
     <img src="{{ asset('images/illustration/etoile.png') }}" alt="" aria-hidden="true" class="deco-rev deco-rev-etoile">
     <img src="{{ asset('images/illustration/singe.png') }}"  alt="" aria-hidden="true" class="deco-rev deco-rev-singe">
@@ -51,7 +51,7 @@
             </p>
         </div>
 
-        <form method="POST" novalidate>
+        <form method="POST" novalidate @submit="loading = true">
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('game_reveal_' ~ game.token) }}">
 
@@ -187,12 +187,22 @@
                  style="border-top: 1px solid var(--color-line)" class="pt-6"
                  {% endif %}>
                 <button type="submit" class="btn btn-primary w-full"
-                        style="min-height: 3rem; font-size: 1rem">
-                    {% if game.isRevealed() %}
-                        {{ 'games.reveal.btn_update'|trans }}
-                    {% else %}
-                        {{ 'games.reveal.btn_reveal'|trans }}
-                    {% endif %}
+                        style="min-height: 3rem; font-size: 1rem"
+                        :disabled="loading">
+                    <span x-show="!loading">
+                        {% if game.isRevealed() %}
+                            {{ 'games.reveal.btn_update'|trans }}
+                        {% else %}
+                            {{ 'games.reveal.btn_reveal'|trans }}
+                        {% endif %}
+                    </span>
+                    <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
+                        <svg class="animate-spin" style="width:1rem;height:1rem;flex-shrink:0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="20" opacity="0.3"/>
+                            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                        {{ locale == 'fr' ? 'Envoi en cours…' : (locale == 'es' ? 'Enviando…' : (locale == 'pt' ? 'A enviar…' : (locale == 'de' ? 'Wird gesendet…' : (locale == 'it' ? 'Invio in corso…' : 'Sending…')))) }}
+                    </span>
                 </button>
             </div>
 
