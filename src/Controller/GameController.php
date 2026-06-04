@@ -97,6 +97,7 @@ class GameController extends AbstractController
                         $ext        = $imageFile->guessExtension() ?? 'jpg';
                         $filename   = bin2hex(random_bytes(16)) . '.' . $ext;
                         $imageFile->move($uploadsDir, $filename);
+                        chmod($uploadsDir . '/' . $filename, 0644);
                         $game->setImage('uploads/games/' . $filename);
                     } catch (\Exception) {
                         // image ignorée si déplacement impossible — le jeu est quand même créé
