@@ -460,7 +460,7 @@ class PlayController extends AbstractController
             $winners['gender'] = array_map(fn($g) => ['guess' => $g, 'diff' => null], $correct);
         }
 
-        // Prénom — tous les corrects, ordre chronologique (premier = meilleur)
+        // Prénom — tous les corrects
         if ($game->isGuessName() && $game->getAnswerName() !== null) {
             $norm    = mb_strtolower(trim($game->getAnswerName()));
             $correct = array_values(array_filter(
@@ -468,7 +468,20 @@ class PlayController extends AbstractController
                 fn($g) => $g->getGuessName() !== null
                     && mb_strtolower(trim($g->getGuessName())) === $norm
             ));
-            $winners['name'] = array_map(fn($g) => ['guess' => $g, 'diff' => null], $correct);
+            if ($game->getNameMode()?->value === 'hints') {
+                // Hints : tri par nb d'essais ASC, puis chronologique (moins = meilleur)
+                usort($correct, fn($a, $b) =>
+                    $a->getNameHintsUsed() <=> $b->getNameHintsUsed()
+                    ?: $a->getCreatedAt() <=> $b->getCreatedAt()
+                );
+                $winners['name'] = array_map(
+                    fn($g) => ['guess' => $g, 'diff' => null, 'attempts' => $g->getNameHintsUsed()],
+                    $correct
+                );
+            } else {
+                // Libre : ordre chronologique (premier = meilleur)
+                $winners['name'] = array_map(fn($g) => ['guess' => $g, 'diff' => null], $correct);
+            }
         }
 
         // Date — top 3 les plus proches, diff en secondes

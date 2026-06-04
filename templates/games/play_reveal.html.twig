@@ -202,25 +202,46 @@
             {% if winners.name is defined and winners.name|length > 0 %}
             {% set nameVisible = winners.name|slice(0, 5) %}
             {% set nameHidden  = winners.name|slice(5) %}
+            {% set isHintsMode = game.nameMode is not null and game.nameMode.value == 'hints' %}
             <div x-data="{ open: false }">
                 <div class="space-y-2">
                     {% for item in nameVisible %}
+                    {% set att = item.attempts is defined ? item.attempts : null %}
+                    {% set isChampion = isHintsMode and att == 1 %}
                     <div class="rounded-xl px-4 py-3 text-center"
-                         style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
+                         style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,{{ isChampion ? '0.35' : '0.18' }})">
                         <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
                         <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                        <div class="text-xs" style="margin-top:0.125rem;color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</div>
+                        <div class="text-xs" style="margin-top:0.125rem">
+                            {% if isHintsMode and att is not null %}
+                            <span style="color:{{ isChampion ? 'var(--color-brand)' : 'var(--color-muted)' }};font-weight:{{ isChampion ? '700' : 'normal' }}">
+                                {% if isChampion %}✦ {% endif %}{{ att }}{{ locale == 'fr' ? (att > 1 ? ' essais' : ' essai') : (locale == 'es' ? (att > 1 ? ' intentos' : ' intento') : (locale == 'pt' ? (att > 1 ? ' tentativas' : ' tentativa') : (locale == 'de' ? (att > 1 ? ' Versuche' : ' Versuch') : (locale == 'it' ? (att > 1 ? ' tentativi' : ' tentativo') : (att > 1 ? ' tries' : ' try'))))) }}
+                            </span>
+                            {% else %}
+                            <span style="color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</span>
+                            {% endif %}
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% if nameHidden|length > 0 %}
                 <div class="space-y-2 mt-2" x-show="open" style="display:none">
                     {% for item in nameHidden %}
+                    {% set att = item.attempts is defined ? item.attempts : null %}
+                    {% set isChampion = isHintsMode and att == 1 %}
                     <div class="rounded-xl px-4 py-3 text-center"
-                         style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,0.18)">
+                         style="background-color:rgba(196,113,74,0.07);border:1px solid rgba(196,113,74,{{ isChampion ? '0.35' : '0.18' }})">
                         <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index + 5 }}</div>
                         <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                        <div class="text-xs" style="margin-top:0.125rem;color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</div>
+                        <div class="text-xs" style="margin-top:0.125rem">
+                            {% if isHintsMode and att is not null %}
+                            <span style="color:{{ isChampion ? 'var(--color-brand)' : 'var(--color-muted)' }};font-weight:{{ isChampion ? '700' : 'normal' }}">
+                                {% if isChampion %}✦ {% endif %}{{ att }}{{ locale == 'fr' ? (att > 1 ? ' essais' : ' essai') : (locale == 'es' ? (att > 1 ? ' intentos' : ' intento') : (locale == 'pt' ? (att > 1 ? ' tentativas' : ' tentativa') : (locale == 'de' ? (att > 1 ? ' Versuche' : ' Versuch') : (locale == 'it' ? (att > 1 ? ' tentativi' : ' tentativo') : (att > 1 ? ' tries' : ' try'))))) }}
+                            </span>
+                            {% else %}
+                            <span style="color:var(--color-muted)">{{ item.guess.createdAt|date(dateFormat) }}</span>
+                            {% endif %}
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
