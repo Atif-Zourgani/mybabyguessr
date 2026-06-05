@@ -37,8 +37,8 @@
     <meta property="og:description"      content="{% block og_description %}{% if app.request.locale == 'fr' %}Créez votre jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, la date de naissance, le poids et le sexe — sans créer de compte. Partagez juste un lien.{% elseif app.request.locale == 'es' %}Crea tu juego de pronósticos bebé en minutos. Familia y amigos adivinan el nombre, la fecha de nacimiento, el peso y el sexo — sin crear cuenta. Solo comparte un enlace.{% elseif app.request.locale == 'pt' %}Crie o seu jogo de apostas sobre o bebé em minutos. Família e amigos adivinham o nome, a data de nascimento, o peso e o sexo — sem criar conta. Partilhe apenas um link.{% elseif app.request.locale == 'de' %}Erstelle dein Baby-Tippspiel in Minuten. Familie und Freunde tippen auf Name, Geburtsdatum, Gewicht und Geschlecht – ohne Konto. Nur ein Link zum Teilen.{% elseif app.request.locale == 'it' %}Crea il tuo gioco di pronostici sul bebè in pochi minuti. Famiglia e amici indovinano nome, data di nascita, peso e sesso — senza account. Solo un link da condividere.{% else %}Create a free baby guessing game in minutes. Family and friends guess name, due date, weight and gender — no account needed. Just share a link.{% endif %}{% endblock %}">
     {% block og_image %}
     <meta property="og:image"        content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
-    <meta property="og:image:width"  content="800">
-    <meta property="og:image:height" content="533">
+    <meta property="og:image:width"  content="1536">
+    <meta property="og:image:height" content="1024">
     <meta property="og:image:alt"    content="MyBabyGuessr">
     {% endblock %}
     <meta property="og:locale"           content="{{ _og_locale }}">
@@ -61,8 +61,8 @@
       "logo": {
         "@type": "ImageObject",
         "url": "{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}",
-        "width": 800,
-        "height": 533
+        "width": 1536,
+        "height": 1024
       }
     }
     </script>
