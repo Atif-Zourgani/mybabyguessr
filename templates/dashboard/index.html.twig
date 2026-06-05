@@ -141,7 +141,7 @@
                             <div class="shrink-0 rounded-xl flex items-center justify-center"
                                  style="width: 4.5rem; height: 4.5rem; overflow: hidden; background-color: rgba(196,113,74,0.10);">
                                 <img src="{{ game.image ? asset(game.image) : asset('images/logo-mybabyguessr.png') }}"
-                                     alt="{{ game.image ? '' : 'MyBabyGuessr' }}"
+                                     alt="{{ game.image ? game.displayTitle : 'MyBabyGuessr' }}"
                                      width="72" height="72"
                                      loading="lazy"
                                      style="width:100%;height:100%;object-fit:{{ game.image ? 'cover' : 'contain' }};display:block;padding:{{ game.image ? '0' : '10px' }};box-sizing:border-box">
