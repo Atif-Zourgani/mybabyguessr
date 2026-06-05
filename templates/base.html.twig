@@ -30,7 +30,7 @@
 
     {# ── Open Graph ───────────────────────────────────────── #}
     {% set _og_locale     = app.request.locale == 'fr' ? 'fr_FR' : (app.request.locale == 'es' ? 'es_ES' : (app.request.locale == 'pt' ? 'pt_BR' : (app.request.locale == 'de' ? 'de_DE' : (app.request.locale == 'it' ? 'it_IT' : 'en_GB')))) %}
-    {% set _og_locale_alt = app.request.locale == 'fr' ? 'en_GB' : 'fr_FR' %}
+    {% set _og_all_locales = {'fr': 'fr_FR', 'en': 'en_GB', 'es': 'es_ES', 'pt': 'pt_PT', 'de': 'de_DE', 'it': 'it_IT'} %}
     <meta property="og:type"             content="website">
     <meta property="og:url"              content="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
     <meta property="og:title"            content="{% block og_title %}MyBabyGuessr{% endblock %}">
@@ -42,7 +42,9 @@
     <meta property="og:image:alt"    content="MyBabyGuessr">
     {% endblock %}
     <meta property="og:locale"           content="{{ _og_locale }}">
-    <meta property="og:locale:alternate" content="{{ _og_locale_alt }}">
+    {% for _loc, _og_alt in _og_all_locales %}{% if _loc != app.request.locale %}
+    <meta property="og:locale:alternate" content="{{ _og_alt }}">
+    {% endif %}{% endfor %}
     <meta property="og:site_name"        content="MyBabyGuessr">
 
     {# ── Twitter Card ─────────────────────────────────────── #}
@@ -50,6 +52,8 @@
     <meta name="twitter:title"       content="{{ block('og_title') }}">
     <meta name="twitter:description" content="{{ block('og_description') }}">
     <meta name="twitter:image"       content="{% block twitter_image %}{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}">
+    <meta name="twitter:site"         content="@MyBabyGuessr">
+    <meta name="twitter:domain"       content="mybabyguessr.com">
 
     {# ── JSON-LD : Organisation (toutes pages) ────────────── #}
     <script type="application/ld+json">

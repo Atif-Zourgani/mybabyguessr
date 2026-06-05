@@ -6,6 +6,10 @@
         <loc>https://mybabyguessr.com/fr/</loc>
         <xhtml:link rel="alternate" hreflang="fr"        href="https://mybabyguessr.com/fr/"/>
         <xhtml:link rel="alternate" hreflang="en"        href="https://mybabyguessr.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="es"        href="https://mybabyguessr.com/es/"/>
+        <xhtml:link rel="alternate" hreflang="pt"        href="https://mybabyguessr.com/pt/"/>
+        <xhtml:link rel="alternate" hreflang="de"        href="https://mybabyguessr.com/de/"/>
+        <xhtml:link rel="alternate" hreflang="it"        href="https://mybabyguessr.com/it/"/>
         <xhtml:link rel="alternate" hreflang="x-default" href="https://mybabyguessr.com/fr/"/>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
@@ -15,6 +19,62 @@
         <loc>https://mybabyguessr.com/en/</loc>
         <xhtml:link rel="alternate" hreflang="fr"        href="https://mybabyguessr.com/fr/"/>
         <xhtml:link rel="alternate" hreflang="en"        href="https://mybabyguessr.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="es"        href="https://mybabyguessr.com/es/"/>
+        <xhtml:link rel="alternate" hreflang="pt"        href="https://mybabyguessr.com/pt/"/>
+        <xhtml:link rel="alternate" hreflang="de"        href="https://mybabyguessr.com/de/"/>
+        <xhtml:link rel="alternate" hreflang="it"        href="https://mybabyguessr.com/it/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://mybabyguessr.com/fr/"/>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://mybabyguessr.com/es/</loc>
+        <xhtml:link rel="alternate" hreflang="fr"        href="https://mybabyguessr.com/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en"        href="https://mybabyguessr.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="es"        href="https://mybabyguessr.com/es/"/>
+        <xhtml:link rel="alternate" hreflang="pt"        href="https://mybabyguessr.com/pt/"/>
+        <xhtml:link rel="alternate" hreflang="de"        href="https://mybabyguessr.com/de/"/>
+        <xhtml:link rel="alternate" hreflang="it"        href="https://mybabyguessr.com/it/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://mybabyguessr.com/fr/"/>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://mybabyguessr.com/pt/</loc>
+        <xhtml:link rel="alternate" hreflang="fr"        href="https://mybabyguessr.com/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en"        href="https://mybabyguessr.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="es"        href="https://mybabyguessr.com/es/"/>
+        <xhtml:link rel="alternate" hreflang="pt"        href="https://mybabyguessr.com/pt/"/>
+        <xhtml:link rel="alternate" hreflang="de"        href="https://mybabyguessr.com/de/"/>
+        <xhtml:link rel="alternate" hreflang="it"        href="https://mybabyguessr.com/it/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://mybabyguessr.com/fr/"/>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://mybabyguessr.com/de/</loc>
+        <xhtml:link rel="alternate" hreflang="fr"        href="https://mybabyguessr.com/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en"        href="https://mybabyguessr.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="es"        href="https://mybabyguessr.com/es/"/>
+        <xhtml:link rel="alternate" hreflang="pt"        href="https://mybabyguessr.com/pt/"/>
+        <xhtml:link rel="alternate" hreflang="de"        href="https://mybabyguessr.com/de/"/>
+        <xhtml:link rel="alternate" hreflang="it"        href="https://mybabyguessr.com/it/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://mybabyguessr.com/fr/"/>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://mybabyguessr.com/it/</loc>
+        <xhtml:link rel="alternate" hreflang="fr"        href="https://mybabyguessr.com/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en"        href="https://mybabyguessr.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="es"        href="https://mybabyguessr.com/es/"/>
+        <xhtml:link rel="alternate" hreflang="pt"        href="https://mybabyguessr.com/pt/"/>
+        <xhtml:link rel="alternate" hreflang="de"        href="https://mybabyguessr.com/de/"/>
+        <xhtml:link rel="alternate" hreflang="it"        href="https://mybabyguessr.com/it/"/>
         <xhtml:link rel="alternate" hreflang="x-default" href="https://mybabyguessr.com/fr/"/>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
