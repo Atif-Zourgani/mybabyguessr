@@ -80,7 +80,8 @@
 <body class="min-h-screen flex flex-col">
 
     {# ── Skip link accessibilité ──────────────────────────── #}
-    <a class="skip-link" href="#main-content">
+    <a class="skip-link" href="#main-content"
+       onclick="event.preventDefault();var t=document.getElementById('main-content');if(t){t.focus();t.scrollIntoView()}">
         {{ app.request.locale == 'fr' ? 'Aller au contenu principal' : (app.request.locale == 'es' ? 'Ir al contenido principal' : (app.request.locale == 'pt' ? 'Ir para o conteúdo principal' : (app.request.locale == 'de' ? 'Zum Hauptinhalt springen' : (app.request.locale == 'it' ? 'Vai al contenuto principale' : 'Skip to main content')))) }}
     </a>
 

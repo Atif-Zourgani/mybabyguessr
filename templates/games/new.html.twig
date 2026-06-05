@@ -40,7 +40,11 @@
                   style="color: var(--color-muted)"
                   x-text="'{{ 'games.new.step_label'|trans|e('js') }} ' + stepNumber + ' / ' + totalSteps">
             </span>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2"
+                 role="progressbar"
+                 :aria-valuenow="stepNumber"
+                 :aria-valuemax="totalSteps"
+                 :aria-label="'{{ 'games.new.step_label'|trans|e('js') }} ' + stepNumber + ' / ' + totalSteps">
                 <template x-for="(s, i) in stepSequence" :key="s">
                     <div class="h-2.5 rounded-full transition-all duration-300"
                          :style="`width: ${i === stepIndex ? '2rem' : '0.625rem'}; background-color: ${i <= stepIndex ? 'var(--color-brand)' : 'var(--color-line)'}`">
@@ -212,9 +216,11 @@
 
                 {# Message d'erreur catégorie #}
                 <div x-show="showCategoryError"
+                     id="error-category"
                      class="flex items-center gap-2 mt-4 px-3 py-2.5 rounded-lg"
                      style="background-color: #FEF2F2; color: #B91C1C;"
-                     role="alert">
+                     role="alert"
+                     aria-live="assertive">
                     <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"/>

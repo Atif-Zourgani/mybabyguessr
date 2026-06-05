@@ -94,9 +94,10 @@
                    autocomplete="nickname"
                    autofocus
                    required
-                   {% if errors.name is defined %}style="border-color: #ef4444;"{% endif %}>
+                   aria-describedby="error-player-name"
+                   {% if errors.name is defined %}aria-invalid="true" style="border-color: #ef4444;"{% endif %}>
             {% if errors.name is defined %}
-            <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
+            <p id="error-player-name" class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
                 <svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -130,7 +131,8 @@
                    placeholder="{{ 'play.identify.email_placeholder'|trans }}"
                    maxlength="255"
                    autocomplete="email"
-                   {% if errors.email is defined %}style="border-color: #ef4444;"{% endif %}>
+                   aria-describedby="error-player-email"
+                   {% if errors.email is defined %}aria-invalid="true" style="border-color: #ef4444;"{% endif %}>
             {% if errors.email is defined %}
             <p class="mt-1.5 flex items-start gap-1.5 text-sm text-red-600" role="alert">
                 <svg class="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none"

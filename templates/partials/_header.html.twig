@@ -6,7 +6,7 @@
            class="shrink-0"
            style="text-decoration:none">
             <img src="{{ asset('images/logo-mybabyguessr-wide.png') }}"
-                 alt="MyBabyGuessr"
+                 alt=""
                  width="612" height="408"
                  class="h-20 md:h-36 w-auto">
         </a>
@@ -37,6 +37,7 @@
                      class="relative">
                     <button @click="open = !open"
                             :aria-expanded="open"
+                            :aria-label="open ? 'Fermer le menu' : ('Menu de ' + '{{ app.user ? app.user.firstName : '' }}')"
                             type="button"
                             class="flex items-center gap-2 rounded-lg px-2.5 py-1.5 transition-colors"
                             style="color:var(--color-ink);border:1px solid var(--color-line);background:var(--color-cream)">
@@ -131,6 +132,7 @@
                     <button @click="open = !open"
                             :aria-expanded="open"
                             type="button"
+                            aria-label="Changer de langue / Change language"
                             class="flex items-center gap-1.5 text-sm font-bold rounded-lg px-2.5 py-1.5 transition-colors"
                             style="color:var(--color-ink);border:1px solid var(--color-line);background:var(--color-cream)">
                         <span class="fi fi-{{ _currentFlag }}" style="width:20px;height:15px;border-radius:2px" aria-hidden="true"></span>
@@ -157,7 +159,7 @@
                         {% for lang in _langs %}
                         <a href="{{ url(_route, _params|merge({'_locale': lang.code})) }}"
                            hreflang="{{ lang.code }}"
-                           {% if app.request.locale == lang.code %}aria-current="true"{% endif %}
+                           {% if app.request.locale == lang.code %}aria-current="page"{% endif %}
                            class="flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors"
                            style="text-decoration:none;color:var(--color-ink);{% if app.request.locale == lang.code %}background:rgba(196,113,74,0.10);{% endif %}">
                             <span class="fi fi-{{ lang.flag }}" style="width:20px;height:15px;border-radius:2px;flex-shrink:0" aria-hidden="true"></span>
