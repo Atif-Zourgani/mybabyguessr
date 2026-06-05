@@ -1,0 +1,102 @@
+{% set _locale = app.request.locale %}
+
+{# ── Script GA4 — chargé uniquement après consentement ───────────────────── #}
+<script>
+(function() {
+    var GA_ID = 'G-31T81S0PJN';
+
+    function loadGA() {
+        if (window._gaLoaded) return;
+        window._gaLoaded = true;
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        s.async = true;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', GA_ID, { anonymize_ip: true });
+    }
+
+    function getConsent() {
+        try { return localStorage.getItem('mbg_cookie_consent'); } catch(e) { return null; }
+    }
+
+    function setConsent(val) {
+        try { localStorage.setItem('mbg_cookie_consent', val); } catch(e) {}
+    }
+
+    window.mbgCookies = {
+        accept: function() {
+            setConsent('accepted');
+            loadGA();
+            document.getElementById('mbg-cookie-banner').style.display = 'none';
+        },
+        refuse: function() {
+            setConsent('refused');
+            document.getElementById('mbg-cookie-banner').style.display = 'none';
+        },
+        manage: function() {
+            setConsent(null);
+            try { localStorage.removeItem('mbg_cookie_consent'); } catch(e) {}
+            document.getElementById('mbg-cookie-banner').style.display = 'flex';
+        }
+    };
+
+    var consent = getConsent();
+    if (consent === 'accepted') {
+        loadGA();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var banner = document.getElementById('mbg-cookie-banner');
+        if (banner && consent === null) {
+            banner.style.display = 'flex';
+        }
+    });
+})();
+</script>
+
+{# ── Bannière ─────────────────────────────────────────────────────────────── #}
+<div id="mbg-cookie-banner"
+     role="dialog"
+     aria-live="polite"
+     aria-label="{{ _locale == 'fr' ? 'Gestion des cookies' : (_locale == 'es' ? 'Gestión de cookies' : (_locale == 'pt' ? 'Gestão de cookies' : (_locale == 'de' ? 'Cookie-Einstellungen' : (_locale == 'it' ? 'Gestione dei cookie' : 'Cookie settings')))) }}"
+     style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:1rem;background:var(--color-cream);border-top:2px solid var(--color-line);box-shadow:0 -4px 24px rgba(44,31,21,0.10);flex-direction:column;gap:0.75rem;align-items:center"
+     class="sm:flex-row sm:justify-between">
+
+    <p style="font-size:0.875rem;color:var(--color-ink);line-height:1.6;margin:0;max-width:640px;text-align:center" class="sm:text-left">
+        {% if _locale == 'fr' %}
+            🍪 Nous utilisons <strong>Google Analytics</strong> pour mesurer l'audience du site. Ces cookies analytiques ne sont déposés qu'avec votre consentement.
+            <a href="{{ path('app_privacy', {'_locale': _locale}) }}" style="color:var(--color-brand);font-weight:600;text-decoration:underline">En savoir plus</a>
+        {% elseif _locale == 'es' %}
+            🍪 Utilizamos <strong>Google Analytics</strong> para medir la audiencia del sitio. Estas cookies analíticas solo se instalan con su consentimiento.
+            <a href="{{ path('app_privacy', {'_locale': _locale}) }}" style="color:var(--color-brand);font-weight:600;text-decoration:underline">Más información</a>
+        {% elseif _locale == 'pt' %}
+            🍪 Utilizamos o <strong>Google Analytics</strong> para medir a audiência do site. Estes cookies analíticos só são instalados com o seu consentimento.
+            <a href="{{ path('app_privacy', {'_locale': _locale}) }}" style="color:var(--color-brand);font-weight:600;text-decoration:underline">Saiba mais</a>
+        {% elseif _locale == 'de' %}
+            🍪 Wir verwenden <strong>Google Analytics</strong> zur Messung der Website-Nutzung. Analyse-Cookies werden nur mit Ihrer Zustimmung gesetzt.
+            <a href="{{ path('app_privacy', {'_locale': _locale}) }}" style="color:var(--color-brand);font-weight:600;text-decoration:underline">Mehr erfahren</a>
+        {% elseif _locale == 'it' %}
+            🍪 Utilizziamo <strong>Google Analytics</strong> per misurare l'audience del sito. I cookie analitici vengono installati solo con il tuo consenso.
+            <a href="{{ path('app_privacy', {'_locale': _locale}) }}" style="color:var(--color-brand);font-weight:600;text-decoration:underline">Scopri di più</a>
+        {% else %}
+            🍪 We use <strong>Google Analytics</strong> to measure site traffic. Analytics cookies are only set with your consent.
+            <a href="{{ path('app_privacy', {'_locale': _locale}) }}" style="color:var(--color-brand);font-weight:600;text-decoration:underline">Learn more</a>
+        {% endif %}
+    </p>
+
+    <div style="display:flex;gap:0.625rem;flex-shrink:0;flex-wrap:wrap;justify-content:center">
+        <button onclick="mbgCookies.refuse()"
+                style="font-size:0.8125rem;padding:0.5rem 1rem;border-radius:0.625rem;border:1.5px solid var(--color-line);background:transparent;color:var(--color-muted);cursor:pointer;font-weight:600;font-family:inherit">
+            {{ _locale == 'fr' ? 'Refuser' : (_locale == 'es' ? 'Rechazar' : (_locale == 'pt' ? 'Recusar' : (_locale == 'de' ? 'Ablehnen' : (_locale == 'it' ? 'Rifiuta' : 'Decline')))) }}
+        </button>
+        <button onclick="mbgCookies.accept()"
+                style="font-size:0.8125rem;padding:0.5rem 1rem;border-radius:0.625rem;border:none;background:var(--color-brand);color:#fff;cursor:pointer;font-weight:700;font-family:inherit">
+            {{ _locale == 'fr' ? 'Accepter' : (_locale == 'es' ? 'Aceptar' : (_locale == 'pt' ? 'Aceitar' : (_locale == 'de' ? 'Akzeptieren' : (_locale == 'it' ? 'Accetta' : 'Accept')))) }}
+        </button>
+    </div>
+
+</div>

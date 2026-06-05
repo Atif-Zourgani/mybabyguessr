@@ -11,6 +11,11 @@
         <a href="{{ path('app_terms',    {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.terms'|trans }}</a>
         <a href="{{ path('app_mentions', {'_locale': app.request.locale}) }}" class="hover:underline">{{ 'footer.mentions'|trans }}</a>
         <a href="mailto:contact@mybabyguessr.com" class="hover:underline">{{ 'footer.contact'|trans }}</a>
+        <button onclick="mbgCookies.manage()"
+                style="background:none;border:none;cursor:pointer;font-size:inherit;font-family:inherit;padding:0;color:inherit"
+                class="hover:underline">
+            {{ app.request.locale == 'fr' ? 'Gérer mes cookies' : (app.request.locale == 'es' ? 'Gestionar cookies' : (app.request.locale == 'pt' ? 'Gerir cookies' : (app.request.locale == 'de' ? 'Cookies verwalten' : (app.request.locale == 'it' ? 'Gestisci cookie' : 'Manage cookies')))) }}
+        </button>
     </nav>
     <p class="mt-3 text-xs" style="color: var(--color-muted)">
         Made by <a href="https://www.linkedin.com/in/atif-micka%C3%ABl/"
