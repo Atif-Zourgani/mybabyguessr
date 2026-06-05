@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -71,7 +72,7 @@ class ProfileController extends AbstractController
         $token     = $this->generateEmailChangeToken($user->getId(), $newEmail);
         $verifyUrl = $this->generateUrl('app_profile_verify_email', ['_locale' => $request->getLocale(), 'token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
         $mail = (new TemplatedEmail())
-            ->from('noreply@mybabyguessr.com')
+            ->from(new Address('noreply@mybabyguessr.com', 'MyBabyGuessr'))
             ->to($newEmail)
             ->subject($request->getLocale() === 'fr' ? 'Confirmez votre nouvelle adresse email — MyBabyGuessr' : 'Confirm your new email address — MyBabyGuessr')
             ->htmlTemplate('emails/email_change.html.twig')

@@ -5,6 +5,7 @@
 
 {% block stylesheets %}
 <style>
+body { overflow-x: hidden; }
 .deco-new { position:absolute; pointer-events:none; z-index:2; }
 .deco-new-liontete  { top:-2px; right:8px;  width:52px; opacity:0.80; }
 .deco-new-papillon  { top:20px; left:10px;  width:42px; opacity:0.74; }
@@ -16,7 +17,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12" style="position:relative;overflow:hidden">
+<div class="max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12" style="position:relative;overflow:hidden;max-width:100%">
 
     <img src="{{ asset('images/illustration/lion_tete.png') }}" alt="" aria-hidden="true" class="deco-new deco-new-liontete">
     <img src="{{ asset('images/illustration/papillon3.png') }}" alt="" aria-hidden="true" class="deco-new deco-new-papillon">

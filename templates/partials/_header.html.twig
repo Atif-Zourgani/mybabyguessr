@@ -1,5 +1,5 @@
-﻿<header class="bg-cream border-b border-line" role="banner">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+﻿<header class="bg-cream border-b border-line overflow-hidden" role="banner">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-2 sm:gap-4">
 
         <a href="{{ path('app_home', {'_locale': app.request.locale}) }}"
            aria-label="MyBabyGuessr — {{ app.request.locale == 'fr' ? 'Accueil' : 'Home' }}"
@@ -8,10 +8,10 @@
             <img src="{{ asset('images/logo-mybabyguessr-wide.png') }}"
                  alt=""
                  width="612" height="408"
-                 class="h-20 md:h-36 w-auto">
+                 class="h-16 sm:h-20 md:h-36 w-auto">
         </a>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
 
             {% if app.user %}
                 {% if is_granted('ROLE_ADMIN') %}
@@ -26,7 +26,7 @@
                              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
                         </svg>
-                        {{ _on_admin ? 'Mes jeux' : 'Admin' }}
+                        <span class="hidden sm:inline">{{ _on_admin ? 'Mes jeux' : 'Admin' }}</span>
                     </a>
                 {% endif %}
 
@@ -136,7 +136,7 @@
                             class="flex items-center gap-1.5 text-sm font-bold rounded-lg px-2.5 py-1.5 transition-colors"
                             style="color:var(--color-ink);border:1px solid var(--color-line);background:var(--color-cream)">
                         <span class="fi fi-{{ _currentFlag }}" style="width:20px;height:15px;border-radius:2px" aria-hidden="true"></span>
-                        <span>{{ app.request.locale|upper }}</span>
+                        <span class="hidden sm:inline">{{ app.request.locale|upper }}</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
                              aria-hidden="true"
