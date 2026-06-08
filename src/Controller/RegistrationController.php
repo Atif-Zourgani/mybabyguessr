@@ -13,12 +13,14 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
     public function __construct(
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
+        private TranslatorInterface $translator,
     ) {}
 
     #[Route('/register', name: 'app_register')]
@@ -44,7 +46,7 @@ class RegistrationController extends AbstractController
             $email = (new TemplatedEmail())
                 ->from('noreply@mybabyguessr.com')
                 ->to($user->getEmail())
-                ->subject($this->getVerificationSubject($request->getLocale()))
+                ->subject($this->translator->trans('email.verify_subject', locale: $request->getLocale()))
                 ->htmlTemplate('emails/confirmation.html.twig')
                 ->context([
                     'user' => $user,
@@ -76,10 +78,4 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    private function getVerificationSubject(string $locale): string
-    {
-        return $locale === 'fr'
-            ? 'Confirmez votre adresse email — MyBabyGuessr'
-            : 'Confirm your email address — MyBabyGuessr';
-    }
 }

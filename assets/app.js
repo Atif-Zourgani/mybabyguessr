@@ -1,6 +1,7 @@
 import './stimulus_bootstrap.js';
 import './styles/app.css';
 import Alpine from 'alpinejs';
+import heic2any from 'heic2any';
 
 Alpine.data('gameForm', () => ({
     step: 'categories',
@@ -16,6 +17,7 @@ Alpine.data('gameForm', () => ({
     submitting: false,
     imagePreview: null,
     imageError: null,
+    imageConverting: false,
 
     get stepSequence() {
         const s = ['categories'];
@@ -77,25 +79,56 @@ Alpine.data('gameForm', () => ({
         if (mode !== 'hints') this.answerName = '';
     },
 
-    handleImageChange(event) {
+    async handleImageChange(event) {
         const file = event.target.files[0];
         this.imageError = null;
         this.imagePreview = null;
+        this.imageConverting = false;
         if (!file) return;
+
+        const isHeic = file.type === 'image/heic' || file.type === 'image/heif'
+            || /\.(heic|heif)$/i.test(file.name);
+
+        let processedFile = file;
+
+        if (isHeic) {
+            this.imageConverting = true;
+            try {
+                const blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
+                const jpegBlob = Array.isArray(blob) ? blob[0] : blob;
+                processedFile = new File(
+                    [jpegBlob],
+                    file.name.replace(/\.(heic|heif)$/i, '.jpg'),
+                    { type: 'image/jpeg' }
+                );
+                if (window.DataTransfer) {
+                    const dt = new DataTransfer();
+                    dt.items.add(processedFile);
+                    event.target.files = dt.files;
+                }
+            } catch (_) {
+                this.imageConverting = false;
+                this.imageError = 'type';
+                event.target.value = '';
+                return;
+            }
+            this.imageConverting = false;
+        }
+
         const allowed = ['image/jpeg', 'image/png', 'image/webp'];
-        if (!allowed.includes(file.type)) {
+        if (!allowed.includes(processedFile.type)) {
             this.imageError = 'type';
             event.target.value = '';
             return;
         }
-        if (file.size > 4 * 1024 * 1024) {
+        if (processedFile.size > 4 * 1024 * 1024) {
             this.imageError = 'size';
             event.target.value = '';
             return;
         }
         const reader = new FileReader();
         reader.onload = (e) => { this.imagePreview = e.target.result; };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(processedFile);
     },
 }));
 

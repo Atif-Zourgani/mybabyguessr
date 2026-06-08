@@ -34,4 +34,7 @@ return [
     'dijkstrajs' => [
         'version' => '1.0.3',
     ],
+    'heic2any' => [
+        'version' => '0.0.4',
+    ],
 ];

@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/games')]
@@ -85,22 +86,26 @@ class GameController extends AbstractController
             }
 
             $imageFile = $request->files->get('imageFile');
-            if ($imageFile !== null && $imageFile->isValid()) {
-                $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-                if (!in_array($imageFile->getMimeType(), $allowedMimes, true)) {
-                    $this->addFlash('error', 'games.new.error_image_type');
-                } elseif ($imageFile->getSize() > 4 * 1024 * 1024) {
-                    $this->addFlash('error', 'games.new.error_image_size');
+            if ($imageFile !== null) {
+                if (!$imageFile->isValid()) {
+                    $this->addFlash('error', 'games.new.error_image_upload');
                 } else {
-                    try {
-                        $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/games';
-                        $ext        = $imageFile->guessExtension() ?? 'jpg';
-                        $filename   = bin2hex(random_bytes(16)) . '.' . $ext;
-                        $imageFile->move($uploadsDir, $filename);
-                        chmod($uploadsDir . '/' . $filename, 0644);
-                        $game->setImage('uploads/games/' . $filename);
-                    } catch (\Exception) {
-                        // image ignorée si déplacement impossible — le jeu est quand même créé
+                    $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+                    if (!in_array($imageFile->getMimeType(), $allowedMimes, true)) {
+                        $this->addFlash('error', 'games.new.error_image_type');
+                    } elseif ($imageFile->getSize() > 4 * 1024 * 1024) {
+                        $this->addFlash('error', 'games.new.error_image_size');
+                    } else {
+                        try {
+                            $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/games';
+                            $ext        = $imageFile->guessExtension() ?? 'jpg';
+                            $filename   = bin2hex(random_bytes(16)) . '.' . $ext;
+                            $imageFile->move($uploadsDir, $filename);
+                            chmod($uploadsDir . '/' . $filename, 0644);
+                            $game->setImage('uploads/games/' . $filename);
+                        } catch (\Exception) {
+                            // image ignorée si déplacement impossible — le jeu est quand même créé
+                        }
                     }
                 }
             }
@@ -115,6 +120,36 @@ class GameController extends AbstractController
         }
 
         return $this->render('games/new.html.twig');
+    }
+
+    #[Route('/{token}/delete', name: 'app_game_delete', methods: ['POST'])]
+    public function delete(string $token, GameRepository $gameRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $game = $gameRepository->findOneByToken($token);
+
+        if ($game === null || $game->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->isCsrfTokenValid('game_delete_' . $token, $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($game->getImage()) {
+            $imagePath = $this->getParameter('kernel.project_dir') . '/public/' . $game->getImage();
+            if (file_exists($imagePath)) {
+                @unlink($imagePath);
+            }
+        }
+
+        $em->remove($game);
+        $em->flush();
+
+        $this->addFlash('success', 'games.delete.success');
+
+        return $this->redirectToRoute('app_dashboard', [
+            '_locale' => $request->getLocale(),
+        ]);
     }
 
     #[Route('/{token}/toggle-status', name: 'app_game_toggle_status', methods: ['POST'])]
@@ -192,6 +227,7 @@ class GameController extends AbstractController
         Request $request,
         MailerInterface $mailer,
         LoggerInterface $logger,
+        TranslatorInterface $translator,
     ): Response {
         $game = $gameRepository->findOneByToken($token);
 
@@ -258,7 +294,7 @@ class GameController extends AbstractController
                 && $playersWithEmail > 0;
 
             if ($sendEmails) {
-                $this->sendRevealEmails($game, $mailer, $request->getLocale(), $logger);
+                $this->sendRevealEmails($game, $mailer, $request->getLocale(), $logger, $translator);
             }
 
             if ($wasAlreadyRevealed) {
@@ -300,7 +336,7 @@ class GameController extends AbstractController
         return $this->render('games/reveal_share.html.twig', ['game' => $game]);
     }
 
-    private function sendRevealEmails(Game $game, MailerInterface $mailer, string $locale, LoggerInterface $logger): void
+    private function sendRevealEmails(Game $game, MailerInterface $mailer, string $locale, LoggerInterface $logger, TranslatorInterface $translator): void
     {
         $revealUrl = $this->generateUrl('app_game_reveal_public', [
             '_locale' => $locale,
@@ -308,9 +344,7 @@ class GameController extends AbstractController
             'token'   => $game->getToken(),
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $subject = $locale === 'fr'
-            ? sprintf('La révélation — %s !', $game->getDisplayTitle())
-            : sprintf('The reveal — %s!', $game->getDisplayTitle());
+        $subject = $translator->trans('games.reveal_share.email_subject', ['%game%' => $game->getDisplayTitle()], locale: $locale);
 
         $emailsSent = [];
         foreach ($game->getGuesses() as $guess) {

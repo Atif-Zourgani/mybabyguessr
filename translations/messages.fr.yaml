@@ -311,7 +311,7 @@ games:
             title_placeholder: "Bébé Dupont, Notre p'tit mystère…"
             title_help: "Par défaut : \"Baby %name%\", visible par tous vos invités"
             image_label: "Photo de couverture (optionnel)"
-            image_help: "Elle s'affichera en haut de la page de vos invités. JPG, PNG ou WebP · max 4 Mo"
+            image_help: "Elle s'affichera en haut de la page de vos invités. JPG, PNG, WebP ou HEIC (iPhone) · max 4 Mo"
         btn_next: "Suivant"
         btn_prev: "Précédent"
         btn_create: "Créer mon Baby Guessr"
@@ -320,6 +320,7 @@ games:
         error_name_required: "Entrez le vrai prénom pour générer les indices."
         error_image_type: "Format non accepté. Utilisez JPG, PNG ou WebP."
         error_image_size: "Image trop volumineuse. Maximum 4 Mo."
+        error_image_upload: "L'image n'a pas pu être chargée (taille ou format refusé par le serveur). Votre jeu a été créé sans photo."
         success: "Votre Baby Guessr est prêt ! Partagez le lien avec vos proches."
     share:
         closed_warning: "La participation est fermée. Rouvrez la partie pour partager le lien avec vos joueurs."
@@ -376,6 +377,14 @@ games:
         email_body: "Bonjour,\n\nLes vraies réponses de %game% sont révélées ! Découvrez qui a deviné juste :"
 
 
+    delete:
+        btn: "Supprimer"
+        confirm_title: "Supprimer la partie ?"
+        confirm_body: "Cette action est irréversible. La partie et tous les pronostics seront supprimés définitivement."
+        confirm_yes: "Supprimer définitivement"
+        confirm_cancel: "Annuler"
+        success: "La partie a été supprimée."
+
 check_email:
     title: Vérifiez votre email
     message: "Un email de confirmation vous a été envoyé. Cliquez sur le lien pour activer votre compte."
@@ -430,4 +439,9 @@ profile:
     email_pending: "Un lien de confirmation a été envoyé à votre nouvelle adresse. Valide 1 heure."
     email_cancelled: "Changement d'email annulé."
     email_token_invalid: "Lien invalide ou expiré. Refaites la demande depuis votre profil."
+    email_taken: "Cette adresse email est déjà utilisée par un autre compte."
     email_same: "Cette adresse est déjà votre email actuel."
+
+email:
+    verify_subject: "Confirmez votre adresse email — MyBabyGuessr"
+    change_subject: "Confirmez votre nouvelle adresse email — MyBabyGuessr"

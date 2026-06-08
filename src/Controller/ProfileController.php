@@ -12,13 +12,18 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
-    public function __construct(private MailerInterface $mailer) {}
+    public function __construct(
+        private MailerInterface $mailer,
+        private TranslatorInterface $translator,
+    ) {}
 
     #[Route('/profile', name: 'app_profile', methods: ['GET'])]
     public function edit(): Response
@@ -47,7 +52,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/email', name: 'app_profile_email', methods: ['POST'])]
-    public function requestEmailChange(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
+    public function requestEmailChange(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, UserRepository $userRepository): Response
     {
         if (!$this->isCsrfTokenValid('profile_email', $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
@@ -67,6 +72,10 @@ class ProfileController extends AbstractController
             $this->addFlash('error', 'profile.email_same');
             return $this->redirectToRoute('app_profile', ['_locale' => $request->getLocale()]);
         }
+        if ($userRepository->findOneBy(['email' => $newEmail]) !== null) {
+            $this->addFlash('error', 'profile.email_taken');
+            return $this->redirectToRoute('app_profile', ['_locale' => $request->getLocale()]);
+        }
         $user->setPendingEmail($newEmail);
         $em->flush();
         $token     = $this->generateEmailChangeToken($user->getId(), $newEmail);
@@ -74,7 +83,7 @@ class ProfileController extends AbstractController
         $mail = (new TemplatedEmail())
             ->from(new Address('noreply@mybabyguessr.com', 'MyBabyGuessr'))
             ->to($newEmail)
-            ->subject($request->getLocale() === 'fr' ? 'Confirmez votre nouvelle adresse email — MyBabyGuessr' : 'Confirm your new email address — MyBabyGuessr')
+            ->subject($this->translator->trans('email.change_subject', locale: $request->getLocale()))
             ->htmlTemplate('emails/email_change.html.twig')
             ->context(['user' => $user, 'verifyUrl' => $verifyUrl, 'newEmail' => $newEmail, 'locale' => $request->getLocale()]);
         $this->mailer->send($mail);

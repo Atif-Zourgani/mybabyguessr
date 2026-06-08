@@ -311,7 +311,7 @@ games:
             title_placeholder: "Baby Johnson, Our little mystery…"
             title_help: "Default: \"Baby %name%\", visible to all your guests"
             image_label: "Cover photo (optional)"
-            image_help: "It will appear at the top of your guests' page. JPG, PNG or WebP · max 4 MB"
+            image_help: "It will appear at the top of your guests' page. JPG, PNG, WebP or HEIC (iPhone) · max 4 MB"
         btn_next: "Next"
         btn_prev: "Back"
         btn_create: "Create my Baby Guessr"
@@ -320,6 +320,7 @@ games:
         error_name_required: "Enter the real name to generate the clues."
         error_image_type: "Format not accepted. Use JPG, PNG or WebP."
         error_image_size: "Image too large. Maximum 4 MB."
+        error_image_upload: "The image could not be uploaded (size or format rejected by the server). Your game was created without a photo."
         success: "Your Baby Guessr is ready! Share the link with your loved ones."
     share:
         closed_warning: "Participation is closed. Reopen the game to share the link with your players."
@@ -376,6 +377,14 @@ games:
         email_body: "Hi,\n\nThe real answers for %game% are revealed! Find out who guessed right:"
 
 
+    delete:
+        btn: "Delete"
+        confirm_title: "Delete this game?"
+        confirm_body: "This action cannot be undone. The game and all guesses will be permanently deleted."
+        confirm_yes: "Delete permanently"
+        confirm_cancel: "Cancel"
+        success: "The game has been deleted."
+
 check_email:
     title: Check your email
     message: "A confirmation email has been sent to you. Click the link to activate your account."
@@ -430,4 +439,9 @@ profile:
     email_pending: "A confirmation link has been sent to your new address. Valid for 1 hour."
     email_cancelled: "Email change cancelled."
     email_token_invalid: "Invalid or expired link. Please make a new request from your profile."
+    email_taken: "This email address is already used by another account."
     email_same: "This is already your current email address."
+
+email:
+    verify_subject: "Confirm your email address — MyBabyGuessr"
+    change_subject: "Confirm your new email address — MyBabyGuessr"

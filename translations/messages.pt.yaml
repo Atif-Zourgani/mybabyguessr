@@ -320,6 +320,7 @@ games:
         error_name_required: "Escreva o nome real para gerar as pistas."
         error_image_type: "Formato não aceite. Use JPG, PNG ou WebP."
         error_image_size: "Imagem demasiado grande. Máximo 4 MB."
+        error_image_upload: "A imagem não pôde ser carregada (tamanho ou formato recusado pelo servidor). O seu jogo foi criado sem foto."
         success: "O seu Baby Guessr está pronto! Partilhe o link com os seus entes queridos."
     share:
         closed_warning: "A participação está encerrada. Reabra o jogo para partilhar o link com os seus jogadores."
@@ -376,6 +377,14 @@ games:
         email_body: "Olá,\n\nAs respostas reais de %game% estão reveladas! Descubra quem adivinhou certo:"
 
 
+    delete:
+        btn: "Eliminar"
+        confirm_title: "Eliminar esta partida?"
+        confirm_body: "Esta ação é irreversível. A partida e todos os prognósticos serão eliminados permanentemente."
+        confirm_yes: "Eliminar definitivamente"
+        confirm_cancel: "Cancelar"
+        success: "A partida foi eliminada."
+
 check_email:
     title: Verifique o seu email
     message: "Foi-lhe enviado um email de confirmação. Clique no link para ativar a sua conta."
@@ -430,4 +439,9 @@ profile:
     email_pending: "Um link de confirmação foi enviado para o seu novo endereço. Válido por 1 hora."
     email_cancelled: "Alteração de email cancelada."
     email_token_invalid: "Link inválido ou expirado. Faça um novo pedido no seu perfil."
+    email_taken: "Este endereço de email já está a ser utilizado por outra conta."
     email_same: "Este já é o seu endereço de email atual."
+
+email:
+    verify_subject: "Confirme o seu endereço de email — MyBabyGuessr"
+    change_subject: "Confirme o seu novo endereço de email — MyBabyGuessr"
