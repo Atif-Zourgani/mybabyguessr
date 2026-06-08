@@ -553,6 +553,15 @@
                        class="form-input"
                        value="{{ formData.date ?? (game.dueDate ? game.dueDate|date('Y-m-d') : '') }}"
                        {% if errors.date is defined %}style="border-color:#ef4444"{% endif %}>
+                <label class="block text-sm font-semibold mt-4 mb-1" style="color:var(--color-ink)">
+                    {{ 'play.guess.time_label'|trans }}
+                </label>
+                <input type="time" id="guess_time" name="guess_time"
+                       class="form-input"
+                       value="{{ formData.time ?? '' }}">
+                <p class="text-xs mt-1" style="color:var(--color-muted)">
+                    {{ 'play.guess.time_optional'|trans }}
+                </p>
                 <p x-show="stepError" class="mt-2 text-sm text-center text-red-600" role="alert">
                     {{ 'play.guess.date_error'|trans }}
                 </p>

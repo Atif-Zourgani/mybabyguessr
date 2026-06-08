@@ -258,8 +258,13 @@ class GameController extends AbstractController
 
             if ($game->isGuessDate()) {
                 $dateStr = trim($post['answerDate'] ?? '');
+                $timeStr = trim($post['answerTime'] ?? '');
                 if ($dateStr !== '') {
-                    $date = \DateTimeImmutable::createFromFormat('Y-m-d', $dateStr);
+                    if ($timeStr !== '') {
+                        $date = \DateTimeImmutable::createFromFormat('Y-m-d H:i', $dateStr . ' ' . $timeStr);
+                    } else {
+                        $date = \DateTimeImmutable::createFromFormat('Y-m-d H:i', $dateStr . ' 00:00');
+                    }
                     $game->setAnswerDate($date !== false ? $date : null);
                 } else {
                     $game->setAnswerDate(null);

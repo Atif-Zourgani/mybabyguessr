@@ -297,7 +297,7 @@
                    style="color:var(--color-muted)">{{ 'play.reveal.winners_date'|trans }}</p>
                 {% if game.answerDate %}
                     <p class="text-xl font-bold mb-4" style="color:var(--color-ink)">
-                        {{ game.answerDate|date(dateFormat) }}
+                        {{ game.answerDate|date(dateFormat) }}{% if game.answerDate|date('H:i') != '00:00' %}<br><span class="text-base font-semibold" style="color:var(--color-muted)">{{ game.answerDate|date('H:i') }}</span>{% endif %}
                     </p>
                     {% if winners.date is defined and winners.date|length > 0 %}
                     {% set dateVisible = winners.date|slice(0, 5) %}
@@ -305,13 +305,18 @@
                     <div x-data="{ open: false }">
                         <div class="space-y-2">
                             {% for item in dateVisible %}
-                            {% set diffDays = (item.diff / 86400)|round %}
+                            {% set diffSec   = item.diff %}
+                            {% set diffMins  = (diffSec / 60)|round %}
+                            {% set diffHours = (diffSec / 3600)|round %}
+                            {% set diffDays  = (diffSec / 86400)|round %}
                             <div class="rounded-lg px-3 py-3 text-center"
                                  style="background-color:var(--color-cream)">
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : (isDe ? 'Genau!' : (isIt ? 'Esatto!' : 'Exact!')))) }}
+                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffSec == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                    {% if diffSec == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : (isDe ? 'Genau!' : (isIt ? 'Esatto!' : 'Exact!')))) }}
+                                    {% elseif diffSec < 3600 %}{{ diffMins }} min
+                                    {% elseif diffSec < 86400 %}{{ diffHours }}h
                                     {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : (isEs ? '1 día' : (isPt ? '1 dia' : (isDe ? '1 Tag' : (isIt ? '1 giorno' : '1 day')))) }}
                                     {% else %}{{ diffDays }}{{ isFr ? ' jours' : (isEs ? ' días' : (isPt ? ' dias' : (isDe ? ' Tage' : (isIt ? ' giorni' : ' days')))) }}
                                     {% endif %}
@@ -322,13 +327,18 @@
                         {% if dateHidden|length > 0 %}
                         <div class="space-y-2 mt-2" x-show="open" style="display:none">
                             {% for item in dateHidden %}
-                            {% set diffDays = (item.diff / 86400)|round %}
+                            {% set diffSec   = item.diff %}
+                            {% set diffMins  = (diffSec / 60)|round %}
+                            {% set diffHours = (diffSec / 3600)|round %}
+                            {% set diffDays  = (diffSec / 86400)|round %}
                             <div class="rounded-lg px-3 py-3 text-center"
                                  style="background-color:var(--color-cream)">
                                 <div class="text-xs font-bold mb-0.5" style="color:var(--color-muted)">{{ loop.index + 5 }}</div>
                                 <div class="text-sm font-bold" style="color:var(--color-ink)">{{ item.guess.playerName }}</div>
-                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffDays == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                                    {% if diffDays == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : (isDe ? 'Genau!' : (isIt ? 'Esatto!' : 'Exact!')))) }}
+                                <div class="text-xs font-semibold" style="margin-top:0.125rem;color:{{ diffSec == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
+                                    {% if diffSec == 0 %}{{ isFr ? 'Exact !' : (isEs ? '¡Exacto!' : (isPt ? 'Exato!' : (isDe ? 'Genau!' : (isIt ? 'Esatto!' : 'Exact!')))) }}
+                                    {% elseif diffSec < 3600 %}{{ diffMins }} min
+                                    {% elseif diffSec < 86400 %}{{ diffHours }}h
                                     {% elseif diffDays == 1 %}{{ isFr ? '1 jour' : (isEs ? '1 día' : (isPt ? '1 dia' : (isDe ? '1 Tag' : (isIt ? '1 giorno' : '1 day')))) }}
                                     {% else %}{{ diffDays }}{{ isFr ? ' jours' : (isEs ? ' días' : (isPt ? ' dias' : (isDe ? ' Tage' : (isIt ? ' giorni' : ' days')))) }}
                                     {% endif %}

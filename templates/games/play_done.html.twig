@@ -115,7 +115,9 @@
             {% if guess.guessDate %}
             <div class="flex justify-between text-sm">
                 <dt style="color: var(--color-muted)">{{ 'play.done.date_summary'|trans }}</dt>
-                <dd class="font-medium" style="color: var(--color-ink)">{{ guess.guessDate|date('d/m/Y') }}</dd>
+                <dd class="font-medium" style="color: var(--color-ink)">
+                    {{ guess.guessDate|date('d/m/Y') }}{% if guess.guessDate|date('H:i') != '00:00' %} à {{ guess.guessDate|date('H:i') }}{% endif %}
+                </dd>
             </div>
             {% endif %}
             {% if guess.guessWeight %}

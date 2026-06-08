@@ -247,12 +247,15 @@ class PlayController extends AbstractController
 
         if ($game->isGuessDate()) {
             $dateStr          = $request->request->get('guess_date', '');
+            $timeStr          = trim($request->request->get('guess_time', ''));
             $formData['date'] = $dateStr;
+            $formData['time'] = $timeStr;
             if ($dateStr === '') {
                 $errors['date'] = true;
             } else {
                 try {
-                    $guessDateParsed = new \DateTimeImmutable($dateStr);
+                    $dateTimeStr     = $dateStr . ' ' . ($timeStr !== '' ? $timeStr : '00:00');
+                    $guessDateParsed = new \DateTimeImmutable($dateTimeStr);
                 } catch (\Throwable) {
                     $errors['date'] = true;
                 }

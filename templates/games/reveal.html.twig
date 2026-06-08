@@ -122,6 +122,13 @@
                 <input id="answerDate" type="date" name="answerDate"
                        class="form-input"
                        value="{{ game.answerDate ? game.answerDate|date('Y-m-d') : '' }}">
+                <label for="answerTime" class="block text-sm font-bold mt-4 mb-2"
+                       style="color: var(--color-ink)">
+                    {{ 'games.reveal.time_label'|trans }}
+                </label>
+                <input id="answerTime" type="time" name="answerTime"
+                       class="form-input"
+                       value="{{ game.answerDate ? game.answerDate|date('H:i') : '' }}">
                 <p class="text-xs mt-2" style="color:var(--color-muted)">{{ 'games.reveal.optional_hint'|trans }}</p>
             </div>
             {% endif %}

@@ -31,7 +31,7 @@ class Guess
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $guessName = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $guessDate = null;
 
     #[ORM\Column(nullable: true)]

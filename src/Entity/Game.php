@@ -70,7 +70,7 @@ class Game
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $answerName = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $answerDate = null;
 
     #[ORM\Column(nullable: true)]
