@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\GameRepository;
+use App\Repository\GuessRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,16 +21,21 @@ class AdminController extends AbstractController
     public function index(
         UserRepository $userRepository,
         GameRepository $gameRepository,
+        GuessRepository $guessRepository,
         EntityManagerInterface $em,
     ): Response {
-        $conn = $em->getConnection();
+        $conn         = $em->getConnection();
+        $since7days   = new \DateTimeImmutable('-7 days');
+        $since30days  = new \DateTimeImmutable('-30 days');
 
         $totalUsers    = $userRepository->count([]);
-        $verifiedCount = (int) $conn->fetchOne('SELECT COUNT(*) FROM user WHERE is_verified = 1');
+        $verifiedCount = $userRepository->countVerified();
         $games         = $gameRepository->findBy([], ['createdAt' => 'DESC']);
-        $totalGuesses  = (int) $conn->fetchOne('SELECT COUNT(*) FROM guess');
-        $recentResets  = (int) $conn->fetchOne(
-            "SELECT COUNT(*) FROM reset_password_request WHERE requested_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+        $totalGuesses  = $guessRepository->countAll();
+
+        $recentResets = (int) $conn->fetchOne(
+            'SELECT COUNT(*) FROM reset_password_request WHERE requested_at >= :since',
+            ['since' => $since30days->format('Y-m-d')]
         );
 
         $gamesByStatus = [];
@@ -40,44 +46,10 @@ class AdminController extends AbstractController
 
         $avgGuessesPerGame = count($games) > 0 ? round($totalGuesses / count($games), 1) : 0;
 
-        $gamesTrend = $this->buildTrend(
-            $conn->fetchAllAssociative(
-                "SELECT DATE(created_at) as day, COUNT(*) as cnt
-                 FROM game WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-                 GROUP BY DATE(created_at) ORDER BY day ASC"
-            )
-        );
-
-        $guessesTrend = $this->buildTrend(
-            $conn->fetchAllAssociative(
-                "SELECT DATE(created_at) as day, COUNT(*) as cnt
-                 FROM guess WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-                 GROUP BY DATE(created_at) ORDER BY day ASC"
-            )
-        );
-
-        $recentGuesses = $conn->fetchAllAssociative(
-            "SELECT g.player_name, g.created_at,
-                    COALESCE(gm.title, CONCAT('Baby ', u.last_name)) as display_title,
-                    gm.token, gm.slug
-             FROM guess g
-             JOIN game gm ON g.game_id = gm.id
-             JOIN user u ON gm.user_id = u.id
-             ORDER BY g.created_at DESC LIMIT 10"
-        );
-
-        $recentGames = $conn->fetchAllAssociative(
-            "SELECT gm.status, gm.created_at,
-                    COALESCE(gm.title, CONCAT('Baby ', u.last_name)) as display_title,
-                    gm.token, gm.slug,
-                    u.first_name, u.last_name,
-                    COUNT(g.id) as guess_count
-             FROM game gm
-             JOIN user u ON gm.user_id = u.id
-             LEFT JOIN guess g ON g.game_id = gm.id
-             GROUP BY gm.id
-             ORDER BY gm.created_at DESC LIMIT 8"
-        );
+        $gamesTrend   = $this->buildTrend($gameRepository->getDailyCreatedTrend($since7days));
+        $guessesTrend = $this->buildTrend($guessRepository->getDailyCreatedTrend($since7days));
+        $recentGuesses = $guessRepository->findRecentWithGame(10);
+        $recentGames   = $gameRepository->findRecentWithGuessCount(8);
 
         return $this->render('admin/index.html.twig', [
             'totalUsers'        => $totalUsers,
@@ -97,24 +69,12 @@ class AdminController extends AbstractController
     // ── Users ─────────────────────────────────────────────────────────────────
 
     #[Route('/users', name: 'users', methods: ['GET'])]
-    public function users(
-        UserRepository $userRepository,
-        EntityManagerInterface $em,
-    ): Response {
-        $users         = $userRepository->findBy([], ['id' => 'DESC']);
-        $totalVerified = (int) $em->getConnection()->fetchOne('SELECT COUNT(*) FROM user WHERE is_verified = 1');
-
-        $totalAdmins = 0;
-        foreach ($users as $user) {
-            if (in_array('ROLE_ADMIN', $user->getRoles())) {
-                ++$totalAdmins;
-            }
-        }
-
+    public function users(UserRepository $userRepository): Response
+    {
         return $this->render('admin/users.html.twig', [
-            'users'         => $users,
-            'totalVerified' => $totalVerified,
-            'totalAdmins'   => $totalAdmins,
+            'users'         => $userRepository->findBy([], ['id' => 'DESC']),
+            'totalVerified' => $userRepository->countVerified(),
+            'totalAdmins'   => $userRepository->countAdmins(),
         ]);
     }
 
@@ -123,9 +83,8 @@ class AdminController extends AbstractController
     #[Route('/games', name: 'games', methods: ['GET'])]
     public function games(
         GameRepository $gameRepository,
-        EntityManagerInterface $em,
+        GuessRepository $guessRepository,
     ): Response {
-        $conn  = $em->getConnection();
         $games = $gameRepository->findBy([], ['createdAt' => 'DESC']);
 
         $gamesByStatus = [];
@@ -134,82 +93,37 @@ class AdminController extends AbstractController
             $gamesByStatus[$s] = ($gamesByStatus[$s] ?? 0) + 1;
         }
 
-        $totalGuesses = (int) $conn->fetchOne('SELECT COUNT(*) FROM guess');
-        $avgGuesses   = count($games) > 0 ? round($totalGuesses / count($games), 1) : 0;
-
-        $catStats = $conn->fetchAssociative(
-            "SELECT
-                SUM(guess_gender) as gender,
-                SUM(guess_name)   as name,
-                SUM(guess_date)   as date_cat,
-                SUM(guess_weight) as weight,
-                SUM(guess_height) as height
-             FROM game"
-        ) ?: [];
+        $totalGuesses = $guessRepository->countAll();
 
         return $this->render('admin/games.html.twig', [
             'games'         => $games,
             'gamesByStatus' => $gamesByStatus,
             'totalGuesses'  => $totalGuesses,
-            'avgGuesses'    => $avgGuesses,
-            'catStats'      => $catStats,
+            'avgGuesses'    => count($games) > 0 ? round($totalGuesses / count($games), 1) : 0,
+            'catStats'      => $gameRepository->getCategoryStats(),
         ]);
     }
 
     // ── Activity logs ─────────────────────────────────────────────────────────
 
     #[Route('/logs', name: 'logs', methods: ['GET'])]
-    public function logs(EntityManagerInterface $em): Response
-    {
-        $conn = $em->getConnection();
-
-        $recentGuesses = $conn->fetchAllAssociative(
-            "SELECT g.player_name, g.player_email, g.created_at,
-                    COALESCE(gm.title, CONCAT('Baby ', u.last_name)) as display_title,
-                    gm.token, gm.slug, u.first_name, u.last_name
-             FROM guess g
-             JOIN game gm ON g.game_id = gm.id
-             JOIN user u ON gm.user_id = u.id
-             ORDER BY g.created_at DESC LIMIT 50"
-        );
-
-        $recentGames = $conn->fetchAllAssociative(
-            "SELECT gm.status, gm.created_at,
-                    COALESCE(gm.title, CONCAT('Baby ', u.last_name)) as display_title,
-                    gm.token, gm.slug, u.first_name, u.last_name, u.email,
-                    COUNT(g.id) as guess_count
-             FROM game gm
-             JOIN user u ON gm.user_id = u.id
-             LEFT JOIN guess g ON g.game_id = gm.id
-             GROUP BY gm.id
-             ORDER BY gm.created_at DESC LIMIT 30"
-        );
-
-        $recentReveals = $conn->fetchAllAssociative(
-            "SELECT gm.updated_at, gm.answer_gender, gm.answer_name,
-                    COALESCE(gm.title, CONCAT('Baby ', u.last_name)) as display_title,
-                    gm.token, gm.slug, u.first_name, u.last_name,
-                    COUNT(g.id) as guess_count
-             FROM game gm
-             JOIN user u ON gm.user_id = u.id
-             LEFT JOIN guess g ON g.game_id = gm.id
-             WHERE gm.status = 'revealed'
-             GROUP BY gm.id
-             ORDER BY gm.updated_at DESC LIMIT 30"
-        );
+    public function logs(
+        GameRepository $gameRepository,
+        GuessRepository $guessRepository,
+        EntityManagerInterface $em,
+    ): Response {
+        $conn          = $em->getConnection();
+        $recentGuesses = $guessRepository->findRecentWithGameAndUser(50);
+        $recentGames   = $gameRepository->findLogsWithUserAndGuessCount(30);
+        $recentReveals = $gameRepository->findRevealedWithGuessCount(30);
 
         $errorLogs = $conn->fetchAllAssociative(
-            "SELECT status_code, url, message, user_email, created_at
-             FROM app_error_log
-             ORDER BY created_at DESC LIMIT 100"
+            'SELECT status_code, url, message, user_email, created_at FROM app_error_log ORDER BY created_at DESC LIMIT 100'
         );
 
         $errorStats = $conn->fetchAllAssociative(
-            "SELECT status_code, COUNT(*) as cnt
-             FROM app_error_log
-             WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-             GROUP BY status_code
-             ORDER BY cnt DESC"
+            'SELECT status_code, COUNT(*) as cnt FROM app_error_log WHERE created_at >= :since GROUP BY status_code ORDER BY cnt DESC',
+            ['since' => (new \DateTimeImmutable('-30 days'))->format('Y-m-d')]
         );
 
         return $this->render('admin/logs.html.twig', [
@@ -228,40 +142,34 @@ class AdminController extends AbstractController
         UserRepository $userRepository,
         EntityManagerInterface $em,
     ): Response {
-        $conn = $em->getConnection();
+        $conn        = $em->getConnection();
+        $since30days = new \DateTimeImmutable('-30 days');
 
         $resetRequests = $conn->fetchAllAssociative(
-            "SELECT r.requested_at, r.expires_at,
-                    u.email, u.first_name, u.last_name
+            'SELECT r.requested_at, r.expires_at, u.email, u.first_name, u.last_name
              FROM reset_password_request r
              JOIN user u ON r.user_id = u.id
-             ORDER BY r.requested_at DESC LIMIT 50"
+             ORDER BY r.requested_at DESC
+             LIMIT 50'
         );
 
         $unverifiedUsers = $conn->fetchAllAssociative(
-            "SELECT id, email, first_name, last_name
-             FROM user WHERE is_verified = 0
-             ORDER BY id DESC"
+            'SELECT id, email, first_name, last_name FROM user WHERE is_verified = 0 ORDER BY id DESC'
         );
-
-        $adminUsers = [];
-        foreach ($userRepository->findAll() as $user) {
-            if (in_array('ROLE_ADMIN', $user->getRoles())) {
-                $adminUsers[] = $user;
-            }
-        }
 
         $totalResets30d = (int) $conn->fetchOne(
-            "SELECT COUNT(*) FROM reset_password_request WHERE requested_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+            'SELECT COUNT(*) FROM reset_password_request WHERE requested_at >= :since',
+            ['since' => $since30days->format('Y-m-d')]
         );
+
         $expiredResets = (int) $conn->fetchOne(
-            "SELECT COUNT(*) FROM reset_password_request WHERE expires_at < NOW()"
+            'SELECT COUNT(*) FROM reset_password_request WHERE expires_at < NOW()'
         );
 
         return $this->render('admin/security.html.twig', [
             'resetRequests'   => $resetRequests,
             'unverifiedUsers' => $unverifiedUsers,
-            'adminUsers'      => $adminUsers,
+            'adminUsers'      => $userRepository->findAllAdmins(),
             'totalResets30d'  => $totalResets30d,
             'expiredResets'   => $expiredResets,
         ]);

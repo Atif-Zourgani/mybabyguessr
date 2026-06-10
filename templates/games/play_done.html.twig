@@ -50,6 +50,9 @@
 </style>
 {% endblock %}
 
+{% set locale     = app.request.locale %}
+{% set dateFormat = locale == 'en' ? 'm/d/Y' : (locale == 'de' ? 'd.m.Y' : 'd/m/Y') %}
+
 {% block body %}
 <section class="flex items-center justify-center min-h-[calc(100vh-10rem)] px-4 py-6 sm:py-12"
          style="position:relative;overflow:hidden">
@@ -116,7 +119,7 @@
             <div class="flex justify-between text-sm">
                 <dt style="color: var(--color-muted)">{{ 'play.done.date_summary'|trans }}</dt>
                 <dd class="font-medium" style="color: var(--color-ink)">
-                    {{ guess.guessDate|date('d/m/Y') }}{% if guess.guessDate|date('H:i') != '00:00' %} à {{ guess.guessDate|date('H:i') }}{% endif %}
+                    {{ guess.guessDate|date(dateFormat) }}{% if guess.guessDate|date('H:i') != '00:00' %} · {{ guess.guessDate|date('H:i') }}{% endif %}
                 </dd>
             </div>
             {% endif %}
