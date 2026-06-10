@@ -1,5 +1,8 @@
 DirectoryIndex index.php
 
+php_value upload_max_filesize 4M
+php_value post_max_size 8M
+
 <IfModule mod_negotiation.c>
     Options -MultiViews
 </IfModule>
