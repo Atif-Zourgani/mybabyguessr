@@ -6,6 +6,9 @@
 {% set dateFormat = locale == 'en' ? 'm/d/Y' : (locale == 'de' ? 'd.m.Y' : 'd/m/Y') %}
 {% set isEsOrPt = locale == 'es' or locale == 'pt' %}
 {% set isIt = locale == 'it' %}
+{% set messageCount = 0 %}
+{% for _mg in guesses %}{% if _mg.message %}{% set messageCount = messageCount + 1 %}{% endif %}{% endfor %}
+{% set hasMessages = messageCount > 0 %}
 
 {% block body %}
 <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12" style="position:relative"
@@ -266,6 +269,9 @@
         {% if game.isGuessWeight() %}{% set tabs = tabs|merge([['weight',  'games.show.tab_weight'|trans]])  %}{% endif %}
         {% if game.isGuessHeight() %}{% set tabs = tabs|merge([['height',  'games.show.tab_height'|trans]])  %}{% endif %}
         {% set tabs = tabs|merge([['players', 'games.show.tab_players'|trans]]) %}
+        {% if hasMessages %}
+        {% set tabs = tabs|merge([['messages', 'games.show.tab_messages'|trans ~ ' (' ~ messageCount ~ ')']]) %}
+        {% endif %}
 
         <div class="relative mb-6">
             {# Dégradé indicateur — visible uniquement sur mobile #}
@@ -1120,7 +1126,9 @@
                             </span>
                             {% endif %}
                             <div class="flex flex-col">
-                                <span class="text-sm font-semibold" style="color: var(--color-ink)">{{ g.playerName }}</span>
+                                <span class="text-sm font-semibold" style="color: var(--color-ink)">
+                                    {{ g.playerName }}{% if g.message %}&thinsp;<span aria-hidden="true">💌</span>{% endif %}
+                                </span>
                                 <span class="text-xs mt-0.5" style="color: var(--color-muted)">
                                     {{ g.createdAt|date(dateFormat) }} · {{ g.createdAt|date('H:i') }}
                                 </span>
@@ -1182,6 +1190,12 @@
                             <p class="text-sm font-semibold" style="color: var(--color-ink)">{{ (g.guessHeight / 10)|round(1) }} cm</p>
                         </div>
                         {% endif %}
+                        {% if g.message %}
+                        <div style="grid-column:1/-1;padding-top:0.75rem;margin-top:0.125rem;border-top:1px solid var(--color-line)">
+                            <p class="text-xs font-semibold mb-1.5" style="color:var(--color-muted)">{{ 'games.show.msg_label'|trans }}</p>
+                            <p class="text-sm leading-relaxed" style="color:var(--color-ink);font-style:italic;padding-left:0.75rem;border-left:3px solid rgba(196,113,74,0.35)">"{{ g.message }}"</p>
+                        </div>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -1190,6 +1204,69 @@
             {% endif %}
 
         </div>
+
+        {# ── Onglet Messages ──────────────────────────────────── #}
+        {% if hasMessages %}
+        <div x-show="tab === 'messages'"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100">
+
+            {# En-tête compteur #}
+            <div class="flex items-center gap-2 mb-4 px-1">
+                <span class="text-xl" aria-hidden="true">💌</span>
+                <p class="text-sm font-semibold" style="color:var(--color-ink)">
+                    {% if messageCount > 1 %}
+                        {{ locale == 'fr' ? messageCount ~ ' messages laissés par vos participants'
+                            : (locale == 'es' ? messageCount ~ ' mensajes dejados por sus participantes'
+                            : (locale == 'pt' ? messageCount ~ ' mensagens deixadas pelos seus participantes'
+                            : (locale == 'de' ? messageCount ~ ' Nachrichten von Ihren Teilnehmern'
+                            : (locale == 'it' ? messageCount ~ ' messaggi lasciati dai partecipanti'
+                            : messageCount ~ ' messages left by your participants')))) }}
+                    {% else %}
+                        {{ locale == 'fr' ? '1 message laissé par vos participants'
+                            : (locale == 'es' ? '1 mensaje dejado por sus participantes'
+                            : (locale == 'pt' ? '1 mensagem deixada pelos seus participantes'
+                            : (locale == 'de' ? '1 Nachricht von Ihren Teilnehmern'
+                            : (locale == 'it' ? '1 messaggio lasciato dai partecipanti'
+                            : '1 message left by your participants')))) }}
+                    {% endif %}
+                </p>
+            </div>
+
+            {# Cartes messages #}
+            <div class="space-y-3">
+                {% for g in guesses %}
+                {% if g.message %}
+                <div class="card-panel px-5 py-5">
+
+                    {# Identité joueur #}
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-base font-bold select-none"
+                             style="background:rgba(196,113,74,0.14);color:var(--color-brand)">
+                            {{ g.playerName|slice(0,1)|upper }}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold truncate" style="color:var(--color-ink)">{{ g.playerName }}</p>
+                            <p class="text-xs mt-0.5" style="color:var(--color-muted)">
+                                {{ g.createdAt|date(dateFormat) }} · {{ g.createdAt|date('H:i') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {# Message en citation #}
+                    <blockquote class="text-sm leading-relaxed pl-4 break-words"
+                                style="color:var(--color-ink);border-left:3px solid var(--color-brand);font-style:italic;margin:0">
+                        {{ g.message }}
+                    </blockquote>
+
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>
+        {% endif %}
 
     </div>{# /x-data #}
 

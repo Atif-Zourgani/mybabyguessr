@@ -136,8 +136,70 @@
     </div>
     {% endif %}
 
+    {# ── Message optionnel ───────────────────────────────────── #}
+    {% if guess %}
+    <div class="py-5" style="border-top: 1px solid var(--color-line)">
+        {% if not messageSent %}
+        <p class="text-sm font-semibold mb-1 text-center" style="color: var(--color-ink)">
+            {{ 'play.done.msg_heading'|trans }}
+        </p>
+        <p class="text-xs mb-3 text-center" style="color: var(--color-muted)">
+            {{ 'play.done.msg_desc'|trans }}
+        </p>
+        <form method="post"
+              action="{{ path('app_game_done', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) }}"
+              x-data="{ chars: 0, max: 500 }"
+              novalidate>
+            <input type="hidden" name="_token" value="{{ csrf_token('guess_message') }}">
+            <div class="relative">
+                <textarea name="message"
+                          id="player-message"
+                          maxlength="500"
+                          rows="3"
+                          class="form-input w-full resize-none"
+                          style="padding-bottom:1.75rem;{% if messageError == 'too_long' %}border-color:#ef4444;{% endif %}"
+                          placeholder="{{ 'play.done.msg_placeholder'|trans }}"
+                          aria-label="{{ 'play.done.msg_heading'|trans }}"
+                          aria-describedby="msg-counter{% if messageError == 'too_long' %} msg-error{% endif %}"
+                          @input="chars = $el.value.length"></textarea>
+                <span id="msg-counter"
+                      class="absolute bottom-2 right-3 text-xs select-none pointer-events-none"
+                      style="color: var(--color-muted)"
+                      aria-live="polite"
+                      x-text="max - chars"></span>
+            </div>
+            {% if messageError == 'too_long' %}
+            <p id="msg-error" class="mt-1 text-sm text-red-600" role="alert">
+                {{ 'play.done.msg_error_too_long'|trans }}
+            </p>
+            {% endif %}
+            <div class="flex gap-3 mt-3">
+                <button type="submit" name="skip" value="1"
+                        class="btn btn-secondary flex-1 text-sm">
+                    {{ 'play.done.msg_skip'|trans }}
+                </button>
+                <button type="submit"
+                        class="btn btn-primary flex-1 text-sm">
+                    {{ 'play.done.msg_submit'|trans }}
+                </button>
+            </div>
+        </form>
+        {% elseif guess.message %}
+        <div class="flex flex-col items-center gap-1 py-1 text-center">
+            <span class="text-2xl" aria-hidden="true">💌</span>
+            <p class="text-sm font-semibold" style="color: var(--color-brand)">
+                {{ 'play.done.msg_sent_title'|trans }}
+            </p>
+            <p class="text-xs" style="color: var(--color-muted)">
+                {{ 'play.done.msg_sent_desc'|trans }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
     {# ── Promo ────────────────────────────────────────────────── #}
-    <div class="pt-5" style="border-top: 1px solid var(--color-border)">
+    <div class="pt-5" style="border-top: 1px solid var(--color-line)">
         <p class="text-sm font-semibold mb-1 text-center" style="color: var(--color-ink)">
             {{ 'play.done.share_heading'|trans }}
         </p>

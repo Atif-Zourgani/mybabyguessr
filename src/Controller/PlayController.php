@@ -538,13 +538,14 @@ class PlayController extends AbstractController
         return $winners;
     }
 
-    #[Route('/play/{slug}/{token}/done', name: 'app_game_done', methods: ['GET'])]
+    #[Route('/play/{slug}/{token}/done', name: 'app_game_done', methods: ['GET', 'POST'])]
     public function done(
         string $slug,
         string $token,
         Request $request,
         GameRepository $gameRepository,
         GuessRepository $guessRepository,
+        EntityManagerInterface $entityManager,
     ): Response {
         $game = $gameRepository->findOneByToken($token);
 
@@ -557,10 +558,49 @@ class PlayController extends AbstractController
         $player     = $request->getSession()->get('player_' . $token);
         $playerName = $guess?->getPlayerName() ?? ($player['name'] ?? '');
 
+        $messageSentKey = 'message_sent_' . $token;
+        $messageSent    = (bool) $request->getSession()->get($messageSentKey, false);
+        $messageError   = null;
+
+        if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('guess_message', $request->request->get('_token'))) {
+                throw $this->createAccessDeniedException();
+            }
+
+            if ($messageSent || $guess === null) {
+                return $this->redirectToRoute('app_game_done', [
+                    '_locale' => $request->getLocale(),
+                    'slug'    => $game->getSlug(),
+                    'token'   => $token,
+                ]);
+            }
+
+            $raw     = $request->request->get('message', '');
+            $message = mb_substr(trim(strip_tags($raw)), 0, 500);
+
+            if (mb_strlen(trim(strip_tags($raw))) > 500) {
+                $messageError = 'too_long';
+            } else {
+                if ($message !== '') {
+                    $guess->setMessage($message);
+                    $entityManager->flush();
+                }
+                $request->getSession()->set($messageSentKey, true);
+
+                return $this->redirectToRoute('app_game_done', [
+                    '_locale' => $request->getLocale(),
+                    'slug'    => $game->getSlug(),
+                    'token'   => $token,
+                ]);
+            }
+        }
+
         return $this->render('games/play_done.html.twig', [
-            'game'       => $game,
-            'guess'      => $guess,
-            'playerName' => $playerName,
+            'game'         => $game,
+            'guess'        => $guess,
+            'playerName'   => $playerName,
+            'messageSent'  => $messageSent,
+            'messageError' => $messageError,
         ]);
     }
 }

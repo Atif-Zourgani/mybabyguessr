@@ -25,6 +25,9 @@ class Guess
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $playerEmail = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $message = null;
+
     #[ORM\Column(enumType: AnswerGender::class, nullable: true)]
     private ?AnswerGender $guessGender = null;
 
@@ -97,6 +100,18 @@ class Guess
     public function setPlayerEmail(?string $playerEmail): static
     {
         $this->playerEmail = $playerEmail;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): static
+    {
+        $this->message = $message;
 
         return $this;
     }
