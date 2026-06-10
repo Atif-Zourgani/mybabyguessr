@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PlayController extends AbstractController
 {
-    #[Route('/play/{slug}/{token}', name: 'app_game_play', methods: ['GET', 'POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{64}'])]
+    #[Route('/play/{slug}/{token}', name: 'app_game_play', methods: ['GET', 'POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{32}'])]
     public function identify(
         string $slug,
         string $token,
@@ -106,7 +106,7 @@ class PlayController extends AbstractController
         ], new Response('', $hasErrors ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
-    #[Route('/play/{slug}/{token}/hint/{attempt}', name: 'app_game_hint', methods: ['POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{64}', 'attempt' => '[1-3]'])]
+    #[Route('/play/{slug}/{token}/hint/{attempt}', name: 'app_game_hint', methods: ['POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{32}', 'attempt' => '[1-3]'])]
     public function hint(
         string $slug,
         string $token,
@@ -168,7 +168,7 @@ class PlayController extends AbstractController
         return new JsonResponse(['clue' => $clue, 'done' => false]);
     }
 
-    #[Route('/play/{slug}/{token}/go', name: 'app_game_guess', methods: ['GET', 'POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{64}'])]
+    #[Route('/play/{slug}/{token}/go', name: 'app_game_guess', methods: ['GET', 'POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{32}'])]
     public function guess(
         string $slug,
         string $token,
@@ -355,7 +355,7 @@ class PlayController extends AbstractController
         ]);
     }
 
-    #[Route('/play/{slug}/{token}/reveal', name: 'app_game_reveal_public', methods: ['GET'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{64}'])]
+    #[Route('/play/{slug}/{token}/reveal', name: 'app_game_reveal_public', methods: ['GET'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{32}'])]
     public function revealPublic(
         string $slug,
         string $token,
@@ -544,7 +544,7 @@ class PlayController extends AbstractController
         return $winners;
     }
 
-    #[Route('/play/{slug}/{token}/done', name: 'app_game_done', methods: ['GET', 'POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{64}'])]
+    #[Route('/play/{slug}/{token}/done', name: 'app_game_done', methods: ['GET', 'POST'], requirements: ['slug' => '[-\w]+', 'token' => '[a-f0-9]{32}'])]
     public function done(
         string $slug,
         string $token,
