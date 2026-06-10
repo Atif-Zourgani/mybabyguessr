@@ -13,6 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\Index(columns: ['slug'], name: 'idx_game_slug')]
+#[ORM\Index(columns: ['status'], name: 'idx_game_status')]
+#[ORM\Index(columns: ['created_at'], name: 'idx_game_created_at')]
+#[ORM\Index(columns: ['updated_at'], name: 'idx_game_updated_at')]
+#[ORM\Index(columns: ['user_id', 'status'], name: 'idx_game_user_status')]
 class Game
 {
     #[ORM\Id]
