@@ -164,6 +164,8 @@ play:
         hint3_before: "La 1re lettre du prénom se situe quelque part avant « %letter% » dans l'alphabet"
         hint3_after: "La 1re lettre du prénom se situe quelque part après « %letter% » dans l'alphabet"
         hint3_same: "La 1re lettre est la même que dans votre proposition !"
+        optional_label: "(facultatif)"
+        try_label: "Essai"
     done:
         title: "C'est envoyé !"
         heading: "Merci, %name% !"
@@ -188,6 +190,8 @@ play:
         msg_sent_title: "Message bien reçu !"
         msg_sent_desc: "Les parents seront touchés par votre attention."
         msg_error_too_long: "Votre message est trop long (500 caractères maximum)."
+        og_title: "Crée ton propre Baby Guessr — MyBabyGuessr"
+        og_description: "Crée ton jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, le sexe et la date — sans créer de compte. Partage juste un lien."
     reveal:
         title: "La révélation — %game% !"
         label: "La révélation"
@@ -216,6 +220,7 @@ play:
         cta_email_subject: "Je viens de jouer à MyBabyGuessr !"
         cta_secondary: "Vous attendez un bébé ? Créez le vôtre →"
 
+        og_description: "Découvrez les vraies réponses et les gagnants du Baby Guessr %game% !"
 games:
     btn_view: "Voir"
     btn_share: "Partager"
@@ -264,6 +269,28 @@ games:
         height_avg: "Moyenne"
         height_min: "Le plus petit"
         height_max: "Le plus grand"
+        share_btn: "Partager"
+        close_btn: "Fermer"
+        open_btn: "Ouvrir"
+        players_label: "joueurs"
+        results_label: "Palmarès"
+        public_page: "Voir la page publique →"
+        no_one: "Personne"
+        answer: "Réponse"
+        answer_colon: "Réponse :"
+        attempts: "Essais"
+        try_singular: "essai"
+        try_plural: "essais"
+        try_label_n: "Essai"
+        ranking: "Classement"
+        exact: "Exact !"
+        day_one: "1 jour"
+        day_abbr: "j"
+        found_singular: "a trouvé"
+        found_plural: "ont trouvé"
+        danger_zone: "Zone dangereuse"
+        messages_plural: "%count% messages laissés par vos participants"
+        messages_singular: "1 message laissé par vos participants"
     status:
         open: "En cours"
         closed: "Fermé"
@@ -334,6 +361,7 @@ games:
         error_image_size: "Image trop volumineuse. Maximum 4 Mo."
         error_image_upload: "L'image n'a pas pu être chargée (taille ou format refusé par le serveur). Votre jeu a été créé sans photo."
         success: "Votre Baby Guessr est prêt ! Partagez le lien avec vos proches."
+        converting: "Conversion en cours…"
     share:
         closed_warning: "La participation est fermée. Rouvrez la partie pour partager le lien avec vos joueurs."
         title: "C'est parti !"
@@ -352,6 +380,8 @@ games:
         whatsapp_text: "Participez à mon Baby Guessr ! Faites vos pronostics sur l'arrivée de notre bébé 👶"
         email_subject: "Participez à mon Baby Guessr !"
         email_body: "Bonjour,\n\nJe vous invite à participer à mon Baby Guessr et faire vos pronostics sur l'arrivée de notre bébé !\n\nCliquez sur le lien pour jouer :"
+        og_title: "Baby Guessr de %name% — À toi de deviner !"
+        og_description: "Devine le prénom, le sexe, la date et le poids du bébé de %name%. Participe maintenant — sans créer de compte !"
     reveal:
         title: "Révéler les vraies réponses"
         title_edit: "Modifier la révélation"
@@ -390,6 +420,8 @@ games:
         email_body: "Bonjour,\n\nLes vraies réponses de %game% sont révélées ! Découvrez qui a deviné juste :"
 
 
+        og_title: "Révélation — %game%"
+        og_description: "Les vraies réponses du Baby Guessr %game% sont révélées ! Découvrez qui a deviné juste."
     delete:
         btn: "Supprimer"
         confirm_title: "Supprimer la partie ?"
@@ -437,6 +469,8 @@ footer:
     mentions: Mentions légales
     contact: Contact
 
+    legal_nav_label: "Liens légaux"
+    manage_cookies: "Gérer mes cookies"
 profile:
     nav: "Mon profil"
     info_saved: "Informations mises à jour."
@@ -455,6 +489,68 @@ profile:
     email_taken: "Cette adresse email est déjà utilisée par un autre compte."
     email_same: "Cette adresse est déjà votre email actuel."
 
+    edit:
+        info_section: "Mes informations"
+        email_section: "Adresse email"
+        current_email: "Email actuel :"
+        pending_title: "Changement en attente de confirmation"
+        pending_body: "Un lien a été envoyé à %email%. Cliquez dessus pour valider. Le lien expire dans 1 heure."
+        cancel_change: "Annuler ce changement"
+        email_change_hint: "Un lien de confirmation sera envoyé à la nouvelle adresse. Votre adresse actuelle reste active jusqu'à validation."
+        new_email_label: "Nouvelle adresse email"
+        current_password: "Mot de passe actuel"
+        send_confirm_link: "Envoyer le lien de confirmation"
+        password_section: "Mot de passe"
+        new_password_label: "Nouveau mot de passe"
+        password_hint: "8 caractères min., 1 majuscule, 1 caractère spécial"
+        confirm_password: "Confirmer le nouveau mot de passe"
+        change_password_btn: "Changer le mot de passe"
+        save_btn: "Enregistrer"
+        danger_zone: "Zone de danger"
+        delete_warning: "La suppression de votre compte est <strong>définitive et irréversible</strong>. Tous vos jeux, pronostics et données associées seront supprimés."
+        delete_btn: "Supprimer mon compte"
+        delete_confirm_label: "Confirmez en saisissant votre mot de passe :"
+        confirm_delete_btn: "Confirmer la suppression"
+        cancel_btn: "Annuler"
+        back_dashboard: "Retour au tableau de bord"
 email:
     verify_subject: "Confirmez votre adresse email — MyBabyGuessr"
     change_subject: "Confirmez votre nouvelle adresse email — MyBabyGuessr"
+    common:
+        greeting: "Bonjour %name% !"
+        fallback_link: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :"
+    confirm:
+        title: "Confirmez votre adresse email"
+        btn: "Confirmer mon adresse email"
+    reset:
+        title: "Réinitialisation de votre mot de passe"
+        btn: "Réinitialiser mon mot de passe"
+    reveal:
+        title: "La révélation est arrivée !"
+        btn: "Voir la révélation"
+    change:
+        title: "Confirmez votre nouvelle adresse email"
+        new_address: "Nouvelle adresse :"
+        btn: "Confirmer ma nouvelle adresse"
+        fallback_link: "Si le bouton ne fonctionne pas :"
+
+base:
+    skip_to_content: "Aller au contenu principal"
+
+header:
+    home_label: "Accueil"
+    my_games: "Mes jeux"
+
+cookies:
+    aria_label: "Gestion des cookies"
+    decline: "Refuser"
+    accept: "Accepter"
+    learn_more: "En savoir plus"
+    body: "🍪 Nous utilisons <strong>Google Analytics</strong> pour mesurer l'audience du site. Ces cookies analytiques ne sont déposés qu'avec votre consentement."
+
+legal:
+    back_home: "← Retour à l'accueil"
+    to_privacy: "Politique de confidentialité →"
+    to_terms: "Conditions d'utilisation →"
+    privacy_short: "Confidentialité"
+    terms_short: "CGU"

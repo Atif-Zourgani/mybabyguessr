@@ -20,7 +20,7 @@
         </p>
 
         {# Liens légaux #}
-        <nav aria-label="{{ app.request.locale == 'fr' ? 'Liens légaux' : (app.request.locale == 'es' ? 'Enlaces legales' : (app.request.locale == 'pt' ? 'Ligações legais' : (app.request.locale == 'de' ? 'Rechtliche Links' : (app.request.locale == 'it' ? 'Link legali' : 'Legal links')))) }}"
+        <nav aria-label="{{ 'footer.legal_nav_label'|trans }}"
              style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.375rem 1rem;font-size:0.75rem">
             <a href="{{ path('app_privacy',  {'_locale': app.request.locale}) }}"
                class="hover:underline" style="color:var(--color-muted)">{{ 'footer.privacy'|trans }}</a>
@@ -37,7 +37,7 @@
             <button onclick="mbgCookies.manage()"
                     style="background:none;border:none;cursor:pointer;font-size:inherit;font-family:inherit;padding:0;color:var(--color-muted)"
                     class="hover:underline">
-                {{ app.request.locale == 'fr' ? 'Gérer mes cookies' : (app.request.locale == 'es' ? 'Gestionar cookies' : (app.request.locale == 'pt' ? 'Gerir cookies' : (app.request.locale == 'de' ? 'Cookies verwalten' : (app.request.locale == 'it' ? 'Gestisci cookie' : 'Manage cookies')))) }}
+                {{ 'footer.manage_cookies'|trans }}
             </button>
         </nav>
 

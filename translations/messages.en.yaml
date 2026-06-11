@@ -164,6 +164,8 @@ play:
         hint3_before: "The 1st letter of the name is somewhere before « %letter% » in the alphabet"
         hint3_after: "The 1st letter of the name is somewhere after « %letter% » in the alphabet"
         hint3_same: "The 1st letter is the same as in your guess!"
+        optional_label: "(optional)"
+        try_label: "Try"
     done:
         title: "All done!"
         heading: "Thank you, %name%!"
@@ -188,6 +190,8 @@ play:
         msg_sent_title: "Message received!"
         msg_sent_desc: "The parents will be touched by your kind words."
         msg_error_too_long: "Your message is too long (500 characters maximum)."
+        og_title: "Create your own Baby Guessr — MyBabyGuessr"
+        og_description: "Create your baby guessing game in minutes. Family and friends guess name, gender and due date — no account needed."
     reveal:
         title: "The reveal — %game%!"
         label: "The reveal"
@@ -216,6 +220,7 @@ play:
         cta_email_subject: "I just played MyBabyGuessr!"
         cta_secondary: "Expecting a baby yourself? Create yours →"
 
+        og_description: "Discover the real answers and the winners of the %game% Baby Guessr!"
 games:
     btn_view: "View"
     btn_share: "Share"
@@ -264,6 +269,28 @@ games:
         height_avg: "Average"
         height_min: "Shortest"
         height_max: "Longest"
+        share_btn: "Share"
+        close_btn: "Close"
+        open_btn: "Open"
+        players_label: "players"
+        results_label: "Results"
+        public_page: "See public page →"
+        no_one: "No one"
+        answer: "Answer"
+        answer_colon: "Answer:"
+        attempts: "Attempts"
+        try_singular: "try"
+        try_plural: "tries"
+        try_label_n: "Try"
+        ranking: "Ranking"
+        exact: "Exact!"
+        day_one: "1 day"
+        day_abbr: "d"
+        found_singular: "found it"
+        found_plural: "found it"
+        danger_zone: "Danger zone"
+        messages_plural: "%count% messages from your participants"
+        messages_singular: "1 message from your participants"
     status:
         open: "Open"
         closed: "Closed"
@@ -334,6 +361,7 @@ games:
         error_image_size: "Image too large. Maximum 4 MB."
         error_image_upload: "The image could not be uploaded (size or format rejected by the server). Your game was created without a photo."
         success: "Your Baby Guessr is ready! Share the link with your loved ones."
+        converting: "Converting…"
     share:
         closed_warning: "Participation is closed. Reopen the game to share the link with your players."
         title: "You're all set!"
@@ -352,6 +380,8 @@ games:
         whatsapp_text: "Join my Baby Guessr! Make your predictions about our baby's arrival 👶"
         email_subject: "Join my Baby Guessr!"
         email_body: "Hi,\n\nI invite you to join my Baby Guessr and make your predictions about our baby's arrival!\n\nClick the link to play:"
+        og_title: "%name%'s Baby Guessr — Make your guesses!"
+        og_description: "Guess the name, gender, due date and weight of %name%'s baby. Join now — no account needed!"
     reveal:
         title: "Reveal the real answers"
         title_edit: "Edit the reveal"
@@ -390,6 +420,8 @@ games:
         email_body: "Hi,\n\nThe real answers for %game% are revealed! Find out who guessed right:"
 
 
+        og_title: "The Reveal — %game%"
+        og_description: "The real answers for %game% are here! See who guessed right."
     delete:
         btn: "Delete"
         confirm_title: "Delete this game?"
@@ -437,6 +469,8 @@ footer:
     mentions: Legal Notice
     contact: Contact
 
+    legal_nav_label: "Legal links"
+    manage_cookies: "Manage cookies"
 profile:
     nav: "My profile"
     info_saved: "Information updated."
@@ -455,6 +489,68 @@ profile:
     email_taken: "This email address is already used by another account."
     email_same: "This is already your current email address."
 
+    edit:
+        info_section: "My information"
+        email_section: "Email address"
+        current_email: "Current email:"
+        pending_title: "Change pending confirmation"
+        pending_body: "A link was sent to %email%. Click it to confirm. The link expires in 1 hour."
+        cancel_change: "Cancel this change"
+        email_change_hint: "A confirmation link will be sent to the new address. Your current address remains active until confirmed."
+        new_email_label: "New email address"
+        current_password: "Current password"
+        send_confirm_link: "Send confirmation link"
+        password_section: "Password"
+        new_password_label: "New password"
+        password_hint: "8+ chars, 1 uppercase, 1 special character"
+        confirm_password: "Confirm new password"
+        change_password_btn: "Change password"
+        save_btn: "Save"
+        danger_zone: "Danger zone"
+        delete_warning: "Deleting your account is <strong>permanent and irreversible</strong>. All your games, guesses and associated data will be deleted."
+        delete_btn: "Delete my account"
+        delete_confirm_label: "Confirm by entering your password:"
+        confirm_delete_btn: "Confirm deletion"
+        cancel_btn: "Cancel"
+        back_dashboard: "Back to dashboard"
 email:
     verify_subject: "Confirm your email address — MyBabyGuessr"
     change_subject: "Confirm your new email address — MyBabyGuessr"
+    common:
+        greeting: "Hello %name%!"
+        fallback_link: "If the button doesn't work, copy this link into your browser:"
+    confirm:
+        title: "Confirm your email address"
+        btn: "Confirm my email address"
+    reset:
+        title: "Reset your password"
+        btn: "Reset my password"
+    reveal:
+        title: "The reveal is here!"
+        btn: "See the reveal"
+    change:
+        title: "Confirm your new email address"
+        new_address: "New address:"
+        btn: "Confirm my new address"
+        fallback_link: "If the button doesn't work:"
+
+base:
+    skip_to_content: "Skip to main content"
+
+header:
+    home_label: "Home"
+    my_games: "My games"
+
+cookies:
+    aria_label: "Cookie settings"
+    decline: "Decline"
+    accept: "Accept"
+    learn_more: "Learn more"
+    body: "🍪 We use <strong>Google Analytics</strong> to measure site traffic. Analytics cookies are only set with your consent."
+
+legal:
+    back_home: "← Back to home"
+    to_privacy: "Privacy Policy →"
+    to_terms: "Terms of Service →"
+    privacy_short: "Privacy"
+    terms_short: "Terms"

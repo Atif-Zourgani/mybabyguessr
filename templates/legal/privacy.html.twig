@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set locale = app.request.locale %}
-{% block title %}{% if locale == 'fr' %}Politique de confidentialité{% elseif locale == 'de' %}Datenschutzrichtlinie{% elseif locale == 'es' %}Política de privacidad{% elseif locale == 'pt' %}Política de privacidade{% elseif locale == 'it' %}Informativa sulla privacy{% else %}Privacy Policy{% endif %} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'footer.privacy'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
@@ -380,11 +380,11 @@
     {# ── Navigation ── #}
     <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
         <a href="{{ path('app_home', {'_locale': locale}) }}" class="btn btn-secondary">
-            {% if locale == 'fr' %}← Retour à l'accueil{% elseif locale == 'de' %}← Zurück zur Startseite{% elseif locale == 'es' %}← Volver al inicio{% elseif locale == 'pt' %}← Voltar ao início{% elseif locale == 'it' %}← Torna alla home{% else %}← Back to home{% endif %}
+            {{ 'legal.back_home'|trans }}
         </a>
         <a href="{{ path('app_terms', {'_locale': locale}) }}"
            style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
-            {% if locale == 'fr' %}Conditions d'utilisation →{% elseif locale == 'de' %}Nutzungsbedingungen →{% elseif locale == 'es' %}Términos de uso →{% elseif locale == 'pt' %}Termos de uso →{% elseif locale == 'it' %}Termini di utilizzo →{% else %}Terms of Service →{% endif %}
+            {{ 'legal.to_terms'|trans }}
         </a>
     </div>
 

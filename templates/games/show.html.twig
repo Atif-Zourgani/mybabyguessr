@@ -85,7 +85,7 @@
                     </svg>
                     <span class="hidden sm:inline">{{ 'games.show.share_btn'|trans }}</span>
                     <span class="sm:hidden" style="font-size:0.6rem;line-height:1.3;margin-top:0.1rem">
-                        {{ locale == 'fr' ? 'Partager' : (locale == 'es' ? 'Compartir' : (locale == 'pt' ? 'Partilhar' : (locale == 'de' ? 'Teilen' : (locale == 'it' ? 'Condividi' : 'Share')))) }}
+                        {{ 'games.show.share_btn'|trans }}
                     </span>
                 </a>
 
@@ -125,7 +125,7 @@
                         </svg>
                         <span class="hidden sm:inline">{{ 'games.toggle.btn_close'|trans }}</span>
                         <span class="sm:hidden" style="font-size:0.6rem;line-height:1.3;margin-top:0.1rem">
-                            {{ locale == 'fr' ? 'Fermer' : (locale == 'es' ? 'Cerrar' : (locale == 'pt' ? 'Fechar' : (locale == 'de' ? 'Schließen' : (locale == 'it' ? 'Chiudi' : 'Close')))) }}
+                            {{ 'games.show.close_btn'|trans }}
                         </span>
                     {% else %}
                         <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none"
@@ -136,7 +136,7 @@
                         </svg>
                         <span class="hidden sm:inline">{{ 'games.toggle.btn_open'|trans }}</span>
                         <span class="sm:hidden" style="font-size:0.6rem;line-height:1.3;margin-top:0.1rem">
-                            {{ locale == 'fr' ? 'Ouvrir' : (locale == 'es' or locale == 'pt' ? 'Abrir' : (locale == 'de' ? 'Öffnen' : (locale == 'it' ? 'Apri' : 'Open'))) }}
+                            {{ 'games.show.open_btn'|trans }}
                         </span>
                     {% endif %}
                 </button>
@@ -332,7 +332,7 @@
                 <div class="col-span-2 sm:col-span-1 card text-center py-6">
                     <p class="text-4xl font-bold" style="color: var(--color-brand)">{{ stats.total }}</p>
                     <p class="text-xs font-semibold uppercase tracking-wider mt-1" style="color: var(--color-muted)">
-                        {{ locale == 'fr' ? 'joueurs' : (locale == 'es' ? 'jugadores' : (locale == 'pt' ? 'jogadores' : (locale == 'de' ? 'Spieler' : (locale == 'it' ? 'giocatori' : 'players')))) }}
+                        {{ 'games.show.players_label'|trans }}
                     </p>
                 </div>
 
@@ -425,12 +425,12 @@
             <div class="card mb-4 px-5 py-5">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Palmarès' : (locale == 'es' or locale == 'pt' ? 'Resultados' : (locale == 'de' ? 'Ergebnisse' : (locale == 'it' ? 'Risultati' : 'Results'))) }}
+                        {{ 'games.show.results_label'|trans }}
                     </p>
                     <a href="{{ url('app_game_reveal_public', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) }}"
                        class="text-xs font-semibold hover:underline"
                        style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Voir la page publique →' : (locale == 'es' ? 'Ver la página pública →' : (locale == 'pt' ? 'Ver a página pública →' : (locale == 'de' ? 'Öffentliche Seite →' : (locale == 'it' ? 'Vedi pagina pubblica →' : 'See public page →')))) }}
+                        {{ 'games.show.public_page'|trans }}
                     </a>
                 </div>
                 {% if game.isGuessGender() and game.answerGender %}
@@ -458,7 +458,7 @@
                             {{ stats.name.winner_names[0] }}{% if stats.name.winner_names|length > 1 %} +{{ stats.name.winner_names|length - 1 }}{% endif %}
                         </span>
                         {% else %}
-                        <span class="text-xs italic" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Personne' : (locale == 'es' ? 'Nadie' : (locale == 'pt' ? 'Ninguém' : (locale == 'de' ? 'Niemand' : (locale == 'it' ? 'Nessuno' : 'No one')))) }}</span>
+                        <span class="text-xs italic" style="color:var(--color-muted)">{{ 'games.show.no_one'|trans }}</span>
                         {% endif %}
                     </div>
                 </div>
@@ -627,7 +627,7 @@
                  style="background:rgba(196,113,74,0.10)">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse' : (locale == 'es' ? 'Respuesta' : (locale == 'pt' ? 'Resposta' : (locale == 'de' ? 'Antwort' : (locale == 'it' ? 'Risposta' : 'Answer')))) }}
+                        {{ 'games.show.answer'|trans }}
                     </p>
                     <p class="text-2xl font-bold mt-0.5" style="color:var(--color-ink)">{{ game.answerName }}</p>
                 </div>
@@ -652,11 +652,11 @@
                 <div class="px-5 py-3 flex items-center justify-between"
                      style="border-bottom:1px solid var(--color-line)">
                     <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">
-                        {{ locale == 'fr' ? 'Essais' : (locale == 'es' ? 'Intentos' : (locale == 'pt' ? 'Tentativas' : (locale == 'de' ? 'Versuche' : (locale == 'it' ? 'Tentativi' : 'Attempts')))) }}
+                        {{ 'games.show.attempts'|trans }}
                     </p>
                     {% if game.status.value == 'revealed' and game.answerName %}
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : (locale == 'it' ? 'Risposta:' : 'Answer:')))) }}
+                        {{ 'games.show.answer_colon'|trans }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ game.answerName }}</span>
                     </p>
                     {% endif %}
@@ -704,7 +704,7 @@
                         <div class="flex items-center gap-3 py-2">
                             <span class="text-xs font-bold shrink-0"
                                   style="width:4.5rem;color:var(--color-muted)">
-                                {{ locale == 'fr' ? 'Essai' : (locale == 'es' ? 'Intento' : (locale == 'pt' ? 'Tentativa' : (locale == 'de' ? 'Versuch' : (locale == 'it' ? 'Tentativo' : 'Try')))) }} {{ loop.index }}
+                                {{ 'games.show.try_label_n'|trans }} {{ loop.index }}
                             </span>
                             <span class="text-sm font-semibold"
                                   style="color:{{ isCorrect ? 'var(--color-brand)' : 'var(--color-ink)' }}">
@@ -763,7 +763,7 @@
                     </p>
                     {% if game.status.value == 'revealed' and game.answerName %}
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : (locale == 'it' ? 'Risposta:' : 'Answer:')))) }}
+                        {{ 'games.show.answer_colon'|trans }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ game.answerName }}</span>
                     </p>
                     {% endif %}
@@ -845,9 +845,9 @@
             {% if game.status.value == 'revealed' and game.answerDate and stats.date.sorted_by_diff is defined %}
             <div class="card-panel">
                 <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--color-line)">
-                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : (locale == 'de' ? 'Rangliste' : (locale == 'it' ? 'Classifica' : 'Ranking')))) }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ 'games.show.ranking'|trans }}</p>
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : (locale == 'it' ? 'Risposta:' : 'Answer:')))) }}
+                        {{ 'games.show.answer_colon'|trans }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ game.answerDate|date(dateFormat) }}{% if game.answerDate|date('H:i') != '00:00' %} · {{ game.answerDate|date('H:i') }}{% endif %}</span>
                     </p>
                 </div>
@@ -868,10 +868,10 @@
                     <div class="text-right">
                         <span class="font-semibold" style="color:var(--color-ink)">{{ item.guess.guessDate|date(dateFormat) }}{% if item.guess.guessDate|date('H:i') != '00:00' %} · {{ item.guess.guessDate|date('H:i') }}{% endif %}</span>
                         <span class="text-xs ml-2" style="color:{{ diffSec == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                            {% if diffSec == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : (locale == 'de' ? 'Genau!' : (locale == 'it' ? 'Esatto!' : 'Exact!')))) }}
+                            {% if diffSec == 0 %}{{ 'games.show.exact'|trans }}
                             {% elseif diffSec < 3600 %}{{ diffMins }} min
                             {% elseif diffSec < 86400 %}{{ diffHours }}h
-                            {% elseif diffDays == 1 %}{{ locale == 'fr' ? '1 jour' : (locale == 'es' ? '1 día' : (locale == 'pt' ? '1 dia' : (locale == 'de' ? '1 Tag' : (locale == 'it' ? '1 giorno' : '1 day')))) }}
+                            {% elseif diffDays == 1 %}{{ 'games.show.day_one'|trans }}
                             {% else %}{{ diffDays }}{{ locale == 'fr' ? ' j' : (locale == 'de' ? ' T' : (locale == 'it' ? ' g' : ' d')) }}
                             {% endif %}
                         </span>
@@ -943,9 +943,9 @@
             {% if game.status.value == 'revealed' and game.answerWeight and stats.weight.sorted_by_diff is defined %}
             <div class="card-panel">
                 <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--color-line)">
-                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : (locale == 'de' ? 'Rangliste' : (locale == 'it' ? 'Classifica' : 'Ranking')))) }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ 'games.show.ranking'|trans }}</p>
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : (locale == 'it' ? 'Risposta:' : 'Answer:')))) }}
+                        {{ 'games.show.answer_colon'|trans }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ (game.answerWeight / 1000)|number_format(3, '.', '') }} kg</span>
                     </p>
                 </div>
@@ -962,7 +962,7 @@
                     <div class="text-right">
                         <span class="font-semibold" style="color:var(--color-ink)">{{ (item.guess.guessWeight / 1000)|number_format(3, '.', '') }} kg</span>
                         <span class="text-xs ml-2" style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                            {% if item.diff == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : (locale == 'de' ? 'Genau!' : (locale == 'it' ? 'Esatto!' : 'Exact!')))) }}
+                            {% if item.diff == 0 %}{{ 'games.show.exact'|trans }}
                             {% elseif item.diff < 1000 %}{{ item.diff }} g
                             {% else %}{{ (item.diff / 1000)|number_format(2, '.', '') }} kg
                             {% endif %}
@@ -1042,9 +1042,9 @@
             {% if game.status.value == 'revealed' and game.answerHeight and stats.height.sorted_by_diff is defined %}
             <div class="card-panel">
                 <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--color-line)">
-                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ locale == 'fr' ? 'Classement' : (locale == 'es' ? 'Clasificación' : (locale == 'pt' ? 'Classificação' : (locale == 'de' ? 'Rangliste' : (locale == 'it' ? 'Classifica' : 'Ranking')))) }}</p>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--color-muted)">{{ 'games.show.ranking'|trans }}</p>
                     <p class="text-xs font-semibold" style="color:var(--color-brand)">
-                        {{ locale == 'fr' ? 'Réponse :' : (locale == 'es' ? 'Respuesta:' : (locale == 'pt' ? 'Resposta:' : (locale == 'de' ? 'Antwort:' : (locale == 'it' ? 'Risposta:' : 'Answer:')))) }}
+                        {{ 'games.show.answer_colon'|trans }}
                         <span class="font-bold" style="color:var(--color-ink)">{{ (game.answerHeight / 10)|number_format(1, '.', '') }} cm</span>
                     </p>
                 </div>
@@ -1061,7 +1061,7 @@
                     <div class="text-right">
                         <span class="font-semibold" style="color:var(--color-ink)">{{ (item.guess.guessHeight / 10)|number_format(1, '.', '') }} cm</span>
                         <span class="text-xs ml-2" style="color:{{ item.diff == 0 ? 'var(--color-brand)' : 'var(--color-muted)' }}">
-                            {% if item.diff == 0 %}{{ locale == 'fr' ? 'Exact !' : (locale == 'es' ? '¡Exacto!' : (locale == 'pt' ? 'Exato!' : (locale == 'de' ? 'Genau!' : (locale == 'it' ? 'Esatto!' : 'Exact!')))) }}
+                            {% if item.diff == 0 %}{{ 'games.show.exact'|trans }}
                             {% elseif item.diff < 10 %}{{ item.diff }} mm
                             {% else %}{{ (item.diff / 10)|number_format(1, '.', '') }} cm
                             {% endif %}
@@ -1217,19 +1217,9 @@
                 <span class="text-xl" aria-hidden="true">💌</span>
                 <p class="text-sm font-semibold" style="color:var(--color-ink)">
                     {% if messageCount > 1 %}
-                        {{ locale == 'fr' ? messageCount ~ ' messages laissés par vos participants'
-                            : (locale == 'es' ? messageCount ~ ' mensajes dejados por sus participantes'
-                            : (locale == 'pt' ? messageCount ~ ' mensagens deixadas pelos seus participantes'
-                            : (locale == 'de' ? messageCount ~ ' Nachrichten von Ihren Teilnehmern'
-                            : (locale == 'it' ? messageCount ~ ' messaggi lasciati dai partecipanti'
-                            : messageCount ~ ' messages left by your participants')))) }}
+                        {{ 'games.show.messages_plural'|trans({'%count%': messageCount}) }}
                     {% else %}
-                        {{ locale == 'fr' ? '1 message laissé par vos participants'
-                            : (locale == 'es' ? '1 mensaje dejado por sus participantes'
-                            : (locale == 'pt' ? '1 mensagem deixada pelos seus participantes'
-                            : (locale == 'de' ? '1 Nachricht von Ihren Teilnehmern'
-                            : (locale == 'it' ? '1 messaggio lasciato dai partecipanti'
-                            : '1 message left by your participants')))) }}
+                        {{ 'games.show.messages_singular'|trans }}
                     {% endif %}
                 </p>
             </div>
@@ -1274,7 +1264,7 @@
     <div class="max-w-2xl mx-auto px-4 sm:px-6 mt-12 mb-8">
         <div class="rounded-xl px-5 py-5" style="border:1px solid #fecaca">
             <p class="text-xs font-bold uppercase tracking-widest mb-1" style="color:#b91c1c">
-                {{ locale == 'fr' ? 'Zone dangereuse' : (locale == 'es' ? 'Zona peligrosa' : (locale == 'pt' ? 'Zona perigosa' : (locale == 'de' ? 'Gefahrenzone' : (locale == 'it' ? 'Zona pericolosa' : 'Danger zone')))) }}
+                {{ 'games.show.danger_zone'|trans }}
             </p>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <p class="text-sm" style="color:var(--color-muted)">

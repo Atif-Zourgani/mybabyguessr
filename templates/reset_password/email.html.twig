@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ locale == 'fr' ? 'Réinitialisation de votre mot de passe' : (locale == 'es' ? 'Restablece tu contraseña' : (locale == 'pt' ? 'Reposição da sua palavra-passe' : (locale == 'de' ? 'Dein Passwort zurücksetzen' : (locale == 'it' ? 'Reimposta la tua password' : 'Reset your password')))) }}</title>
+    <title>{{ 'email.reset.title'|trans }}</title>
     <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
@@ -51,19 +51,7 @@
 
                         {# Salutation #}
                         <h1 style="margin:0 0 16px;font-size:24px;font-weight:700;color:#2C1F15;line-height:1.3;">
-                            {% if locale == 'fr' %}
-                                Bonjour {{ user.firstName }}&nbsp;!
-                            {% elseif locale == 'es' %}
-                                ¡Hola {{ user.firstName }}!
-                            {% elseif locale == 'pt' %}
-                                Olá {{ user.firstName }}!
-                            {% elseif locale == 'de' %}
-                                Hallo {{ user.firstName }}!
-                            {% elseif locale == 'it' %}
-                                Ciao {{ user.firstName }}!
-                            {% else %}
-                                Hello {{ user.firstName }}!
-                            {% endif %}
+                            {{ 'email.common.greeting'|trans({'%name%': user.firstName}) }}
                         </h1>
 
                         {# Message #}
@@ -97,7 +85,7 @@
                                        class="btn-cta"
                                        style="display:inline-block;background-color:#C4714A;color:#ffffff;font-family:'Nunito','Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:10px;mso-padding-alt:0;text-align:center;">
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%;mso-text-raise:30pt">&nbsp;</i><![endif]-->
-                                        {{ locale == 'fr' ? 'Réinitialiser mon mot de passe' : (locale == 'es' ? 'Restablecer mi contraseña' : (locale == 'pt' ? 'Repor a minha palavra-passe' : (locale == 'de' ? 'Passwort zurücksetzen' : (locale == 'it' ? 'Reimposta la mia password' : 'Reset my password')))) }}
+                                        {{ 'email.reset.btn'|trans }}
                                         <!--[if mso]><i style="letter-spacing:36px;mso-font-width:-100%">&nbsp;</i><![endif]-->
                                     </a>
                                 </td>
@@ -124,7 +112,7 @@
                         {# Lien de secours #}
                         {% set resetUrl = url('app_reset_password', {token: resetToken.token, _locale: locale}) %}
                         <p style="margin:0 0 8px;font-size:13px;color:#7A6A5F;line-height:1.5;">
-                            {{ locale == 'fr' ? 'Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :' : (locale == 'es' ? 'Si el botón no funciona, copia este enlace en tu navegador:' : (locale == 'pt' ? 'Se o botão não funcionar, copie este link para o seu navegador:' : (locale == 'de' ? 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:' : (locale == 'it' ? 'Se il pulsante non funziona, copia questo link nel tuo browser:' : 'If the button doesn\'t work, copy this link into your browser:')))) }}
+                            {{ 'email.common.fallback_link'|trans }}
                         </p>
                         <p style="margin:0 0 32px;font-size:12px;word-break:break-all;">
                             <a href="{{ resetUrl }}" style="color:#C4714A;">{{ resetUrl }}</a>

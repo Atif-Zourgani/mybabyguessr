@@ -1,6 +1,6 @@
 ﻿{% extends 'base.html.twig' %}
 {% set locale = app.request.locale %}
-{% block title %}{% if locale == 'fr' %}Mentions légales{% elseif locale == 'de' %}Impressum{% elseif locale == 'es' %}Aviso legal{% elseif locale == 'pt' %}Aviso legal{% elseif locale == 'it' %}Note legali{% else %}Legal Notice{% endif %} — MyBabyGuessr{% endblock %}
+{% block title %}{{ 'footer.mentions'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
@@ -106,14 +106,14 @@
     {# ── Navigation ── #}
     <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
         <a href="{{ path('app_home', {'_locale': locale}) }}" class="btn btn-secondary">
-            {% if locale == 'fr' %}← Retour à l'accueil{% elseif locale == 'de' %}← Zurück zur Startseite{% elseif locale == 'es' %}← Volver al inicio{% elseif locale == 'pt' %}← Voltar ao início{% elseif locale == 'it' %}← Torna alla home{% else %}← Back to home{% endif %}
+            {{ 'legal.back_home'|trans }}
         </a>
         <div style="display:flex;gap:1.5rem">
             <a href="{{ path('app_privacy', {'_locale': locale}) }}" style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
-                {% if locale == 'fr' %}Confidentialité{% elseif locale == 'de' %}Datenschutz{% elseif locale == 'es' %}Privacidad{% elseif locale == 'pt' %}Privacidade{% elseif locale == 'it' %}Privacy{% else %}Privacy{% endif %}
+                {{ 'legal.privacy_short'|trans }}
             </a>
             <a href="{{ path('app_terms', {'_locale': locale}) }}" style="font-size:0.875rem;color:var(--color-brand);font-weight:600">
-                {% if locale == 'fr' %}CGU{% elseif locale == 'de' %}Nutzungsbedingungen{% elseif locale == 'es' %}Términos{% elseif locale == 'pt' %}Termos{% elseif locale == 'it' %}Termini{% else %}Terms{% endif %}
+                {{ 'legal.terms_short'|trans }}
             </a>
         </div>
     </div>

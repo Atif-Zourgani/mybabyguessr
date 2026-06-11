@@ -34,7 +34,7 @@ body { overflow-x: hidden; }
          data-error-name-required="{{ 'games.new.error_name_required'|trans|e('html_attr') }}"
          data-error-image-type="{{ 'games.new.error_image_type'|trans|e('html_attr') }}"
          data-error-image-size="{{ 'games.new.error_image_size'|trans|e('html_attr') }}"
-         data-converting-label="{{ app.request.locale == 'fr' ? 'Conversion en cours…' : (app.request.locale == 'es' ? 'Convirtiendo…' : (app.request.locale == 'pt' ? 'A converter…' : (app.request.locale == 'de' ? 'Wird konvertiert…' : (app.request.locale == 'it' ? 'Conversione…' : 'Converting…')))) }}">
+         data-converting-label="{{ 'games.new.converting'|trans }}">
 
         {# ── Indicateur de progression ────────────────────────── #}
         <div class="flex items-center justify-between mb-6">

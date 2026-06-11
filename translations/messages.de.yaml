@@ -164,6 +164,8 @@ play:
         hint3_before: "Der erste Buchstabe des Namens liegt irgendwo vor « %letter% » im Alphabet"
         hint3_after: "Der erste Buchstabe des Namens liegt irgendwo nach « %letter% » im Alphabet"
         hint3_same: "Der erste Buchstabe ist derselbe wie in deinem Vorschlag!"
+        optional_label: "(optional)"
+        try_label: "Versuch"
     done:
         title: "Abgeschickt!"
         heading: "Danke, %name%!"
@@ -188,6 +190,8 @@ play:
         msg_sent_title: "Nachricht erhalten!"
         msg_sent_desc: "Die Eltern werden von Ihren lieben Worten berührt sein."
         msg_error_too_long: "Ihre Nachricht ist zu lang (maximal 500 Zeichen)."
+        og_title: "Erstelle dein eigenes Baby-Tippspiel — MyBabyGuessr"
+        og_description: "Erstelle dein Baby-Tippspiel in Minuten. Familie und Freunde tippen auf Name, Geschlecht und Datum — ohne Konto."
     reveal:
         title: "Die Enthüllung — %game%!"
         label: "Die Enthüllung"
@@ -216,6 +220,7 @@ play:
         cta_email_subject: "Ich habe gerade MyBabyGuessr gespielt!"
         cta_secondary: "Erwartest du ein Baby? Erstelle deins →"
 
+        og_description: "Entdecke die echten Antworten und die Gewinner des Baby Guessr %game%!"
 games:
     btn_view: "Anzeigen"
     btn_share: "Teilen"
@@ -264,6 +269,28 @@ games:
         height_avg: "Durchschnitt"
         height_min: "Am kleinsten"
         height_max: "Am größten"
+        share_btn: "Teilen"
+        close_btn: "Schließen"
+        open_btn: "Öffnen"
+        players_label: "Spieler"
+        results_label: "Ergebnisse"
+        public_page: "Öffentliche Seite →"
+        no_one: "Niemand"
+        answer: "Antwort"
+        answer_colon: "Antwort:"
+        attempts: "Versuche"
+        try_singular: "Versuch"
+        try_plural: "Versuche"
+        try_label_n: "Versuch"
+        ranking: "Rangliste"
+        exact: "Genau!"
+        day_one: "1 Tag"
+        day_abbr: "T"
+        found_singular: "hatte recht"
+        found_plural: "hatten recht"
+        danger_zone: "Gefahrenzone"
+        messages_plural: "%count% Nachrichten Ihrer Teilnehmer"
+        messages_singular: "1 Nachricht Ihrer Teilnehmer"
     status:
         open: "Offen"
         closed: "Geschlossen"
@@ -334,6 +361,7 @@ games:
         error_image_size: "Bild zu groß. Maximal 4 MB."
         error_image_upload: "Das Bild konnte nicht hochgeladen werden (Größe oder Format vom Server abgelehnt). Dein Spiel wurde ohne Foto erstellt."
         success: "Dein Baby Guessr ist bereit! Teile den Link mit deinen Lieben."
+        converting: "Wird konvertiert…"
     share:
         closed_warning: "Die Teilnahme ist geschlossen. Öffne das Spiel wieder, um den Link mit deinen Spielern zu teilen."
         title: "Alles bereit!"
@@ -352,6 +380,8 @@ games:
         whatsapp_text: "Mach mit bei meinem Baby Guessr! Gib deine Tipps zur Ankunft unseres Babys ab 👶"
         email_subject: "Mach mit bei meinem Baby Guessr!"
         email_body: "Hallo,\n\nIch lade dich ein, bei meinem Baby Guessr mitzumachen und deine Tipps zur Ankunft unseres Babys abzugeben.\n\nKlicke auf den Link zum Spielen:"
+        og_title: "Baby-Tippspiel von %name% — Rate mit!"
+        og_description: "Tippe auf Name, Geschlecht, Datum und Gewicht des Babys von %name%. Mitmachen — ohne Konto!"
     reveal:
         title: "Echte Antworten enthüllen"
         title_edit: "Enthüllung bearbeiten"
@@ -390,6 +420,8 @@ games:
         email_body: "Hallo,\n\nDie echten Antworten von %game% sind enthüllt! Entdecke, wer richtig geraten hat:"
 
 
+        og_title: "Enthüllung — %game%"
+        og_description: "Die echten Antworten für %game% sind da! Sieh, wer richtig getippt hat."
     delete:
         btn: "Löschen"
         confirm_title: "Dieses Spiel löschen?"
@@ -437,6 +469,8 @@ footer:
     mentions: Impressum
     contact: Kontakt
 
+    legal_nav_label: "Rechtliche Links"
+    manage_cookies: "Cookies verwalten"
 profile:
     nav: "Mein Profil"
     info_saved: "Informationen aktualisiert."
@@ -455,6 +489,68 @@ profile:
     email_taken: "Diese E-Mail-Adresse wird bereits von einem anderen Konto verwendet."
     email_same: "Das ist bereits deine aktuelle E-Mail-Adresse."
 
+    edit:
+        info_section: "Meine Informationen"
+        email_section: "E-Mail-Adresse"
+        current_email: "Aktuelle E-Mail:"
+        pending_title: "Änderung ausstehend"
+        pending_body: "Ein Link wurde an %email% gesendet. Klicke darauf, um zu bestätigen. Der Link läuft in 1 Stunde ab."
+        cancel_change: "Änderung abbrechen"
+        email_change_hint: "Ein Bestätigungslink wird an die neue Adresse gesendet. Deine aktuelle Adresse bleibt bis zur Bestätigung aktiv."
+        new_email_label: "Neue E-Mail-Adresse"
+        current_password: "Aktuelles Passwort"
+        send_confirm_link: "Bestätigungslink senden"
+        password_section: "Passwort"
+        new_password_label: "Neues Passwort"
+        password_hint: "8+ Zeichen, 1 Großbuchstabe, 1 Sonderzeichen"
+        confirm_password: "Neues Passwort bestätigen"
+        change_password_btn: "Passwort ändern"
+        save_btn: "Speichern"
+        danger_zone: "Gefahrenzone"
+        delete_warning: "Das Löschen deines Kontos ist <strong>dauerhaft und nicht rückgängig zu machen</strong>. Alle deine Spiele, Tipps und zugehörigen Daten werden gelöscht."
+        delete_btn: "Mein Konto löschen"
+        delete_confirm_label: "Bestätige durch Eingabe deines Passworts:"
+        confirm_delete_btn: "Löschen bestätigen"
+        cancel_btn: "Abbrechen"
+        back_dashboard: "Zurück zum Dashboard"
 email:
     verify_subject: "Bestätige deine E-Mail-Adresse — MyBabyGuessr"
     change_subject: "Bestätige deine neue E-Mail-Adresse — MyBabyGuessr"
+    common:
+        greeting: "Hallo %name%!"
+        fallback_link: "Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:"
+    confirm:
+        title: "Bestätige deine E-Mail-Adresse"
+        btn: "E-Mail-Adresse bestätigen"
+    reset:
+        title: "Dein Passwort zurücksetzen"
+        btn: "Passwort zurücksetzen"
+    reveal:
+        title: "Die Enthüllung ist da!"
+        btn: "Enthüllung ansehen"
+    change:
+        title: "Bestätige deine neue E-Mail-Adresse"
+        new_address: "Neue Adresse:"
+        btn: "Neue Adresse bestätigen"
+        fallback_link: "Falls der Button nicht funktioniert:"
+
+base:
+    skip_to_content: "Zum Hauptinhalt springen"
+
+header:
+    home_label: "Startseite"
+    my_games: "Meine Spiele"
+
+cookies:
+    aria_label: "Cookie-Einstellungen"
+    decline: "Ablehnen"
+    accept: "Akzeptieren"
+    learn_more: "Mehr erfahren"
+    body: "🍪 Wir verwenden <strong>Google Analytics</strong> zur Messung der Website-Nutzung. Analyse-Cookies werden nur mit Ihrer Zustimmung gesetzt."
+
+legal:
+    back_home: "← Zurück zur Startseite"
+    to_privacy: "Datenschutzrichtlinie →"
+    to_terms: "Nutzungsbedingungen →"
+    privacy_short: "Datenschutz"
+    terms_short: "Nutzungsbedingungen"

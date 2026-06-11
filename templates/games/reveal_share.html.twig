@@ -2,29 +2,9 @@
 {% block title %}{{ 'games.reveal_share.title'|trans }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
-{% block og_title %}{{ app.request.locale == 'fr'
-    ? 'Révélation — ' ~ game.displayTitle
-    : (app.request.locale == 'es'
-        ? 'Revelación — ' ~ game.displayTitle
-        : (app.request.locale == 'pt'
-            ? 'Revelação — ' ~ game.displayTitle
-            : (app.request.locale == 'de'
-                ? 'Enthüllung — ' ~ game.displayTitle
-                : (app.request.locale == 'it'
-                    ? 'Rivelazione — ' ~ game.displayTitle
-                    : 'The Reveal — ' ~ game.displayTitle)))) }}{% endblock %}
+{% block og_title %}{{ 'games.reveal_share.og_title'|trans({'%game%': game.displayTitle}) }}{% endblock %}
 
-{% block og_description %}{{ app.request.locale == 'fr'
-    ? 'Les vraies réponses du Baby Guessr ' ~ game.displayTitle ~ ' sont révélées ! Découvrez qui a deviné juste.'
-    : (app.request.locale == 'es'
-        ? '¡Las respuestas reales del Baby Guessr ' ~ game.displayTitle ~ ' ya están aquí! Descubre quién ha acertado.'
-        : (app.request.locale == 'pt'
-            ? 'As respostas reais do Baby Guessr ' ~ game.displayTitle ~ ' foram reveladas! Veja quem adivinhou certo.'
-            : (app.request.locale == 'de'
-                ? 'Die echten Antworten für ' ~ game.displayTitle ~ ' sind da! Sieh, wer richtig getippt hat.'
-                : (app.request.locale == 'it'
-                    ? 'Le risposte vere del Baby Guessr ' ~ game.displayTitle ~ ' sono qui! Scopri chi ha indovinato.'
-                    : 'The real answers for ' ~ game.displayTitle ~ ' are here! See who guessed right.')))) }}{% endblock %}
+{% block og_description %}{{ 'games.reveal_share.og_description'|trans({'%game%': game.displayTitle}) }}{% endblock %}
 
 {% block og_image %}
 {% set _base = app.request.schemeAndHttpHost %}

@@ -120,7 +120,7 @@
             <label for="player_email" class="form-label">
                 {{ 'play.identify.email_label'|trans }}
                 <span class="text-xs font-normal ml-1" style="color: var(--color-muted)">
-                    ({{ app.request.locale == 'fr' ? 'facultatif' : (app.request.locale == 'es' or app.request.locale == 'pt' ? 'opcional' : (app.request.locale == 'it' ? 'facoltativo' : 'optional')) }})
+                    {{ 'play.guess.optional_label'|trans }}
                 </span>
             </label>
             <input type="email"

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ locale == 'fr' ? 'Confirmez votre nouvelle adresse email' : 'Confirm your new email address' }}</title>
+    <title>{{ 'email.change.title'|trans }}</title>
     <style>
         body { margin:0; padding:0; background-color:#F8F3EE; font-family:'Helvetica Neue',Arial,sans-serif; }
         * { box-sizing:border-box; }
@@ -36,7 +36,7 @@
                     <td class="email-body" style="padding:48px 40px 32px;">
 
                         <h1 style="margin:0 0 16px;font-size:24px;font-weight:700;color:#2C1F15;line-height:1.3;">
-                            {% if locale == 'fr' %}Bonjour {{ user.firstName }}&nbsp;!{% else %}Hello {{ user.firstName }}!{% endif %}
+                            {{ 'email.common.greeting'|trans({'%name%': user.firstName}) }}
                         </h1>
 
                         <p style="margin:0 0 16px;font-size:16px;color:#7A6A5F;line-height:1.6;">
@@ -49,7 +49,7 @@
 
                         <div style="background-color:#F8F3EE;border-radius:10px;padding:16px 20px;margin:0 0 24px;">
                             <p style="margin:0 0 4px;font-size:13px;color:#7A6A5F;">
-                                {% if locale == 'fr' %}Nouvelle adresse :{% else %}New address:{% endif %}
+                                {{ 'email.change.new_address'|trans }}
                             </p>
                             <p style="margin:0;font-size:16px;font-weight:700;color:#2C1F15;">{{ newEmail }}</p>
                         </div>
@@ -67,7 +67,7 @@
                                 <td align="center" style="padding:8px 0 32px;">
                                     <a href="{{ verifyUrl }}"
                                        style="display:inline-block;background-color:#C4714A;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:10px;">
-                                        {% if locale == 'fr' %}Confirmer ma nouvelle adresse{% else %}Confirm my new address{% endif %}
+                                        {{ 'email.change.btn'|trans }}
                                     </a>
                                 </td>
                             </tr>
@@ -82,7 +82,7 @@
                         </p>
 
                         <p style="margin:0 0 8px;font-size:13px;color:#7A6A5F;">
-                            {% if locale == 'fr' %}Si le bouton ne fonctionne pas :{% else %}If the button doesn't work:{% endif %}
+                            {{ 'email.change.fallback_link'|trans }}
                         </p>
                         <p style="margin:0 0 24px;font-size:12px;word-break:break-all;">
                             <a href="{{ verifyUrl }}" style="color:#C4714A;">{{ verifyUrl }}</a>

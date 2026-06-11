@@ -3,29 +3,9 @@
 {% block title %}{{ 'play.done.title'|trans }} — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
-{% block og_title %}{{ app.request.locale == 'fr'
-    ? 'Crée ton propre Baby Guessr — MyBabyGuessr'
-    : (app.request.locale == 'es'
-        ? 'Crea tu propio Baby Guessr — MyBabyGuessr'
-        : (app.request.locale == 'pt'
-            ? 'Cria o teu próprio Baby Guessr — MyBabyGuessr'
-            : (app.request.locale == 'de'
-                ? 'Erstelle dein eigenes Baby-Tippspiel — MyBabyGuessr'
-                : (app.request.locale == 'it'
-                    ? 'Crea il tuo Baby Guessr — MyBabyGuessr'
-                    : 'Create your own Baby Guessr — MyBabyGuessr')))) }}{% endblock %}
+{% block og_title %}{{ 'play.done.og_title'|trans }}{% endblock %}
 
-{% block og_description %}{{ app.request.locale == 'fr'
-    ? 'Crée ton jeu de pronostics bébé en 2 minutes. Famille et amis devinent le prénom, le sexe et la date — sans créer de compte. Partage juste un lien.'
-    : (app.request.locale == 'es'
-        ? 'Crea tu juego de pronósticos bebé en minutos. Familia y amigos adivinan el nombre, el sexo y la fecha — sin crear cuenta.'
-        : (app.request.locale == 'pt'
-            ? 'Cria o teu jogo de apostas sobre o bebé em minutos. Família e amigos adivinham o nome, o sexo e a data — sem criar conta.'
-            : (app.request.locale == 'de'
-                ? 'Erstelle dein Baby-Tippspiel in Minuten. Familie und Freunde tippen auf Name, Geschlecht und Datum — ohne Konto.'
-                : (app.request.locale == 'it'
-                    ? 'Crea il tuo gioco di pronostici sul bebè in pochi minuti. Famiglia e amici indovinano nome, sesso e data — senza account.'
-                    : 'Create your baby guessing game in minutes. Family and friends guess name, gender and due date — no account needed.')))) }}{% endblock %}
+{% block og_description %}{{ 'play.done.og_description'|trans }}{% endblock %}
 
 {% block og_image %}
 <meta property="og:image"        content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">

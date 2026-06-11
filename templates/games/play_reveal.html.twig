@@ -3,17 +3,7 @@
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block og_title %}{{ 'play.reveal.title'|trans({'%game%': game.displayTitle}) }} — MyBabyGuessr{% endblock %}
-{% block og_description %}{{ app.request.locale == 'fr'
-    ? 'Découvrez les vraies réponses et les gagnants du Baby Guessr ' ~ game.displayTitle ~ ' !'
-    : (app.request.locale == 'es'
-        ? '¡Descubre las respuestas reales y los ganadores del Baby Guessr ' ~ game.displayTitle ~ '!'
-        : (app.request.locale == 'pt'
-            ? 'Descubra as respostas reais e os vencedores do Baby Guessr ' ~ game.displayTitle ~ '!'
-            : (app.request.locale == 'de'
-                ? 'Entdecke die echten Antworten und die Gewinner des Baby Guessr ' ~ game.displayTitle ~ '!'
-                : (app.request.locale == 'it'
-                    ? 'Scopri le risposte vere e i vincitori del Baby Guessr ' ~ game.displayTitle ~ '!'
-                    : 'Discover the real answers and the winners of the ' ~ game.displayTitle ~ ' Baby Guessr!')))) }}{% endblock %}
+{% block og_description %}{{ 'play.reveal.og_description'|trans({'%game%': game.displayTitle}) }}{% endblock %}
 {% block og_image %}
 {% set _base = app.request.schemeAndHttpHost %}
 {% set _og_img = game.image ? (_base ~ '/' ~ game.image) : (_base ~ asset('images/logo-mybabyguessr.png')) %}
