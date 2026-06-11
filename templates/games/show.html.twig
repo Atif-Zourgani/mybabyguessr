@@ -267,7 +267,7 @@
     {# ══════════════════════════════════════════════════════════ #}
 
     {% set firstTab = 'overview' %}
-    <div x-data="{ tab: '{{ firstTab }}' }">
+    <div x-data="{ tab: '{{ firstTab }}', tabs: {{ tabs|column(0)|json_encode|raw }} }">
 
         {# Nav onglets — underline style + scroll mobile #}
         {% set tabs = [['overview', 'games.show.tab_overview'|trans]] %}
@@ -287,6 +287,7 @@
                  style="background: linear-gradient(to right, rgba(255,255,255,0), #fff); z-index: 1"></div>
 
             <div class="flex overflow-x-auto"
+                 role="tablist"
                  x-ref="tabbar"
                  x-init="$watch('tab', () => {
                      $nextTick(() => {
@@ -294,10 +295,19 @@
                          if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                      });
                  })"
+                 @keydown.arrow-right.prevent="tab = tabs[(tabs.indexOf(tab) + 1) % tabs.length]; $nextTick(() => $refs.tabbar.querySelector('[data-active=\'1\']')?.focus())"
+                 @keydown.arrow-left.prevent="tab = tabs[(tabs.indexOf(tab) - 1 + tabs.length) % tabs.length]; $nextTick(() => $refs.tabbar.querySelector('[data-active=\'1\']')?.focus())"
+                 @keydown.home.prevent="tab = tabs[0]; $nextTick(() => $refs.tabbar.querySelector('[data-active=\'1\']')?.focus())"
+                 @keydown.end.prevent="tab = tabs[tabs.length - 1]; $nextTick(() => $refs.tabbar.querySelector('[data-active=\'1\']')?.focus())"
                  style="border-bottom: 2px solid var(--color-line); scrollbar-width: none;">
 
                 {% for tabItem in tabs %}
                 <button @click="tab = '{{ tabItem[0] }}'"
+                        role="tab"
+                        id="tab-{{ tabItem[0] }}"
+                        aria-controls="panel-{{ tabItem[0] }}"
+                        :aria-selected="tab === '{{ tabItem[0] }}' ? 'true' : 'false'"
+                        :tabindex="tab === '{{ tabItem[0] }}' ? '0' : '-1'"
                         :data-active="tab === '{{ tabItem[0] }}' ? '1' : '0'"
                         class="px-4 sm:px-5 py-3.5 text-sm font-semibold shrink-0 transition-colors -mb-0.5"
                         :style="tab === '{{ tabItem[0] }}'
@@ -312,6 +322,10 @@
 
         {# ── Onglet Synthèse ──────────────────────────────────── #}
         <div x-show="tab === 'overview'"
+             role="tabpanel"
+             id="panel-overview"
+             aria-labelledby="tab-overview"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -512,6 +526,10 @@
         {# ── Onglet Sexe ──────────────────────────────────────── #}
         {% if game.isGuessGender() %}
         <div x-show="tab === 'gender'"
+             role="tabpanel"
+             id="panel-gender"
+             aria-labelledby="tab-gender"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -618,6 +636,10 @@
         {# ── Onglet Prénom ────────────────────────────────────── #}
         {% if game.isGuessName() %}
         <div x-show="tab === 'name'"
+             role="tabpanel"
+             id="panel-name"
+             aria-labelledby="tab-name"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -799,6 +821,10 @@
         {# ── Onglet Date ──────────────────────────────────────── #}
         {% if game.isGuessDate() %}
         <div x-show="tab === 'date'"
+             role="tabpanel"
+             id="panel-date"
+             aria-labelledby="tab-date"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -906,6 +932,10 @@
         {# ── Onglet Poids ─────────────────────────────────────── #}
         {% if game.isGuessWeight() %}
         <div x-show="tab === 'weight'"
+             role="tabpanel"
+             id="panel-weight"
+             aria-labelledby="tab-weight"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -1005,6 +1035,10 @@
         {# ── Onglet Taille ────────────────────────────────────── #}
         {% if game.isGuessHeight() %}
         <div x-show="tab === 'height'"
+             role="tabpanel"
+             id="panel-height"
+             aria-labelledby="tab-height"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -1103,6 +1137,10 @@
 
         {# ── Onglet Participants ──────────────────────────────── #}
         <div x-show="tab === 'players'"
+             role="tabpanel"
+             id="panel-players"
+             aria-labelledby="tab-players"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
@@ -1216,6 +1254,10 @@
         {# ── Onglet Messages ──────────────────────────────────── #}
         {% if hasMessages %}
         <div x-show="tab === 'messages'"
+             role="tabpanel"
+             id="panel-messages"
+             aria-labelledby="tab-messages"
+             tabindex="0"
              x-transition:enter="transition ease-out duration-150"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100">
