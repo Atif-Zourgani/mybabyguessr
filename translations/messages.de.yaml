@@ -269,7 +269,6 @@ games:
         height_avg: "Durchschnitt"
         height_min: "Am kleinsten"
         height_max: "Am größten"
-        share_btn: "Teilen"
         close_btn: "Schließen"
         open_btn: "Öffnen"
         players_label: "Spieler"
@@ -289,8 +288,8 @@ games:
         found_singular: "hatte recht"
         found_plural: "hatten recht"
         danger_zone: "Gefahrenzone"
-        messages_plural: "%count% Nachrichten Ihrer Teilnehmer"
-        messages_singular: "1 Nachricht Ihrer Teilnehmer"
+        messages_plural: "%count% Nachrichten deiner Teilnehmer"
+        messages_singular: "1 Nachricht deiner Teilnehmer"
     status:
         open: "Offen"
         closed: "Geschlossen"
@@ -546,7 +545,7 @@ cookies:
     decline: "Ablehnen"
     accept: "Akzeptieren"
     learn_more: "Mehr erfahren"
-    body: "🍪 Wir verwenden <strong>Google Analytics</strong> zur Messung der Website-Nutzung. Analyse-Cookies werden nur mit Ihrer Zustimmung gesetzt."
+    body: "🍪 Wir verwenden <strong>Google Analytics</strong> zur Messung der Website-Nutzung. Analyse-Cookies werden nur mit deiner Zustimmung gesetzt."
 
 legal:
     back_home: "← Zurück zur Startseite"

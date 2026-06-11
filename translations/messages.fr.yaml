@@ -269,7 +269,6 @@ games:
         height_avg: "Moyenne"
         height_min: "Le plus petit"
         height_max: "Le plus grand"
-        share_btn: "Partager"
         close_btn: "Fermer"
         open_btn: "Ouvrir"
         players_label: "joueurs"

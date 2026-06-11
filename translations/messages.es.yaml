@@ -269,7 +269,6 @@ games:
         height_avg: "Media"
         height_min: "El más pequeño"
         height_max: "El más largo"
-        share_btn: "Compartir"
         close_btn: "Cerrar"
         open_btn: "Abrir"
         players_label: "jugadores"
@@ -546,7 +545,7 @@ cookies:
     decline: "Rechazar"
     accept: "Aceptar"
     learn_more: "Más información"
-    body: "🍪 Utilizamos <strong>Google Analytics</strong> para medir la audiencia del sitio. Estas cookies analíticas solo se instalan con su consentimiento."
+    body: "🍪 Utilizamos <strong>Google Analytics</strong> para medir la audiencia del sitio. Estas cookies analíticas solo se instalan con tu consentimiento."
 
 legal:
     back_home: "← Volver al inicio"

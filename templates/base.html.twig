@@ -29,7 +29,7 @@
     {% endif %}
 
     {# ── Open Graph ───────────────────────────────────────── #}
-    {% set _og_locale     = app.request.locale == 'fr' ? 'fr_FR' : (app.request.locale == 'es' ? 'es_ES' : (app.request.locale == 'pt' ? 'pt_BR' : (app.request.locale == 'de' ? 'de_DE' : (app.request.locale == 'it' ? 'it_IT' : 'en_GB')))) %}
+    {% set _og_locale     = app.request.locale == 'fr' ? 'fr_FR' : (app.request.locale == 'es' ? 'es_ES' : (app.request.locale == 'pt' ? 'pt_PT' : (app.request.locale == 'de' ? 'de_DE' : (app.request.locale == 'it' ? 'it_IT' : 'en_GB')))) %}
     {% set _og_all_locales = {'fr': 'fr_FR', 'en': 'en_GB', 'es': 'es_ES', 'pt': 'pt_PT', 'de': 'de_DE', 'it': 'it_IT'} %}
     <meta property="og:type"             content="website">
     <meta property="og:url"              content="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">

@@ -269,7 +269,6 @@ games:
         height_avg: "Average"
         height_min: "Shortest"
         height_max: "Longest"
-        share_btn: "Share"
         close_btn: "Close"
         open_btn: "Open"
         players_label: "players"

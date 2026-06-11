@@ -269,7 +269,6 @@ games:
         height_avg: "Media"
         height_min: "Il più piccolo"
         height_max: "Il più lungo"
-        share_btn: "Condividi"
         close_btn: "Chiudi"
         open_btn: "Apri"
         players_label: "giocatori"
@@ -475,9 +474,9 @@ profile:
     nav: "Il mio profilo"
     info_saved: "Informazioni aggiornate."
     info_invalid: "Nome e cognome richiesti (2-100 caratteri)."
-    email_saved: "Indirizzo email aggiornato con successo."
+    email_saved: "Indirizzo e-mail aggiornato con successo."
     email_wrong_password: "Password errata."
-    email_invalid: "Indirizzo email non valido."
+    email_invalid: "Indirizzo e-mail non valido."
     password_saved: "Password cambiata con successo."
     password_wrong_current: "La password attuale non è corretta."
     password_mismatch: "Le password non corrispondono."
@@ -486,8 +485,8 @@ profile:
     email_pending: "Un link di conferma è stato inviato al nuovo indirizzo. Valido 1 ora."
     email_cancelled: "Modifica email annullata."
     email_token_invalid: "Link non valido o scaduto. Fai una nuova richiesta dal tuo profilo."
-    email_taken: "Questo indirizzo email è già utilizzato da un altro account."
-    email_same: "Questo è già il tuo indirizzo email attuale."
+    email_taken: "Questo indirizzo e-mail è già utilizzato da un altro account."
+    email_same: "Questo è già il tuo indirizzo e-mail attuale."
 
     edit:
         info_section: "Le mie informazioni"
@@ -514,8 +513,8 @@ profile:
         cancel_btn: "Annulla"
         back_dashboard: "Torna alla dashboard"
 email:
-    verify_subject: "Conferma il tuo indirizzo email — MyBabyGuessr"
-    change_subject: "Conferma il tuo nuovo indirizzo email — MyBabyGuessr"
+    verify_subject: "Conferma il tuo indirizzo e-mail — MyBabyGuessr"
+    change_subject: "Conferma il tuo nuovo indirizzo e-mail — MyBabyGuessr"
     common:
         greeting: "Ciao %name%!"
         fallback_link: "Se il pulsante non funziona, copia questo link nel tuo browser:"
