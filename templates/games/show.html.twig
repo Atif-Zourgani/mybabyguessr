@@ -160,10 +160,14 @@
                      x-transition:enter-end="opacity-100 scale-100"
                      class="fixed inset-0 flex items-center justify-center"
                      style="z-index: 50; padding: 1rem"
-                     @keydown.escape.window="confirm = false">
+                     @keydown.escape.window="confirm = false"
+                     role="dialog"
+                     aria-modal="true"
+                     aria-labelledby="modal-toggle-title"
+                     x-trap="confirm">
 
                     <div class="card-panel w-full max-w-sm px-6 py-6">
-                        <h2 class="text-lg font-bold mb-3" style="color: var(--color-ink)">
+                        <h2 id="modal-toggle-title" class="text-lg font-bold mb-3" style="color: var(--color-ink)">
                             {% if game.status.value == 'open' %}
                                 {{ 'games.toggle.confirm_close_title'|trans }}
                             {% else %}
@@ -217,10 +221,14 @@
                      x-transition:enter-end="opacity-100 scale-100"
                      class="fixed inset-0 flex items-center justify-center"
                      style="z-index: 50; padding: 1rem"
-                     @keydown.escape.window="confirmDelete = false">
+                     @keydown.escape.window="confirmDelete = false"
+                     role="dialog"
+                     aria-modal="true"
+                     aria-labelledby="modal-delete-title"
+                     x-trap="confirmDelete">
 
                     <div class="card-panel w-full max-w-sm px-6 py-6">
-                        <h2 class="text-lg font-bold mb-3" style="color: #b91c1c">
+                        <h2 id="modal-delete-title" class="text-lg font-bold mb-3" style="color: #b91c1c">
                             {{ 'games.delete.confirm_title'|trans }}
                         </h2>
                         <p class="text-sm leading-relaxed mb-6" style="color: var(--color-muted)">

@@ -37,4 +37,7 @@ return [
     'heic2any' => [
         'version' => '0.0.4',
     ],
+    '@alpinejs/focus' => [
+        'version' => '3.15.12',
+    ],
 ];

@@ -1,7 +1,10 @@
 import './stimulus_bootstrap.js';
 import './styles/app.css';
 import Alpine from 'alpinejs';
+import Focus from '@alpinejs/focus';
 import heic2any from 'heic2any';
+
+Alpine.plugin(Focus);
 
 Alpine.data('gameForm', () => ({
     step: 'categories',
