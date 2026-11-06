@@ -267,8 +267,6 @@
     {# ══════════════════════════════════════════════════════════ #}
 
     {% set firstTab = 'overview' %}
-    <div x-data="{ tab: '{{ firstTab }}', tabs: {{ tabs|column(0)|json_encode|raw }} }">
-
         {# Nav onglets — underline style + scroll mobile #}
         {% set tabs = [['overview', 'games.show.tab_overview'|trans]] %}
         {% if game.isGuessGender() %}{% set tabs = tabs|merge([['gender',  'games.show.tab_gender'|trans]]) %}{% endif %}
@@ -280,6 +278,8 @@
         {% if hasMessages %}
         {% set tabs = tabs|merge([['messages', 'games.show.tab_messages'|trans ~ ' (' ~ messageCount ~ ')']]) %}
         {% endif %}
+
+    <div x-data="{ tab: '{{ firstTab }}', tabs: {{ tabs|column(0)|json_encode }} }">
 
         <div class="relative mb-6">
             {# Dégradé indicateur — visible uniquement sur mobile #}
