@@ -28,7 +28,8 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, RateLimiterFactory $registerLimiter): Response
     {
-        if (!$registerLimiter->create($request->getClientIp())->consume()->isAccepted()) {
+        // On ne compte que les soumissions : afficher la page ne doit pas consommer le quota
+        if ($request->isMethod('POST') && !$registerLimiter->create($request->getClientIp())->consume()->isAccepted()) {
             throw new TooManyRequestsHttpException();
         }
 

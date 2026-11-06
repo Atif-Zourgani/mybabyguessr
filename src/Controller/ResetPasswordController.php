@@ -35,7 +35,8 @@ class ResetPasswordController extends AbstractController
     #[Route('', name: 'app_forgot_password_request')]
     public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator, RateLimiterFactory $resetPasswordLimiter): Response
     {
-        if (!$resetPasswordLimiter->create($request->getClientIp())->consume()->isAccepted()) {
+        // On ne compte que les soumissions : afficher la page ne doit pas consommer le quota
+        if ($request->isMethod('POST') && !$resetPasswordLimiter->create($request->getClientIp())->consume()->isAccepted()) {
             throw new TooManyRequestsHttpException();
         }
 
