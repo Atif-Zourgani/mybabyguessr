@@ -155,6 +155,7 @@ play:
         hints_input_placeholder: "Proponi un nome…"
         hints_submit: "Conferma"
         hints_completed: "I tuoi 3 suggerimenti sono stati salvati!"
+        hints_found: "Bravo, hai trovato il nome! La tua risposta è stata salvata."
         hints_error: "Completa i tuoi 3 tentativi prima di continuare."
         hint1_vowel: "Il nome finisce con una vocale"
         hint1_consonant: "Il nome finisce con una consonante"

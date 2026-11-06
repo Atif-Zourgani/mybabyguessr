@@ -47,6 +47,7 @@
        hintsCurrentInput: '',
        hintsLoading: false,
        hintsCompleted: {{ hs.completed ? 'true' : 'false' }},
+       hintsSolved: {{ hs.solved ? 'true' : 'false' }},
        hintUrls: [
          null,
          '{{ path('app_game_hint', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token, 'attempt': 1}) }}',
@@ -90,8 +91,9 @@
            const data = await res.json();
            this.hintsProposals.push(name);
            this.hintsCurrentInput = '';
-           if (this.hintsStep >= 3) {
+           if (data.done) {
              this.hintsCompleted = true;
+             this.hintsSolved = data.correct === true;
            } else {
              this.hintsClues.push(data.clue);
              this.hintsStep++;
@@ -496,8 +498,11 @@
 
                 {# Message de fin #}
                 <div x-show="hintsCompleted" class="text-center py-4 rounded-xl" style="background:rgba(196,113,74,0.08)">
-                    <p class="text-base font-semibold" style="color:var(--color-brand)">
+                    <p x-show="!hintsSolved" class="text-base font-semibold" style="color:var(--color-brand)">
                         {{ 'play.guess.hints_completed'|trans }}
+                    </p>
+                    <p x-show="hintsSolved" class="text-base font-semibold" style="color:var(--color-brand)">
+                        {{ 'play.guess.hints_found'|trans }}
                     </p>
                 </div>
 

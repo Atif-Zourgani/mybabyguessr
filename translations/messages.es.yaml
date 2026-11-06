@@ -155,6 +155,7 @@ play:
         hints_input_placeholder: "Propón un nombre…"
         hints_submit: "Validar"
         hints_completed: "¡Tus 3 propuestas han sido guardadas!"
+        hints_found: "¡Enhorabuena, has encontrado el nombre! Tu respuesta ha sido guardada."
         hints_error: "Completa tus 3 intentos antes de continuar."
         hint1_vowel: "El nombre termina en vocal"
         hint1_consonant: "El nombre termina en consonante"

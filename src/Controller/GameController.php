@@ -7,6 +7,7 @@ use App\Enum\AnswerGender;
 use App\Enum\GameStatus;
 use App\Enum\NameMode;
 use App\Repository\GameRepository;
+use App\Service\GameScorer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,6 +26,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/games')]
 class GameController extends AbstractController
 {
+    public function __construct(private readonly GameScorer $scorer)
+    {
+    }
+
     #[Route('/new', name: 'app_game_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, LoggerInterface $logger): Response
     {
@@ -244,7 +249,7 @@ class GameController extends AbstractController
             'game'          => $game,
             'guesses'       => $guesses,
             'stats'         => $stats,
-            'guessesRanked' => $game->isRevealed() ? $this->rankGuesses($game, $guesses, $stats) : null,
+            'guessesRanked' => $game->isRevealed() ? $this->scorer->rank($game, $guesses) : null,
         ]);
     }
 
@@ -413,39 +418,6 @@ class GameController extends AbstractController
         }
     }
 
-    private function rankGuesses(Game $game, array $guesses, array $stats): array
-    {
-        $maxScore = 0;
-        if ($game->isGuessGender() && $game->getAnswerGender() !== null) $maxScore++;
-        if ($game->isGuessName()   && $game->getAnswerName()   !== null) $maxScore++;
-        if ($game->isGuessDate()   && $game->getAnswerDate()   !== null) $maxScore++;
-        if ($game->isGuessWeight() && $game->getAnswerWeight() !== null) $maxScore++;
-        if ($game->isGuessHeight() && $game->getAnswerHeight() !== null) $maxScore++;
-
-        $minDateDiff   = isset($stats['date']['sorted_by_diff'])   ? $stats['date']['sorted_by_diff'][0]['diff']   : null;
-        $minWeightDiff = isset($stats['weight']['sorted_by_diff']) ? $stats['weight']['sorted_by_diff'][0]['diff'] : null;
-        $minHeightDiff = isset($stats['height']['sorted_by_diff']) ? $stats['height']['sorted_by_diff'][0]['diff'] : null;
-
-        $scored = [];
-        foreach ($guesses as $g) {
-            $score = 0;
-            if ($game->isGuessGender() && $game->getAnswerGender() !== null)
-                if ($g->getGuessGender()?->value === $game->getAnswerGender()->value) $score++;
-            if ($game->isGuessName() && $game->getAnswerName() !== null && $g->getGuessName() !== null)
-                if (mb_strtolower(trim($g->getGuessName())) === mb_strtolower(trim($game->getAnswerName()))) $score++;
-            if ($minDateDiff !== null && $g->getGuessDate() !== null)
-                if (abs($g->getGuessDate()->getTimestamp() - $game->getAnswerDate()->getTimestamp()) === $minDateDiff) $score++;
-            if ($minWeightDiff !== null && $g->getGuessWeight() !== null)
-                if (abs($g->getGuessWeight() - $game->getAnswerWeight()) === $minWeightDiff) $score++;
-            if ($minHeightDiff !== null && $g->getGuessHeight() !== null)
-                if (abs($g->getGuessHeight() - $game->getAnswerHeight()) === $minHeightDiff) $score++;
-            $scored[] = ['guess' => $g, 'score' => $score];
-        }
-
-        usort($scored, fn($a, $b) => $b['score'] <=> $a['score'] ?: $a['guess']->getCreatedAt() <=> $b['guess']->getCreatedAt());
-        return ['items' => $scored, 'max' => $maxScore];
-    }
-
     private function computeStats(Game $game, array $guesses): array
     {
         $stats = ['total' => count($guesses)];
@@ -480,14 +452,8 @@ class GameController extends AbstractController
 
         if ($game->isGuessName()) {
             $named = array_values(array_filter($guesses, fn($g) => $g->getGuessName() !== null));
-            if ($named) {
-                $freq = [];
-                foreach ($named as $g) {
-                    $n = $g->getGuessName();
-                    $freq[$n] = ($freq[$n] ?? 0) + 1;
-                }
-                arsort($freq);
-
+            $freq  = $this->scorer->nameFrequencies($named);
+            if ($freq) {
                 $topName  = array_key_first($freq);
                 $topCount = $freq[$topName];
 
@@ -504,8 +470,7 @@ class GameController extends AbstractController
                     'last_player'  => $last->getPlayerName(),
                 ];
                 if ($isRevealed && $game->getAnswerName() !== null) {
-                    $answerNorm = mb_strtolower(trim($game->getAnswerName()));
-                    $nWinners   = array_filter($named, fn($g) => mb_strtolower(trim($g->getGuessName() ?? '')) === $answerNorm);
+                    $nWinners = array_filter($named, fn($g) => $this->scorer->isCorrectName($game, $g));
                     $stats['name']['winner_names'] = array_values(array_map(fn($g) => $g->getPlayerName(), $nWinners));
                 }
             }

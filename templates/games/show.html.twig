@@ -647,12 +647,12 @@
             {% if game.nameMode is not null and game.nameMode.value == 'hints' %}
 
             {# ── Mode indices ── #}
-            {% set answerNorm = game.answerName ? game.answerName|lower|trim : null %}
+            {% set answerNorm = game.answerName ? game.answerName|name_key : null %}
 
             {# Stat box révélation #}
             {% if game.status.value == 'revealed' and game.answerName %}
             {% set hintsWinners = [] %}
-            {% for g in guesses %}{% if g.guessName is not null and g.guessName|lower|trim == answerNorm %}{% set hintsWinners = hintsWinners|merge([g.playerName]) %}{% endif %}{% endfor %}
+            {% for g in guesses %}{% if g.guessName is not null and g.guessName|name_key == answerNorm %}{% set hintsWinners = hintsWinners|merge([g.playerName]) %}{% endif %}{% endfor %}
             <div class="rounded-xl px-5 py-4 mb-4 flex items-center justify-between"
                  style="background:rgba(196,113,74,0.10)">
                 <div>
@@ -695,7 +695,7 @@
                 {# Accordéon par joueur #}
                 {% for g in guesses %}
                 {% if g.nameAttempt1 is not null %}
-                {% set isWinner = answerNorm and g.guessName is not null and g.guessName|lower|trim == answerNorm and game.status.value == 'revealed' %}
+                {% set isWinner = answerNorm and g.guessName is not null and g.guessName|name_key == answerNorm and game.status.value == 'revealed' %}
                 {% set nbEssais = g.nameHintsUsed %}
                 <div style="{{ not loop.last ? 'border-bottom:1px solid var(--color-line)' : '' }}">
 
@@ -730,7 +730,7 @@
                         {% set attempts = [g.nameAttempt1, g.nameAttempt2, g.nameAttempt3] %}
                         {% for attempt in attempts %}
                         {% if attempt is not null %}
-                        {% set isCorrect = answerNorm and attempt|lower|trim == answerNorm %}
+                        {% set isCorrect = answerNorm and attempt|name_key == answerNorm %}
                         <div class="flex items-center gap-3 py-2">
                             <span class="text-xs font-bold shrink-0"
                                   style="width:4.5rem;color:var(--color-muted)">
@@ -785,7 +785,7 @@
             {% endif %}
 
             {# Toutes les réponses #}
-            {% set nameAnswerNorm = game.answerName ? game.answerName|lower|trim : null %}
+            {% set nameAnswerNorm = game.answerName ? game.answerName|name_key : null %}
             <div class="card-panel">
                 <div class="px-5 py-4 flex items-center justify-between" style="border-bottom: 1px solid var(--color-line)">
                     <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--color-muted)">
@@ -800,7 +800,7 @@
                 </div>
                 {% for g in guesses %}
                 {% if g.guessName %}
-                {% set isNameWinner = nameAnswerNorm and g.guessName|lower|trim == nameAnswerNorm %}
+                {% set isNameWinner = nameAnswerNorm and g.guessName|name_key == nameAnswerNorm %}
                 <div class="flex items-center justify-between px-5 py-3.5 text-sm"
                      style="border-bottom:1px solid var(--color-line);{{ isNameWinner ? 'background:rgba(196,113,74,0.07)' : '' }}">
                     <span style="color:{{ isNameWinner ? 'var(--color-ink)' : 'var(--color-muted)' }};font-weight:{{ isNameWinner ? '600' : 'normal' }}">
@@ -1214,7 +1214,7 @@
                             <p class="text-xs mb-0.5" style="color: var(--color-muted)">{{ 'games.show.tab_name'|trans }}</p>
                             <p class="text-sm font-semibold" style="color: var(--color-ink)">
                                 {{ g.guessName }}
-                                {% if game.status.value == 'revealed' and game.answerName and g.guessName|lower|trim == game.answerName|lower|trim %} ✓{% endif %}
+                                {% if game.status.value == 'revealed' and game.answerName and g.guessName|name_key == game.answerName|name_key %} ✓{% endif %}
                             </p>
                         </div>
                         {% endif %}

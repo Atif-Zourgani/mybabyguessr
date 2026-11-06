@@ -155,6 +155,7 @@ play:
         hints_input_placeholder: "Proposez un prénom…"
         hints_submit: "Valider"
         hints_completed: "Vos 3 propositions sont enregistrées !"
+        hints_found: "Bravo, vous avez trouvé le prénom ! Votre réponse est enregistrée."
         hints_error: "Complétez vos 3 essais avant de continuer."
         hint1_vowel: "Le prénom se termine par une voyelle"
         hint1_consonant: "Le prénom se termine par une consonne"
