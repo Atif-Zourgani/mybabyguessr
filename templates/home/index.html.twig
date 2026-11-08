@@ -6,6 +6,7 @@
 {% block og_description %}{{ 'home.seo.description'|trans }}{% endblock %}
 
 {% block structured_data %}
+{% set _in_language = app.request.locale == 'fr' ? 'fr-FR' : (app.request.locale == 'es' ? 'es-ES' : (app.request.locale == 'pt' ? 'pt-PT' : (app.request.locale == 'de' ? 'de-DE' : (app.request.locale == 'it' ? 'it-IT' : 'en-GB')))) %}
 <script type="application/ld+json">
 [
   {
@@ -14,7 +15,23 @@
     "name": "MyBabyGuessr",
     "url": "{{ app.request.schemeAndHttpHost }}",
     "description": "{{ 'home.seo.description'|trans|e('js') }}",
-    "inLanguage": "{{ app.request.locale == 'fr' ? 'fr-FR' : (app.request.locale == 'es' ? 'es-ES' : (app.request.locale == 'pt' ? 'pt-PT' : (app.request.locale == 'de' ? 'de-DE' : (app.request.locale == 'it' ? 'it-IT' : 'en-GB')))) }}"
+    "inLanguage": "{{ _in_language }}"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "MyBabyGuessr",
+    "url": "{{ app.request.schemeAndHttpHost }}{{ path('app_home', {'_locale': app.request.locale}) }}",
+    "description": "{{ 'home.seo.description'|trans|e('js') }}",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "All",
+    "inLanguage": "{{ _in_language }}",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    }
   },
   {
     "@context": "https://schema.org",

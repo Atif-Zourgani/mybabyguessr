@@ -8,13 +8,13 @@
 {% block og_description %}{{ 'play.done.og_description'|trans }}{% endblock %}
 
 {% block og_image %}
-<meta property="og:image"        content="{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}">
-<meta property="og:image:width"  content="1024">
-<meta property="og:image:height" content="1024">
+<meta property="og:image"        content="{{ absolute_url(asset('images/og/og-' ~ app.request.locale ~ '.png')) }}">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:image:alt"    content="MyBabyGuessr">
 {% endblock %}
-{% block twitter_card %}summary{% endblock %}
-{% block twitter_image %}{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}{% endblock %}
+{% block twitter_card %}summary_large_image{% endblock %}
+{% block twitter_image %}{{ absolute_url(asset('images/og/og-' ~ app.request.locale ~ '.png')) }}{% endblock %}
 
 {% block stylesheets %}
 <style>

@@ -6,14 +6,14 @@
 {% block og_description %}{{ 'play.reveal.og_description'|trans({'%game%': game.displayTitle}) }}{% endblock %}
 {% block og_image %}
 {% set _base = app.request.schemeAndHttpHost %}
-{% set _og_img = game.image ? (_base ~ '/' ~ game.image) : (_base ~ asset('images/logo-mybabyguessr.png')) %}
+{% set _og_img = game.image ? (_base ~ '/' ~ game.image) : (_base ~ asset('images/og/og-' ~ app.request.locale ~ '.png')) %}
 <meta property="og:image" content="{{ _og_img }}">
 <meta property="og:image:width"  content="{{ game.image ? '800' : '1024' }}">
 <meta property="og:image:height" content="{{ game.image ? '800' : '1024' }}">
 <meta property="og:image:alt"    content="{{ game.displayTitle|e('html_attr') }}">
 {% endblock %}
-{% block twitter_card %}{{ game.image ? 'summary_large_image' : 'summary' }}{% endblock %}
-{% block twitter_image %}{% set _b = app.request.schemeAndHttpHost %}{{ game.image ? (_b ~ '/' ~ game.image) : (_b ~ asset('images/logo-mybabyguessr.png')) }}{% endblock %}
+{% block twitter_card %}summary_large_image{% endblock %}
+{% block twitter_image %}{% set _b = app.request.schemeAndHttpHost %}{{ game.image ? (_b ~ '/' ~ game.image) : (_b ~ asset('images/og/og-' ~ app.request.locale ~ '.png')) }}{% endblock %}
 
 {% block stylesheets %}
 <style>
