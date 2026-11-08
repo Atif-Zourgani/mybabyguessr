@@ -181,9 +181,11 @@ class AdminGamesTest extends DatabaseWebTestCase
     public function testPreviewShowsTheContentToModerate(): void
     {
         $game = $this->createGame($this->owner, 'Bébé Martin');
-        $game->setGuessName(true)->setAnswerName('Prénom-Secret')->setDueDate(new \DateTimeImmutable('2027-01-15'));
+        $game->setGuessName(true)->setGuessDate(true)->setGuessWeight(true)->setGuessHeight(true)
+            ->setAnswerName('Prénom-Secret')->setDueDate(new \DateTimeImmutable('2027-01-15'));
         $guess = $this->createGuess($game, 'Tante Sylvie', 'sylvie@example.test');
-        $guess->setGuessName('Proposition-Libre');
+        $guess->setGuessName('Proposition-Libre')->setGuessGender(\App\Enum\AnswerGender::Boy)
+            ->setGuessDate(new \DateTimeImmutable('2027-01-20 08:30'))->setGuessWeight(3400)->setGuessHeight(505);
         $guess->setMessage("Bravo <script>alert(1)</script>\nBisous");
         $this->em->flush();
 
@@ -195,6 +197,11 @@ class AdminGamesTest extends DatabaseWebTestCase
         $this->assertStringContainsString('Tante Sylvie', $html);
         $this->assertStringContainsString('15/01/2027', $html);
         $this->assertStringContainsString('Proposition-Libre', $html);
+        // Les pronostics des joueurs sont visibles (sexe, date, poids, taille)
+        $this->assertStringContainsString('Garçon', $html);
+        $this->assertStringContainsString('20/01/2027 08:30', $html);
+        $this->assertStringContainsString('3,40 kg', $html);
+        $this->assertStringContainsString('50,5 cm', $html);
         // Le message est affiché, mais échappé : aucune balise ne s'exécute
         $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
         $this->assertStringNotContainsString('<script>alert(1)', $html);
