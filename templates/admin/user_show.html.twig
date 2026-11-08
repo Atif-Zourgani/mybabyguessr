@@ -1,0 +1,75 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Admin — {{ user.firstName }} {{ user.lastName }} — MyBabyGuessr{% endblock %}
+
+{% block admin_content %}
+{% import 'admin/_macros.html.twig' as adm %}
+
+    <a class="adm-breadcrumb" href="{{ path('app_admin_users', {'_locale': app.request.locale}) }}">← Utilisateurs</a>
+
+    <div class="adm-head">
+        <div>
+            <h1 class="adm-title">{{ user.firstName }} {{ user.lastName }}</h1>
+            <p class="adm-subtitle">{{ user.email }}</p>
+        </div>
+        <div class="adm-chips">
+            {% if user.verified %}<span class="adm-badge adm-badge--ok">Email vérifié</span>{% else %}<span class="adm-badge">Email non vérifié</span>{% endif %}
+            {% if user.admin %}<span class="adm-badge adm-badge--brand">Admin</span>{% endif %}
+        </div>
+    </div>
+
+    <div class="card adm-section" style="padding:1.25rem 1.5rem">
+        <h2 class="adm-section-title">Compte</h2>
+        <dl class="adm-props">
+            <div><dt>Numéro</dt><dd>#{{ user.id }}</dd></div>
+            <div><dt>Inscrit le</dt><dd>{{ adm.fmt_date(user.createdAt, 'd/m/Y H:i') }}</dd></div>
+            <div><dt>Dernière connexion</dt><dd>{{ adm.fmt_date(user.lastLoginAt, 'd/m/Y H:i') }}</dd></div>
+            <div><dt>Jeux créés</dt><dd>{{ games|length }}</dd></div>
+            {% if user.pendingEmail %}<div><dt>Changement d'email en attente</dt><dd>{{ user.pendingEmail }}</dd></div>{% endif %}
+        </dl>
+    </div>
+
+    <div class="card adm-section" style="padding:0;overflow:hidden">
+        <h2 class="adm-section-title" style="padding:1.25rem 1.5rem 0">Jeux</h2>
+        {% include 'admin/_games_table.html.twig' with {page: games, return: app.request.requestUri, showOwner: false} only %}
+    </div>
+
+    <div class="card adm-section" style="padding:1.25rem 1.5rem">
+        <h2 class="adm-section-title">Historique de modération</h2>
+        {% if history is empty %}
+            <p class="adm-subtitle">Aucune action de modération sur ce compte.</p>
+        {% else %}
+            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.75rem">
+                {% for log in history %}
+                <li>
+                    <span class="adm-badge adm-badge--brand">{{ adm.action_label(log.action) }}</span>
+                    <span class="adm-cell-sub">{{ log.createdAt|date('d/m/Y H:i') }} · par {{ log.adminEmail }}</span>
+                    {% if log.reason %}<div style="font-size:.8125rem;margin-top:.25rem">« {{ log.reason }} »</div>{% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <details class="adm-danger adm-section">
+        <summary>Supprimer ce compte…</summary>
+        {% if not canDelete %}
+            <p class="adm-subtitle" style="margin-top:1rem">{{ deleteRefusal }}</p>
+        {% else %}
+        <form class="adm-danger-body" method="post" action="{{ path('app_admin_user_delete', {'_locale': app.request.locale, 'id': user.id}) }}">
+            <p style="font-size:.875rem;color:var(--color-ink)">
+                Cette action est <strong>définitive</strong> : le compte, ses {{ games|length }} jeu(x), tous les pronostics reçus et les photos téléversées seront supprimés.
+            </p>
+            <input type="hidden" name="_token" value="{{ csrf_token('admin_user_delete_' ~ user.id) }}">
+            <div class="adm-field">
+                <label for="del-reason">Motif (conservé dans le journal)</label>
+                <textarea id="del-reason" name="reason" rows="2" maxlength="500" placeholder="Contenu inapproprié, demande RGPD…"></textarea>
+            </div>
+            <div class="adm-field">
+                <label for="del-confirm">Pour confirmer, retapez l'email du compte</label>
+                <input id="del-confirm" name="confirm_email" type="email" required autocomplete="off" placeholder="{{ user.email }}">
+            </div>
+            <div><button type="submit" class="adm-btn adm-btn--danger">Supprimer définitivement</button></div>
+        </form>
+        {% endif %}
+    </details>
+{% endblock %}

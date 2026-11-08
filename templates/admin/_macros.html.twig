@@ -1,0 +1,42 @@
+{# URL de la page courante avec des paramètres de requête en plus ou modifiés (tri, page...) #}
+{% macro url(extra) -%}
+    {{- path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge(extra)) -}}
+{%- endmacro %}
+
+{# En-tête de colonne triable : lien + flèche + aria-sort #}
+{% macro sort_link(label, key, filters) %}
+    {% set _active = filters.sort == key %}
+    {% set _next = _active and filters.dir == 'asc' ? 'desc' : 'asc' %}
+    <a class="adm-sort{{ _active ? ' is-active' : '' }}" href="{{ _self.url({sort: key, dir: _next, page: 1}) }}">
+        {{ label }}{% if _active %}<span aria-hidden="true">{{ filters.dir == 'asc' ? '↑' : '↓' }}</span>{% endif %}
+    </a>
+{% endmacro %}
+
+{% macro aria_sort(key, filters) -%}
+    {%- if filters.sort == key %} aria-sort="{{ filters.dir == 'asc' ? 'ascending' : 'descending' }}"{% endif -%}
+{%- endmacro %}
+
+{# Pagination : compteur et liens précédent / suivant #}
+{% macro pager(page) %}
+    <div class="adm-pager">
+        <span>
+            {% if page.total == 0 %}Aucun résultat
+            {% else %}{{ page.from }}–{{ page.to }} sur {{ page.total }}{% endif %}
+        </span>
+        {% if page.pages > 1 %}
+        <nav class="adm-pager-links" aria-label="Pagination">
+            {% if page.hasPrevious %}<a class="adm-btn adm-btn--sm" rel="prev" href="{{ _self.url({page: page.page - 1}) }}">← Précédent</a>{% endif %}
+            <span style="align-self:center">Page {{ page.page }} / {{ page.pages }}</span>
+            {% if page.hasNext %}<a class="adm-btn adm-btn--sm" rel="next" href="{{ _self.url({page: page.page + 1}) }}">Suivant →</a>{% endif %}
+        </nav>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro fmt_date(value, format = 'd/m/Y') -%}
+    {{- value ? value|date(format) : '—' -}}
+{%- endmacro %}
+
+{% macro action_label(action) -%}
+    {{- {game_hidden: 'Jeu masqué', game_restored: 'Jeu rétabli', user_deleted: 'Compte supprimé'}[action.value] ?? action.value -}}
+{%- endmacro %}

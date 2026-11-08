@@ -1,13 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 {% block title %}Admin — Vue d'ensemble — MyBabyGuessr{% endblock %}
-{% block robots %}noindex, nofollow{% endblock %}
 
-{% block body %}
-<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
-
-    {% include 'admin/_nav.html.twig' %}
-
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+{% block admin_content %}
 
         {# ── En-tête ── #}
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem">
@@ -58,6 +52,39 @@
                 <div style="font-size:0.8125rem;color:var(--color-muted);margin-top:0.375rem">30 derniers jours</div>
             </div>
 
+        </div>
+
+        {# ── Modération ── #}
+        {% import 'admin/_macros.html.twig' as adm %}
+        <div class="adm-stats">
+            <a class="card adm-stat" style="text-decoration:none" href="{{ path('app_admin_users', {'_locale': app.request.locale, 'sort': 'created', 'dir': 'desc'}) }}">
+                <div class="adm-stat-value">{{ newUsers7d }}</div>
+                <div class="adm-stat-label">Nouveaux comptes (7 jours)</div>
+            </a>
+            <a class="card adm-stat" style="text-decoration:none" href="{{ path('app_admin_games', {'_locale': app.request.locale, 'visibility': 'hidden'}) }}">
+                <div class="adm-stat-value" style="color:#b42318">{{ hiddenGames }}</div>
+                <div class="adm-stat-label">Jeux masqués</div>
+            </a>
+        </div>
+
+        <div class="card adm-section" style="padding:1.25rem 1.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.75rem">
+                <h2 class="adm-section-title" style="margin:0">Dernières actions de modération</h2>
+                <a class="adm-cell-sub" style="font-size:.8125rem" href="{{ path('app_admin_moderation', {'_locale': app.request.locale}) }}">Voir le journal →</a>
+            </div>
+            {% if recentModeration is empty %}
+                <p class="adm-subtitle">Aucune action pour le moment.</p>
+            {% else %}
+                <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.625rem">
+                    {% for log in recentModeration %}
+                    <li style="font-size:.8125rem">
+                        <span class="adm-badge adm-badge--brand">{{ adm.action_label(log.action) }}</span>
+                        <span style="color:var(--color-ink);font-weight:600;overflow-wrap:anywhere">{{ log.targetLabel }}</span>
+                        <span class="adm-cell-sub">· {{ log.createdAt|date('d/m/Y H:i') }} · {{ log.adminEmail }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
 
         {# ── Trend charts ── #}
@@ -185,6 +212,4 @@
 
         </div>
 
-    </div>
-</div>
 {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+<div style="min-height:calc(100vh - 56px)">
+
+    {% include 'admin/_nav.html.twig' %}
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12 adm-page">
+        {% block admin_content %}{% endblock %}
+    </div>
+</div>
+
+{# Mode cartes sur mobile : recopie les en-têtes de colonnes dans les cellules qui n'ont pas d'étiquette #}
+<script>
+document.querySelectorAll('table.adm-table').forEach(function (table) {
+    var heads = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) { return th.textContent.trim(); });
+    table.querySelectorAll('tbody tr').forEach(function (row) {
+        Array.prototype.forEach.call(row.children, function (cell, i) {
+            if (!cell.hasAttribute('data-label') && cell.colSpan <= 1) { cell.setAttribute('data-label', heads[i] || ''); }
+        });
+    });
+});
+</script>
+{% endblock %}

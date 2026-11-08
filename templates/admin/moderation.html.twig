@@ -1,0 +1,67 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Admin — Modération — MyBabyGuessr{% endblock %}
+
+{% block admin_content %}
+{% import 'admin/_macros.html.twig' as adm %}
+
+    <div class="adm-head">
+        <div>
+            <h1 class="adm-title">Modération</h1>
+            <p class="adm-subtitle">Journal des actions effectuées par les administrateurs</p>
+        </div>
+    </div>
+
+    <form class="adm-toolbar" method="get" action="{{ path('app_admin_moderation', {'_locale': app.request.locale}) }}" role="search">
+        <div class="adm-field adm-field--grow">
+            <label for="f-q">Recherche</label>
+            <input id="f-q" type="search" name="q" value="{{ filters.q }}" placeholder="Admin, cible ou motif" autocomplete="off">
+        </div>
+        <div class="adm-field">
+            <label for="f-action">Action</label>
+            <select id="f-action" name="action">
+                <option value="">Toutes</option>
+                {% for a in actions %}
+                <option value="{{ a.value }}" {{ filters.action == a.value ? 'selected' }}>{{ adm.action_label(a) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="adm-btn adm-btn--primary">Filtrer</button>
+        <a class="adm-btn" href="{{ path('app_admin_moderation', {'_locale': app.request.locale}) }}">Réinitialiser</a>
+    </form>
+
+    <div class="card" style="padding:0;overflow:hidden">
+        <div class="adm-table-wrap">
+            <table class="adm-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Cible</th>
+                        <th scope="col">Administrateur</th>
+                        <th scope="col">Motif</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in page.items %}
+                    <tr>
+                        <td data-label="Date">{{ log.createdAt|date('d/m/Y H:i') }}</td>
+                        <td data-label="Action"><span class="adm-badge adm-badge--brand">{{ adm.action_label(log.action) }}</span></td>
+                        <td data-label="Cible">
+                            {% if log.targetType == 'user' and log.action.value != 'user_deleted' and log.targetId %}
+                                <a class="adm-cell-main" href="{{ path('app_admin_user_show', {'_locale': app.request.locale, 'id': log.targetId}) }}">{{ log.targetLabel }}</a>
+                            {% else %}
+                                <span class="adm-cell-main">{{ log.targetLabel }}</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Administrateur">{{ log.adminEmail }}</td>
+                        <td data-label="Motif">{{ log.reason ?: '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td data-label="" colspan="5"><div class="adm-empty" style="width:100%">Aucune action de modération pour le moment.</div></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ adm.pager(page) }}
+    </div>
+{% endblock %}

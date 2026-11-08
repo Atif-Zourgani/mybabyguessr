@@ -1,93 +1,106 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 {% block title %}Admin — Utilisateurs — MyBabyGuessr{% endblock %}
-{% block robots %}noindex, nofollow{% endblock %}
 
-{% block body %}
-<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
+{% block admin_content %}
+{% import 'admin/_macros.html.twig' as adm %}
 
-    {% include 'admin/_nav.html.twig' %}
-
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
-
-        {# ── En-tête ── #}
-        <div style="margin-bottom:1.75rem">
-            <h1 class="text-2xl font-bold" style="color:var(--color-ink)">Utilisateurs</h1>
-            <p style="font-size:0.875rem;color:var(--color-muted);margin-top:0.25rem">Tous les comptes enregistrés</p>
+    <div class="adm-head">
+        <div>
+            <h1 class="adm-title">Utilisateurs</h1>
+            <p class="adm-subtitle">Tous les comptes enregistrés</p>
         </div>
-
-        {# ── Stat boxes ── #}
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
-
-            <div class="card" style="padding:1.25rem;text-align:center">
-                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ users|length }}</div>
-                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Total</div>
-            </div>
-
-            <div class="card" style="padding:1.25rem;text-align:center">
-                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ totalVerified }}</div>
-                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">
-                    Vérifiés
-                    {% if users|length > 0 %}
-                    <span style="color:var(--color-ink)">({{ ((totalVerified / users|length) * 100)|round }}%)</span>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="card" style="padding:1.25rem;text-align:center">
-                <div style="font-size:1.875rem;font-weight:800;color:var(--color-brand)">{{ totalAdmins }}</div>
-                <div style="font-size:0.75rem;font-weight:600;color:var(--color-muted);margin-top:0.25rem">Admins</div>
-            </div>
-
-        </div>
-
-        {# ── Table ── #}
-        <div class="card" style="padding:0;overflow:hidden">
-            <div style="overflow-x:auto">
-                <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
-                    <thead>
-                        <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
-                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">#</th>
-                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Nom</th>
-                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Email</th>
-                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Vérifié</th>
-                            <th style="text-align:center;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Jeux</th>
-                            <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Rôles</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr style="border-bottom:{% if loop.last %}none{% else %}1px solid var(--color-line){% endif %}">
-                            <td style="padding:0.75rem 1rem;color:var(--color-muted)">{{ user.id }}</td>
-                            <td style="padding:0.75rem 1rem">
-                                <span style="font-weight:600;color:var(--color-ink)">{{ user.firstName }} {{ user.lastName }}</span>
-                            </td>
-                            <td style="padding:0.75rem 1rem;color:var(--color-ink)">{{ user.email }}</td>
-                            <td style="padding:0.75rem 1rem;text-align:center">
-                                {% if user.verified %}
-                                <span style="color:#276749;font-weight:700">✓</span>
-                                {% else %}
-                                <span style="color:#d1d5db">—</span>
-                                {% endif %}
-                            </td>
-                            <td style="padding:0.75rem 1rem;text-align:center">
-                                <span style="font-weight:600;color:var(--color-ink)">{{ user.games|length }}</span>
-                            </td>
-                            <td style="padding:0.75rem 1rem">
-                                {% for role in user.roles %}
-                                {% if role != 'ROLE_USER' %}
-                                <span style="font-size:0.625rem;font-weight:700;padding:0.125rem 0.5rem;border-radius:999px;background:rgba(196,113,74,0.12);color:var(--color-brand)">
-                                    {{ role }}
-                                </span>
-                                {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
-</div>
+
+    <div class="adm-stats">
+        <div class="card adm-stat"><div class="adm-stat-value">{{ totalUsers }}</div><div class="adm-stat-label">Total</div></div>
+        <div class="card adm-stat">
+            <div class="adm-stat-value">{{ totalVerified }}</div>
+            <div class="adm-stat-label">Vérifiés{% if totalUsers > 0 %} ({{ ((totalVerified / totalUsers) * 100)|round }}%){% endif %}</div>
+        </div>
+        <div class="card adm-stat"><div class="adm-stat-value">{{ totalAdmins }}</div><div class="adm-stat-label">Admins</div></div>
+        <div class="card adm-stat"><div class="adm-stat-value">{{ newUsers7d }}</div><div class="adm-stat-label">Inscrits sur 7 jours</div></div>
+    </div>
+
+    <form class="adm-toolbar" method="get" action="{{ path('app_admin_users', {'_locale': app.request.locale}) }}" role="search">
+        <div class="adm-field adm-field--grow">
+            <label for="f-q">Recherche</label>
+            <input id="f-q" type="search" name="q" value="{{ filters.q }}" placeholder="Nom ou email" autocomplete="off">
+        </div>
+        <div class="adm-field">
+            <label for="f-verified">Email</label>
+            <select id="f-verified" name="verified">
+                <option value="">Tous</option>
+                <option value="1" {{ filters.verified == '1' ? 'selected' }}>Vérifiés</option>
+                <option value="0" {{ filters.verified == '0' ? 'selected' }}>Non vérifiés</option>
+            </select>
+        </div>
+        <div class="adm-field">
+            <label for="f-role">Rôle</label>
+            <select id="f-role" name="role">
+                <option value="">Tous</option>
+                <option value="admin" {{ filters.role == 'admin' ? 'selected' }}>Admins</option>
+                <option value="user" {{ filters.role == 'user' ? 'selected' }}>Utilisateurs</option>
+            </select>
+        </div>
+        <div class="adm-field">
+            <label for="f-sort">Trier par</label>
+            <select id="f-sort" name="sort">
+                {% for key, label in {id: 'Numéro', name: 'Nom', email: 'Email', created: 'Inscription', login: 'Dernière connexion', games: 'Nombre de jeux'} %}
+                <option value="{{ key }}" {{ filters.sort == key ? 'selected' }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="adm-field">
+            <label for="f-dir">Ordre</label>
+            <select id="f-dir" name="dir">
+                <option value="desc" {{ filters.dir != 'asc' ? 'selected' }}>Décroissant</option>
+                <option value="asc" {{ filters.dir == 'asc' ? 'selected' }}>Croissant</option>
+            </select>
+        </div>
+        <button type="submit" class="adm-btn adm-btn--primary">Filtrer</button>
+        <a class="adm-btn" href="{{ path('app_admin_users', {'_locale': app.request.locale}) }}">Réinitialiser</a>
+    </form>
+
+    <div class="card" style="padding:0;overflow:hidden">
+        <div class="adm-table-wrap">
+            <table class="adm-table">
+                <thead>
+                    <tr>
+                        <th scope="col"{{ adm.aria_sort('name', filters) }}>{{ adm.sort_link('Utilisateur', 'name', filters) }}</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col" class="is-num"{{ adm.aria_sort('games', filters) }}>{{ adm.sort_link('Jeux', 'games', filters) }}</th>
+                        <th scope="col"{{ adm.aria_sort('created', filters) }}>{{ adm.sort_link('Inscrit le', 'created', filters) }}</th>
+                        <th scope="col"{{ adm.aria_sort('login', filters) }}>{{ adm.sort_link('Dernière connexion', 'login', filters) }}</th>
+                        <th scope="col"><span class="sr-only">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in page.items %}
+                    {% set user = row.user %}
+                    <tr>
+                        <td data-label="Utilisateur">
+                            <div>
+                                <a class="adm-cell-main" href="{{ path('app_admin_user_show', {'_locale': app.request.locale, 'id': user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a>
+                                <div class="adm-cell-sub">{{ user.email }}</div>
+                            </div>
+                        </td>
+                        <td data-label="Statut">
+                            <div class="adm-chips">
+                                {% if user.verified %}<span class="adm-badge adm-badge--ok">Vérifié</span>{% else %}<span class="adm-badge">Non vérifié</span>{% endif %}
+                                {% if user.admin %}<span class="adm-badge adm-badge--brand">Admin</span>{% endif %}
+                            </div>
+                        </td>
+                        <td data-label="Jeux" class="is-num">{{ row.games }}</td>
+                        <td data-label="Inscrit le">{{ adm.fmt_date(user.createdAt) }}</td>
+                        <td data-label="Dernière connexion">{{ adm.fmt_date(user.lastLoginAt, 'd/m/Y H:i') }}</td>
+                        <td data-label=""><a class="adm-btn adm-btn--sm" href="{{ path('app_admin_user_show', {'_locale': app.request.locale, 'id': user.id}) }}">Voir la fiche</a></td>
+                    </tr>
+                    {% else %}
+                    <tr><td data-label="" colspan="6"><div class="adm-empty" style="width:100%">Aucun utilisateur ne correspond à ces filtres.</div></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ adm.pager(page) }}
+    </div>
 {% endblock %}

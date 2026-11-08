@@ -1,13 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 {% block title %}Admin — Activité — MyBabyGuessr{% endblock %}
-{% block robots %}noindex, nofollow{% endblock %}
 
-{% block body %}
-<div style="background:var(--color-bg);min-height:calc(100vh - 56px)">
-
-    {% include 'admin/_nav.html.twig' %}
-
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+{% block admin_content %}
 
         {# ── En-tête ── #}
         <div style="margin-bottom:1.75rem">
@@ -51,7 +45,7 @@
             <div x-show="tab === 'guesses'">
                 <div class="card" style="padding:0;overflow:hidden">
                     <div style="overflow-x:auto">
-                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                        <table class="adm-table" style="width:100%;border-collapse:collapse;font-size:0.8125rem">
                             <thead>
                                 <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
                                     <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Joueur</th>
@@ -88,7 +82,7 @@
             <div x-show="tab === 'games'" x-cloak>
                 <div class="card" style="padding:0;overflow:hidden">
                     <div style="overflow-x:auto">
-                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                        <table class="adm-table" style="width:100%;border-collapse:collapse;font-size:0.8125rem">
                             <thead>
                                 <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
                                     <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Titre</th>
@@ -132,7 +126,7 @@
             <div x-show="tab === 'reveals'" x-cloak>
                 <div class="card" style="padding:0;overflow:hidden">
                     <div style="overflow-x:auto">
-                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                        <table class="adm-table" style="width:100%;border-collapse:collapse;font-size:0.8125rem">
                             <thead>
                                 <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
                                     <th style="text-align:left;padding:0.625rem 1rem;font-weight:700;color:var(--color-muted)">Jeu</th>
@@ -196,7 +190,7 @@
 
                 <div class="card" style="padding:0;overflow:hidden">
                     <div style="overflow-x:auto">
-                        <table style="width:100%;border-collapse:collapse;font-size:0.8125rem">
+                        <table class="adm-table" style="width:100%;border-collapse:collapse;font-size:0.8125rem">
                             <thead>
                                 <tr style="border-bottom:1px solid var(--color-line);background:rgba(0,0,0,0.02)">
                                     <th style="text-align:center;padding:0.625rem 0.75rem;font-weight:700;color:var(--color-muted);white-space:nowrap">Code</th>
@@ -259,6 +253,4 @@
 
         </div>
 
-    </div>
-</div>
 {% endblock %}

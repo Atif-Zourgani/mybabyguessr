@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\GameRepository;
 use App\Repository\GuessRepository;
+use App\Repository\ModerationLogRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +23,7 @@ class AdminController extends AbstractController
         UserRepository $userRepository,
         GameRepository $gameRepository,
         GuessRepository $guessRepository,
+        ModerationLogRepository $moderationLogRepository,
         EntityManagerInterface $em,
     ): Response {
         $conn         = $em->getConnection();
@@ -30,7 +32,8 @@ class AdminController extends AbstractController
 
         $totalUsers    = $userRepository->count([]);
         $verifiedCount = $userRepository->countVerified();
-        $games         = $gameRepository->findBy([], ['createdAt' => 'DESC']);
+        $gamesByStatus = $gameRepository->countByStatus();
+        $totalGames    = array_sum($gamesByStatus);
         $totalGuesses  = $guessRepository->countAll();
 
         $recentResets = (int) $conn->fetchOne(
@@ -38,13 +41,7 @@ class AdminController extends AbstractController
             ['since' => $since30days->format('Y-m-d')]
         );
 
-        $gamesByStatus = [];
-        foreach ($games as $game) {
-            $s = $game->getStatus()->value;
-            $gamesByStatus[$s] = ($gamesByStatus[$s] ?? 0) + 1;
-        }
-
-        $avgGuessesPerGame = count($games) > 0 ? round($totalGuesses / count($games), 1) : 0;
+        $avgGuessesPerGame = $totalGames > 0 ? round($totalGuesses / $totalGames, 1) : 0;
 
         $gamesTrend   = $this->buildTrend($gameRepository->getDailyCreatedTrend($since7days));
         $guessesTrend = $this->buildTrend($guessRepository->getDailyCreatedTrend($since7days));
@@ -54,7 +51,10 @@ class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'totalUsers'        => $totalUsers,
             'verifiedCount'     => $verifiedCount,
-            'totalGames'        => count($games),
+            'totalGames'        => $totalGames,
+            'newUsers7d'        => $userRepository->countCreatedSince($since7days),
+            'hiddenGames'       => $gameRepository->countHidden(),
+            'recentModeration'  => $moderationLogRepository->searchForAdmin('', null, 1, 5)->items,
             'totalGuesses'      => $totalGuesses,
             'gamesByStatus'     => $gamesByStatus,
             'avgGuessesPerGame' => $avgGuessesPerGame,
@@ -63,44 +63,6 @@ class AdminController extends AbstractController
             'guessesTrend'      => $guessesTrend,
             'recentGuesses'     => $recentGuesses,
             'recentGames'       => $recentGames,
-        ]);
-    }
-
-    // ── Users ─────────────────────────────────────────────────────────────────
-
-    #[Route('/users', name: 'users', methods: ['GET'])]
-    public function users(UserRepository $userRepository): Response
-    {
-        return $this->render('admin/users.html.twig', [
-            'users'         => $userRepository->findBy([], ['id' => 'DESC']),
-            'totalVerified' => $userRepository->countVerified(),
-            'totalAdmins'   => $userRepository->countAdmins(),
-        ]);
-    }
-
-    // ── Games ─────────────────────────────────────────────────────────────────
-
-    #[Route('/games', name: 'games', methods: ['GET'])]
-    public function games(
-        GameRepository $gameRepository,
-        GuessRepository $guessRepository,
-    ): Response {
-        $games = $gameRepository->findBy([], ['createdAt' => 'DESC']);
-
-        $gamesByStatus = [];
-        foreach ($games as $game) {
-            $s = $game->getStatus()->value;
-            $gamesByStatus[$s] = ($gamesByStatus[$s] ?? 0) + 1;
-        }
-
-        $totalGuesses = $guessRepository->countAll();
-
-        return $this->render('admin/games.html.twig', [
-            'games'         => $games,
-            'gamesByStatus' => $gamesByStatus,
-            'totalGuesses'  => $totalGuesses,
-            'avgGuesses'    => count($games) > 0 ? round($totalGuesses / count($games), 1) : 0,
-            'catStats'      => $gameRepository->getCategoryStats(),
         ]);
     }
 
@@ -163,7 +125,8 @@ class AdminController extends AbstractController
         );
 
         $expiredResets = (int) $conn->fetchOne(
-            'SELECT COUNT(*) FROM reset_password_request WHERE expires_at < NOW()'
+            'SELECT COUNT(*) FROM reset_password_request WHERE expires_at < :now',
+            ['now' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')]
         );
 
         return $this->render('admin/security.html.twig', [

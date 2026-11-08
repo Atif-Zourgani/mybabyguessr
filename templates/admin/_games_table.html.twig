@@ -1,0 +1,87 @@
+{# Tableau de jeux partagé par la liste des jeux et la fiche utilisateur.
+   Variables : page (ou liste "items"), filters (facultatif), return, showOwner #}
+{% import 'admin/_macros.html.twig' as adm %}
+{% set _items = page.items is defined ? page.items : page %}
+<div class="adm-table-wrap">
+    <table class="adm-table">
+        <thead>
+            <tr>
+                <th scope="col">{% if filters is defined %}{{ adm.sort_link('Jeu', 'title', filters) }}{% else %}Jeu{% endif %}</th>
+                {% if showOwner %}<th scope="col">{% if filters is defined %}{{ adm.sort_link('Créateur', 'owner', filters) }}{% else %}Créateur{% endif %}</th>{% endif %}
+                <th scope="col">Statut</th>
+                <th scope="col">Catégories</th>
+                <th scope="col" class="is-num">{% if filters is defined %}{{ adm.sort_link('Part.', 'guesses', filters) }}{% else %}Part.{% endif %}</th>
+                <th scope="col">{% if filters is defined %}{{ adm.sort_link('Créé le', 'created', filters) }}{% else %}Créé le{% endif %}</th>
+                <th scope="col">Modération</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in _items %}
+            {% set game = row.game %}
+            <tr>
+                <td data-label="Jeu">
+                    <div class="adm-media">
+                        {% if game.image %}<img class="adm-thumb" src="{{ asset(game.image) }}" alt="" loading="lazy">{% endif %}
+                        <div>
+                            <div class="adm-cell-main">{{ game.displayTitle }}</div>
+                            <a class="adm-cell-sub" href="{{ path('app_game_play', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) }}" target="_blank" rel="noopener">Page joueur ↗</a>
+                        </div>
+                    </div>
+                </td>
+                {% if showOwner %}
+                <td data-label="Créateur">
+                    <div>
+                        <a class="adm-cell-main" href="{{ path('app_admin_user_show', {'_locale': app.request.locale, 'id': game.user.id}) }}">{{ game.user.firstName }} {{ game.user.lastName }}</a>
+                        <div class="adm-cell-sub">{{ game.user.email }}</div>
+                    </div>
+                </td>
+                {% endif %}
+                <td data-label="Statut">
+                    <div class="adm-chips">
+                        {% if game.status.value == 'revealed' %}<span class="adm-badge adm-badge--ok">Révélé</span>
+                        {% elseif game.status.value == 'closed' %}<span class="adm-badge">Fermé</span>
+                        {% else %}<span class="adm-badge adm-badge--brand">Ouvert</span>{% endif %}
+                        {% if game.hidden %}<span class="adm-badge adm-badge--danger">Masqué</span>{% endif %}
+                    </div>
+                </td>
+                <td data-label="Catégories">
+                    <div class="adm-chips">
+                        {% if game.guessGender %}<span class="adm-badge">Sexe</span>{% endif %}
+                        {% if game.guessName %}<span class="adm-badge">Prénom</span>{% endif %}
+                        {% if game.guessDate %}<span class="adm-badge">Date</span>{% endif %}
+                        {% if game.guessWeight %}<span class="adm-badge">Poids</span>{% endif %}
+                        {% if game.guessHeight %}<span class="adm-badge">Taille</span>{% endif %}
+                    </div>
+                </td>
+                <td data-label="Part." class="is-num">{{ row.guesses }}</td>
+                <td data-label="Créé le">{{ game.createdAt|date('d/m/Y') }}</td>
+                <td data-label="Modération">
+                    {% if game.hidden %}
+                    <details class="adm-inline">
+                        <summary class="adm-btn adm-btn--sm">Rétablir</summary>
+                        <form class="adm-inline-form" method="post" action="{{ path('app_admin_game_restore', {'_locale': app.request.locale, 'id': game.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin_game_moderate_' ~ game.id) }}">
+                            <input type="hidden" name="_return" value="{{ return }}">
+                            <div class="adm-field"><label for="r-{{ game.id }}">Motif (facultatif)</label><input id="r-{{ game.id }}" name="reason" maxlength="500"></div>
+                            <button type="submit" class="adm-btn adm-btn--primary adm-btn--sm">Confirmer</button>
+                        </form>
+                    </details>
+                    {% else %}
+                    <details class="adm-inline">
+                        <summary class="adm-btn adm-btn--sm">Masquer</summary>
+                        <form class="adm-inline-form" method="post" action="{{ path('app_admin_game_hide', {'_locale': app.request.locale, 'id': game.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin_game_moderate_' ~ game.id) }}">
+                            <input type="hidden" name="_return" value="{{ return }}">
+                            <div class="adm-field"><label for="h-{{ game.id }}">Motif (facultatif)</label><input id="h-{{ game.id }}" name="reason" maxlength="500" placeholder="Photo ou titre inapproprié…"></div>
+                            <button type="submit" class="adm-btn adm-btn--danger adm-btn--sm">Masquer ce jeu</button>
+                        </form>
+                    </details>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td data-label="" colspan="7"><div class="adm-empty" style="width:100%">Aucun jeu ne correspond.</div></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
