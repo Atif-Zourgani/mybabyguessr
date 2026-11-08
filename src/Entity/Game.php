@@ -90,6 +90,10 @@ class Game
     #[ORM\OneToMany(targetEntity: Guess::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $guesses;
 
+    // Masqué par la modération : injouable et non réouvrable par son créateur
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $hiddenAt = null;
+
     // ── Timestamps ────────────────────────────────────────────────
 
     #[ORM\Column]
@@ -368,6 +372,23 @@ class Game
     public function getGuesses(): Collection
     {
         return $this->guesses;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->hiddenAt !== null;
+    }
+
+    public function getHiddenAt(): ?\DateTimeImmutable
+    {
+        return $this->hiddenAt;
+    }
+
+    public function setHiddenAt(?\DateTimeImmutable $hiddenAt): static
+    {
+        $this->hiddenAt = $hiddenAt;
+
+        return $this;
     }
 
     public function hasAtLeastOneCategory(): bool

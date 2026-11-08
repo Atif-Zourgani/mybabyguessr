@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Admin\DisplayTitle;
 use App\Entity\Game;
 use App\Entity\Guess;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -39,29 +40,29 @@ class GuessRepository extends ServiceEntityRepository
 
     public function findRecentWithGame(int $limit = 10): array
     {
-        return $this->getEntityManager()->getConnection()->fetchAllAssociative(
+        return DisplayTitle::apply($this->getEntityManager()->getConnection()->fetchAllAssociative(
             'SELECT g.player_name, g.created_at,
-                    COALESCE(gm.title, CONCAT(\'Baby \', u.last_name)) as display_title,
+                    gm.title, u.last_name AS owner_last_name,
                     gm.token, gm.slug
              FROM guess g
              JOIN game gm ON g.game_id = gm.id
              JOIN user u ON gm.user_id = u.id
              ORDER BY g.created_at DESC
              LIMIT ' . max(1, (int) $limit)
-        );
+        ));
     }
 
     public function findRecentWithGameAndUser(int $limit = 50): array
     {
-        return $this->getEntityManager()->getConnection()->fetchAllAssociative(
+        return DisplayTitle::apply($this->getEntityManager()->getConnection()->fetchAllAssociative(
             'SELECT g.player_name, g.player_email, g.created_at,
-                    COALESCE(gm.title, CONCAT(\'Baby \', u.last_name)) as display_title,
+                    gm.title, u.last_name AS owner_last_name,
                     gm.token, gm.slug, u.first_name, u.last_name
              FROM guess g
              JOIN game gm ON g.game_id = gm.id
              JOIN user u ON gm.user_id = u.id
              ORDER BY g.created_at DESC
              LIMIT ' . max(1, (int) $limit)
-        );
+        ));
     }
 }
