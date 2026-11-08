@@ -9,6 +9,9 @@
 parameters:
     # Expéditeur des emails transactionnels (confirmation, réinitialisation)
     app.mail_from: 'noreply@mybabyguessr.com'
+    # Adresse unique du site. Vide (développement, tests) : aucune redirection. En production : toute requête GET ou HEAD
+    # reçue en http, avec www ou sur un autre nom est redirigée en 301, ce qui évite les doublons indexés.
+    app.canonical_url: ''
 
 services:
     # default configuration for services in *this* file
@@ -23,3 +26,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+when@prod:
+    parameters:
+        app.canonical_url: 'https://mybabyguessr.com'
