@@ -38,7 +38,7 @@ class PlayController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        if ($game->getStatus() === GameStatus::Closed) {
+        if ($game->isHidden() || $game->getStatus() === GameStatus::Closed) {
             return $this->render('games/play_closed.html.twig', ['game' => $game]);
         }
 
@@ -131,7 +131,7 @@ class PlayController extends AbstractController
             return new JsonResponse(['error' => 'invalid'], 400);
         }
 
-        if ($game->getStatus() !== GameStatus::Open) {
+        if ($game->getStatus() !== GameStatus::Open || $game->isHidden()) {
             return new JsonResponse(['error' => 'closed'], 403);
         }
 
@@ -200,7 +200,7 @@ class PlayController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        if ($game->getStatus() === GameStatus::Closed) {
+        if ($game->isHidden() || $game->getStatus() === GameStatus::Closed) {
             return $this->render('games/play_closed.html.twig', ['game' => $game]);
         }
 
@@ -388,6 +388,10 @@ class PlayController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        if ($game->isHidden()) {
+            return $this->render('games/play_closed.html.twig', ['game' => $game]);
+        }
+
         if (!$game->isRevealed()) {
             return $this->redirectToRoute('app_game_play', [
                 'slug'  => $game->getSlug(),
@@ -512,6 +516,10 @@ class PlayController extends AbstractController
 
         if ($game === null) {
             throw $this->createNotFoundException();
+        }
+
+        if ($game->isHidden()) {
+            return $this->render('games/play_closed.html.twig', ['game' => $game]);
         }
 
         $guessId    = $request->getSession()->get('guess_' . $token);

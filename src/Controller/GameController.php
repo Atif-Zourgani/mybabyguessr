@@ -30,6 +30,18 @@ class GameController extends AbstractController
     {
     }
 
+    /** Un jeu masqué par la modération ne peut plus être rouvert, partagé ni révélé par son créateur. */
+    private function redirectIfHidden(Game $game, Request $request): ?Response
+    {
+        if (!$game->isHidden()) {
+            return null;
+        }
+
+        $this->addFlash('error', 'games.show.hidden_by_moderation');
+
+        return $this->redirectToRoute('app_game_show', ['_locale' => $request->getLocale(), 'token' => $game->getToken()]);
+    }
+
     #[Route('/new', name: 'app_game_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, LoggerInterface $logger): Response
     {
@@ -199,6 +211,10 @@ class GameController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        if ($hidden = $this->redirectIfHidden($game, $request)) {
+            return $hidden;
+        }
+
         if ($game->getStatus() === GameStatus::Open) {
             $game->setStatus(GameStatus::Closed);
         } elseif ($game->getStatus() === GameStatus::Closed) {
@@ -220,6 +236,10 @@ class GameController extends AbstractController
 
         if ($game === null || $game->getUser() !== $this->getUser()) {
             throw $this->createNotFoundException();
+        }
+
+        if ($hidden = $this->redirectIfHidden($game, $request)) {
+            return $hidden;
         }
 
         if ($game->getStatus() === GameStatus::Closed) {
@@ -267,6 +287,10 @@ class GameController extends AbstractController
 
         if ($game === null || $game->getUser() !== $this->getUser()) {
             throw $this->createNotFoundException();
+        }
+
+        if ($hidden = $this->redirectIfHidden($game, $request)) {
+            return $hidden;
         }
 
         $guesses = $game->getGuesses()->toArray();
@@ -363,6 +387,10 @@ class GameController extends AbstractController
 
         if ($game === null || $game->getUser() !== $this->getUser()) {
             throw $this->createNotFoundException();
+        }
+
+        if ($hidden = $this->redirectIfHidden($game, $request)) {
+            return $hidden;
         }
 
         if (!$game->isRevealed()) {

@@ -245,6 +245,7 @@ games:
         tab_overview: "Overview"
         tab_players: "Participants"
         tab_gender: "Gender"
+        hidden_by_moderation: "This game has been hidden by MyBabyGuessr moderation. Players can no longer access it. Contact us if you think this is a mistake."
         tab_name: "Name"
         tab_date: "Date"
         tab_weight: "Weight"

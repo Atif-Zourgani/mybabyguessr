@@ -28,6 +28,10 @@
         &larr; {{ 'games.new.back'|trans }}
     </a>
 
+    {% if game.hidden %}
+    <div class="flash-error mb-6" role="alert">{{ 'games.show.hidden_by_moderation'|trans }}</div>
+    {% endif %}
+
     {# ── En-tête ──────────────────────────────────────────────── #}
     <div class="card-panel mb-6">
 

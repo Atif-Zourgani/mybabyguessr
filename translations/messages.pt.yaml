@@ -245,6 +245,7 @@ games:
         tab_overview: "Resumo"
         tab_players: "Participantes"
         tab_gender: "Sexo"
+        hidden_by_moderation: "Este jogo foi ocultado pela moderação do MyBabyGuessr. Os jogadores já não têm acesso. Contacte-nos se achar que se trata de um erro."
         tab_name: "Nome"
         tab_date: "Data"
         tab_weight: "Peso"

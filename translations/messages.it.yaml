@@ -245,6 +245,7 @@ games:
         tab_overview: "Riepilogo"
         tab_players: "Partecipanti"
         tab_gender: "Sesso"
+        hidden_by_moderation: "Questo gioco è stato nascosto dalla moderazione di MyBabyGuessr. I giocatori non possono più accedervi. Contattaci se pensi si tratti di un errore."
         tab_name: "Nome"
         tab_date: "Data"
         tab_weight: "Peso"
