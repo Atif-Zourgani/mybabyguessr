@@ -18,6 +18,8 @@ class EmailVerificationSubscriber implements EventSubscriberInterface
         'app_register',
         'app_register_check_email',
         'app_verify_email',
+        'app_verify_email_pending',
+        'app_verify_email_resend',
         'app_forgot_password_request',
         'app_check_email',
         'app_reset_password',
@@ -67,7 +69,7 @@ class EmailVerificationSubscriber implements EventSubscriberInterface
         }
 
         $locale = $event->getRequest()->getLocale();
-        $url = $this->urlGenerator->generate('app_check_email', ['_locale' => $locale]);
+        $url = $this->urlGenerator->generate('app_verify_email_pending', ['_locale' => $locale]);
         $event->setResponse(new RedirectResponse($url));
     }
 }

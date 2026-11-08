@@ -4,30 +4,29 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\EmailVerificationSender;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
-use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(
-        private VerifyEmailHelperInterface $verifyEmailHelper,
-        private MailerInterface $mailer,
-        private TranslatorInterface $translator,
-    ) {}
-
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, RateLimiterFactory $registerLimiter): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        RateLimiterFactory $registerLimiter,
+        EmailVerificationSender $verificationSender,
+        LoggerInterface $logger,
+    ): Response {
         // On ne compte que les soumissions : afficher la page ne doit pas consommer le quota
         if ($request->isMethod('POST') && !$registerLimiter->create($request->getClientIp())->consume()->isAccepted()) {
             throw new TooManyRequestsHttpException();
@@ -43,26 +42,12 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $signatureComponents = $this->verifyEmailHelper->generateSignature(
-                'app_verify_email',
-                $user->getId(),
-                $user->getEmail(),
-                ['id' => $user->getId()]
-            );
-
-            $email = (new TemplatedEmail())
-                ->from('noreply@mybabyguessr.com')
-                ->to($user->getEmail())
-                ->subject($this->translator->trans('email.verify_subject', locale: $request->getLocale()))
-                ->htmlTemplate('emails/confirmation.html.twig')
-                ->context([
-                    'user' => $user,
-                    'signedUrl' => $signatureComponents->getSignedUrl(),
-                    'expiresAt' => $signatureComponents->getExpiresAt(),
-                    'locale' => $request->getLocale(),
-                ]);
-
-            $this->mailer->send($email);
+            // Si l'envoi échoue, le compte existe : l'utilisateur pourra demander un nouvel email après connexion
+            try {
+                $verificationSender->send($user, $request->getLocale());
+            } catch (TransportExceptionInterface $e) {
+                $logger->error('Verification email could not be sent', ['user' => $user->getId(), 'error' => $e->getMessage()]);
+            }
 
             $request->getSession()->set('registration_email', $user->getEmail());
 

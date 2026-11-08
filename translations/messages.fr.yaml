@@ -435,6 +435,12 @@ check_email:
     title: Vérifiez votre email
     message: "Un email de confirmation vous a été envoyé. Cliquez sur le lien pour activer votre compte."
     spam: "Vous ne le trouvez pas ? Pensez à vérifier vos spams."
+    resend_hint: "Lien expiré ou email non reçu ? Connectez-vous : nous pourrons vous en renvoyer un."
+
+verify_pending:
+    title: "Confirmez votre adresse email"
+    message: "Votre compte n'est pas encore activé. Cliquez sur le lien envoyé à l'adresse ci-dessous pour continuer."
+    resend: "Renvoyer l'email de confirmation"
 
 reset:
     request:
@@ -455,6 +461,10 @@ reset:
 flash:
     email_verified: "Votre adresse email a bien été confirmée. Vous pouvez maintenant vous connecter."
     password_reset: "Votre mot de passe a bien été réinitialisé. Vous pouvez maintenant vous connecter."
+    verify_link_invalid: "Ce lien de confirmation n'est plus valide. Connectez-vous pour recevoir un nouvel email de confirmation."
+    verify_resent: "Un nouvel email de confirmation vient de vous être envoyé."
+    verify_resend_limited: "Trop de demandes. Réessayez dans une heure."
+    verify_resend_failed: "L'email n'a pas pu être envoyé. Réessayez dans quelques instants."
 
 nav:
     lang_fr: Français
@@ -517,6 +527,7 @@ profile:
 email:
     verify_subject: "Confirmez votre adresse email — MyBabyGuessr"
     change_subject: "Confirmez votre nouvelle adresse email — MyBabyGuessr"
+    reset_subject: "Réinitialisation de votre mot de passe — MyBabyGuessr"
     common:
         greeting: "Bonjour %name% !"
         fallback_link: "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :"

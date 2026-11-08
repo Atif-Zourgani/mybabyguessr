@@ -69,6 +69,19 @@ abstract class DatabaseWebTestCase extends WebTestCase
         return $guess;
     }
 
+    /**
+     * Soumet un formulaire Symfony protégé par le jeton CSRF « sans état » (double envoi cookie + champ),
+     * comme le fait le JavaScript du site : le champ `_token` et le cookie `csrf-token_<jeton>` doivent correspondre.
+     *
+     * @param array<string, mixed> $fields champs du formulaire (sans le jeton)
+     */
+    protected function postForm(string $url, string $formName, array $fields): void
+    {
+        $token = 'abcdefghijklmnopqrstuvwxyz012345';
+        $this->client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie('csrf-token_' . $token, 'csrf-token'));
+        $this->client->request('POST', $url, [$formName => $fields + ['_token' => $token]]);
+    }
+
     protected function loginAs(User $user): void
     {
         $this->client->loginUser($user);

@@ -14,6 +14,8 @@ class AdminUsersTest extends DatabaseWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Le limiteur de connexion conserve son état entre deux exécutions : une IP aléatoire évite les faux échecs
+        $this->client->setServerParameter('REMOTE_ADDR', sprintf('10.%d.%d.%d', random_int(1, 254), random_int(1, 254), random_int(1, 254)));
         $this->admin = $this->createUser('admin@example.test', ['ROLE_ADMIN'], true, 'Ada', 'Admin');
         $this->loginAs($this->admin);
     }

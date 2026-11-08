@@ -435,6 +435,12 @@ check_email:
     title: Verifique o seu email
     message: "Foi-lhe enviado um email de confirmação. Clique no link para ativar a sua conta."
     spam: "Não o encontra? Verifique a sua pasta de spam."
+    resend_hint: "Link expirado ou email não recebido? Inicie sessão e poderemos enviar-lhe um novo."
+
+verify_pending:
+    title: "Confirme o seu endereço de email"
+    message: "A sua conta ainda não está ativada. Clique no link enviado para o endereço abaixo para continuar."
+    resend: "Reenviar o email de confirmação"
 
 reset:
     request:
@@ -455,6 +461,10 @@ reset:
 flash:
     email_verified: "O seu endereço de email foi confirmado. Já pode iniciar sessão."
     password_reset: "A sua palavra-passe foi reposta. Já pode iniciar sessão."
+    verify_link_invalid: "Este link de confirmação já não é válido. Inicie sessão para receber um novo email de confirmação."
+    verify_resent: "Acabámos de lhe enviar um novo email de confirmação."
+    verify_resend_limited: "Demasiados pedidos. Tente novamente dentro de uma hora."
+    verify_resend_failed: "Não foi possível enviar o email. Tente novamente dentro de instantes."
 
 nav:
     lang_fr: Français
@@ -517,6 +527,7 @@ profile:
 email:
     verify_subject: "Confirme o seu endereço de email — MyBabyGuessr"
     change_subject: "Confirme o seu novo endereço de email — MyBabyGuessr"
+    reset_subject: "Redefina a sua palavra-passe — MyBabyGuessr"
     common:
         greeting: "Olá %name%!"
         fallback_link: "Se o botão não funcionar, copie este link para o seu navegador:"

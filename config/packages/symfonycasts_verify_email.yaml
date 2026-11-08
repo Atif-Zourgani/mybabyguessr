@@ -1,0 +1,4 @@
+symfonycasts_verify_email:
+    # Le lien de confirmation reste valable 24 h (1 h par défaut : trop court pour un email lu le lendemain).
+    # La date d'expiration exacte est affichée dans l'email.
+    lifetime: 86400

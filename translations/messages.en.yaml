@@ -435,6 +435,12 @@ check_email:
     title: Check your email
     message: "A confirmation email has been sent to you. Click the link to activate your account."
     spam: "Can't find it? Check your spam folder."
+    resend_hint: "Link expired or email not received? Log in and we can send you a new one."
+
+verify_pending:
+    title: "Confirm your email address"
+    message: "Your account is not activated yet. Click the link sent to the address below to continue."
+    resend: "Resend the confirmation email"
 
 reset:
     request:
@@ -455,6 +461,10 @@ reset:
 flash:
     email_verified: "Your email address has been confirmed. You can now sign in."
     password_reset: "Your password has been reset. You can now sign in."
+    verify_link_invalid: "This confirmation link is no longer valid. Log in to receive a new confirmation email."
+    verify_resent: "A new confirmation email has just been sent to you."
+    verify_resend_limited: "Too many requests. Please try again in an hour."
+    verify_resend_failed: "The email could not be sent. Please try again in a few moments."
 
 nav:
     lang_fr: Français
@@ -517,6 +527,7 @@ profile:
 email:
     verify_subject: "Confirm your email address — MyBabyGuessr"
     change_subject: "Confirm your new email address — MyBabyGuessr"
+    reset_subject: "Reset your password — MyBabyGuessr"
     common:
         greeting: "Hello %name%!"
         fallback_link: "If the button doesn't work, copy this link into your browser:"

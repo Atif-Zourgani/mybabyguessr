@@ -8,6 +8,7 @@ use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class ResetPasswordController extends AbstractController
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private EntityManagerInterface $entityManager,
+        #[Autowire('%app.mail_from%')] private string $mailFrom,
     ) {}
 
     #[Route('', name: 'app_forgot_password_request')]
@@ -103,6 +105,8 @@ class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             $user->setPassword($passwordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            // Le lien de réinitialisation n'est parvenu qu'au propriétaire de l'adresse : cela prouve qu'elle est la sienne
+            $user->setIsVerified(true);
             $this->entityManager->flush();
             $this->cleanSessionAfterReset();
 
@@ -130,14 +134,10 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email', ['_locale' => $locale]);
         }
 
-        $subject = $locale === 'fr'
-            ? 'Réinitialisation de votre mot de passe — MyBabyGuessr'
-            : 'Reset your password — MyBabyGuessr';
-
         $email = (new TemplatedEmail())
-            ->from(new Address('noreply@mybabyguessr.com', 'MyBabyGuessr'))
+            ->from(new Address($this->mailFrom, 'MyBabyGuessr'))
             ->to((string) $user->getEmail())
-            ->subject($subject)
+            ->subject($translator->trans('email.reset_subject', locale: $locale))
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,

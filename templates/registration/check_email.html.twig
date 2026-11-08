@@ -34,6 +34,7 @@
         <p class="font-bold text-lg mb-4" style="color: var(--color-ink)">{{ email }}</p>
         {% endif %}
         <p class="text-sm text-muted">{{ 'check_email.spam'|trans }}</p>
+        <p class="text-sm text-muted mt-2">{{ 'check_email.resend_hint'|trans }}</p>
 
         <a href="{{ path('app_login', {'_locale': app.request.locale}) }}"
            class="btn btn-secondary mt-8">

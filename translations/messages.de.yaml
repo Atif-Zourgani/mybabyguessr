@@ -435,6 +435,12 @@ check_email:
     title: E-Mail prüfen
     message: "Eine Bestätigungs-E-Mail wurde dir zugesandt. Klicke auf den Link, um dein Konto zu aktivieren."
     spam: "Nicht gefunden? Überprüfe deinen Spam-Ordner."
+    resend_hint: "Link abgelaufen oder E-Mail nicht erhalten? Melde dich an, dann senden wir dir eine neue."
+
+verify_pending:
+    title: "Bestätige deine E-Mail-Adresse"
+    message: "Dein Konto ist noch nicht aktiviert. Klicke auf den Link, der an die untenstehende Adresse gesendet wurde, um fortzufahren."
+    resend: "Bestätigungs-E-Mail erneut senden"
 
 reset:
     request:
@@ -455,6 +461,10 @@ reset:
 flash:
     email_verified: "Deine E-Mail-Adresse wurde bestätigt. Du kannst dich jetzt anmelden."
     password_reset: "Dein Passwort wurde zurückgesetzt. Du kannst dich jetzt anmelden."
+    verify_link_invalid: "Dieser Bestätigungslink ist nicht mehr gültig. Melde dich an, um eine neue Bestätigungs-E-Mail zu erhalten."
+    verify_resent: "Wir haben dir soeben eine neue Bestätigungs-E-Mail gesendet."
+    verify_resend_limited: "Zu viele Anfragen. Bitte versuche es in einer Stunde erneut."
+    verify_resend_failed: "Die E-Mail konnte nicht gesendet werden. Bitte versuche es gleich noch einmal."
 
 nav:
     lang_fr: Français
@@ -517,6 +527,7 @@ profile:
 email:
     verify_subject: "Bestätige deine E-Mail-Adresse — MyBabyGuessr"
     change_subject: "Bestätige deine neue E-Mail-Adresse — MyBabyGuessr"
+    reset_subject: "Passwort zurücksetzen — MyBabyGuessr"
     common:
         greeting: "Hallo %name%!"
         fallback_link: "Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:"

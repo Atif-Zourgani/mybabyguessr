@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,9 +12,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     // Route définie dans config/routes.yaml (pas de préfixe /{_locale})
-    public function index(Request $request): RedirectResponse
+    public function index(Request $request, #[Autowire('%kernel.enabled_locales%')] array $enabledLocales): RedirectResponse
     {
-        $locale = $request->getPreferredLanguage(['fr', 'en']) ?? 'fr';
+        // Langue du navigateur parmi toutes celles du site (fr, en, es, pt, de, it), français par défaut
+        $locale = $request->getPreferredLanguage($enabledLocales) ?? 'fr';
 
         return $this->redirectToRoute('app_home', ['_locale' => $locale]);
     }
