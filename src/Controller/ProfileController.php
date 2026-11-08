@@ -13,7 +13,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Repository\UserRepository;
-use App\Service\UserAccountRemover;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -149,7 +148,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/delete', name: 'app_profile_delete', methods: ['POST'])]
-    public function delete(Request $request, UserPasswordHasherInterface $hasher, TokenStorageInterface $tokenStorage, UserAccountRemover $remover): Response
+    public function delete(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, TokenStorageInterface $tokenStorage): Response
     {
         if (!$this->isCsrfTokenValid('profile_delete', $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
@@ -159,9 +158,17 @@ class ProfileController extends AbstractController
             $this->addFlash('error', 'profile.delete_wrong_password');
             return $this->redirectToRoute('app_profile', ['_locale' => $request->getLocale()]);
         }
+        $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/games/';
+        foreach ($user->getGames() as $game) {
+            if ($game->getImage()) {
+                $file = $uploadsDir . basename($game->getImage());
+                if (file_exists($file)) { @unlink($file); }
+            }
+        }
         $tokenStorage->setToken(null);
         $request->getSession()->invalidate();
-        $remover->remove($user);
+        $em->remove($user);
+        $em->flush();
         return $this->redirectToRoute('app_home', ['_locale' => $request->getLocale()]);
     }
 
