@@ -128,8 +128,8 @@ a.adm-cell-main:hover { color: var(--adm-brand); text-decoration: underline; }
 .adm-pager-links { display: flex; gap: .5rem; }
 
 /* ── Actions en ligne (masquer, supprimer) ──────────────── */
-.adm-inline > summary { list-style: none; cursor: pointer; }
-.adm-inline > summary::-webkit-details-marker { display: none; }
+.adm-inline > summary, .adm-secret > summary { list-style: none; cursor: pointer; }
+.adm-inline > summary::-webkit-details-marker, .adm-secret > summary::-webkit-details-marker { display: none; }
 .adm-inline-form { display: flex; flex-direction: column; gap: .5rem; margin-top: .5rem; min-width: 14rem; }
 .adm-inline-form .adm-field, .adm-danger-body .adm-field { flex: none; }
 .adm-danger { border: 1.5px solid rgba(180, 35, 24, .35); border-radius: 1rem; padding: 1rem 1.25rem; background: rgba(180, 35, 24, .03); }

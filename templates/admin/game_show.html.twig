@@ -50,12 +50,23 @@
                         </div>
                     </dd>
                 </div>
+                {% if game.guessName and game.answerName %}
+                <div>
+                    <dt>Prénom secret</dt>
+                    <dd>
+                        <details class="adm-secret">
+                            <summary class="adm-btn adm-btn--sm">Afficher (spoiler)</summary>
+                            <p style="margin:.5rem 0 0;font-weight:700;overflow-wrap:anywhere">{{ game.answerName }}</p>
+                        </details>
+                    </dd>
+                </div>
+                {% endif %}
                 <div><dt>Créé le</dt><dd>{{ game.createdAt|date('d/m/Y H:i') }}</dd></div>
                 <div><dt>Participations</dt><dd>{{ participantsTotal }}</dd></div>
                 {% if game.hidden %}<div><dt>Masqué le</dt><dd>{{ game.hiddenAt|date('d/m/Y H:i') }}</dd></div>{% endif %}
             </dl>
         </div>
-        <p class="adm-cell-sub" style="margin-top:1rem">Les réponses secrètes (prénom, date, poids…) ne sont pas affichées ici.</p>
+        <p class="adm-cell-sub" style="margin-top:1rem">Le prénom secret est replié pour ne pas gâcher la surprise : ouvrez-le pour vérifier qu'il est conforme. Les emails des invités ne sont pas affichés.</p>
     </div>
 
     {# ── Modération ── #}
@@ -104,17 +115,25 @@
         <div class="adm-table-wrap">
             <table class="adm-table">
                 <thead>
-                    <tr><th scope="col">Joueur</th><th scope="col">Date</th><th scope="col">Message</th></tr>
+                    <tr><th scope="col">Joueur</th><th scope="col">Date</th><th scope="col">Prénom proposé</th><th scope="col">Message</th></tr>
                 </thead>
                 <tbody>
                     {% for guess in participants %}
                     <tr>
                         <td data-label="Joueur"><span class="adm-cell-main">{{ guess.playerName }}</span></td>
                         <td data-label="Date">{{ guess.createdAt|date('d/m/Y H:i') }}</td>
+                        <td data-label="Prénom proposé">
+                            {% if game.guessName and guess.guessName %}
+                                <span class="adm-cell-main">{{ guess.guessName }}</span>
+                                {% if guess.nameAttempt1 and (guess.nameAttempt2 or guess.nameAttempt3) %}
+                                <div class="adm-cell-sub">Essais : {{ [guess.nameAttempt1, guess.nameAttempt2, guess.nameAttempt3]|filter(v => v)|join(', ') }}</div>
+                                {% endif %}
+                            {% else %}<span class="adm-cell-sub">—</span>{% endif %}
+                        </td>
                         <td data-label="Message">{% if guess.message %}<span style="white-space:pre-wrap;overflow-wrap:anywhere">{{ guess.message }}</span>{% else %}<span class="adm-cell-sub">—</span>{% endif %}</td>
                     </tr>
                     {% else %}
-                    <tr><td data-label="" colspan="3"><div class="adm-empty" style="width:100%">Aucun participant pour le moment.</div></td></tr>
+                    <tr><td data-label="" colspan="4"><div class="adm-empty" style="width:100%">Aucun participant pour le moment.</div></td></tr>
                     {% endfor %}
                 </tbody>
             </table>

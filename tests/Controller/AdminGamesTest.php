@@ -178,26 +178,29 @@ class AdminGamesTest extends DatabaseWebTestCase
 
     // ── Aperçu de modération ─────────────────────────────────────────────
 
-    public function testPreviewShowsContentAndGuestMessagesButNoSecretsOrEmails(): void
+    public function testPreviewShowsTheContentToModerate(): void
     {
         $game = $this->createGame($this->owner, 'Bébé Martin');
         $game->setGuessName(true)->setAnswerName('Prénom-Secret')->setDueDate(new \DateTimeImmutable('2027-01-15'));
         $guess = $this->createGuess($game, 'Tante Sylvie', 'sylvie@example.test');
+        $guess->setGuessName('Proposition-Libre');
         $guess->setMessage("Bravo <script>alert(1)</script>\nBisous");
         $this->em->flush();
 
-        $this->client->request('GET', '/fr/admin/games/' . $game->getId());
+        $crawler = $this->client->request('GET', '/fr/admin/games/' . $game->getId());
 
         $this->assertResponseIsSuccessful();
         $html = $this->client->getResponse()->getContent();
         $this->assertStringContainsString('Bébé Martin', $html);
         $this->assertStringContainsString('Tante Sylvie', $html);
         $this->assertStringContainsString('15/01/2027', $html);
+        $this->assertStringContainsString('Proposition-Libre', $html);
         // Le message est affiché, mais échappé : aucune balise ne s'exécute
         $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
         $this->assertStringNotContainsString('<script>alert(1)', $html);
-        // Ni la réponse secrète ni l'email d'un invité
-        $this->assertStringNotContainsString('Prénom-Secret', $html);
+        // Le prénom secret est modérable, mais replié dans un <details> pour ne pas gâcher la surprise
+        $this->assertSame('Prénom-Secret', trim($crawler->filter('details.adm-secret p')->text()));
+        // L'email d'un invité n'est jamais nécessaire à la modération
         $this->assertStringNotContainsString('sylvie@example.test', $html);
     }
 
