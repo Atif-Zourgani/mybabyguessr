@@ -1,0 +1,40 @@
+{% extends 'guide/layout.html.twig' %}
+
+{% block guide_content %}
+<p class="guide-lead">Bei einer Gender-Reveal-Party wird das Geschlecht des Babys den Liebsten verraten. Statt es einfach zu verkünden, kannst du ein Spiel vorschalten: Jeder gibt seinen Tipp ab, und dann erfahren alle gleichzeitig die Antwort.</p>
+
+<h2>Gender Reveal zum Mitmachen</h2>
+<p>Die Idee ist, aus einer Ankündigung einen gemeinsamen Moment zu machen. Jeder Gast stimmt vor der Enthüllung ab (Junge oder Mädchen), und die Antwort wird vor allen verkündet, oder zu einem Zeitpunkt, den du bestimmst. Man lacht über die Tipps, zählt die Stimmen und gratuliert denen, die richtig lagen. Das Spiel eignet sich ebenso für eine Feier wie für eine Ankündigung aus der Ferne in einer Familiengruppe.</p>
+
+<h2>So richtest du es ein</h2>
+<ol>
+    <li><strong>Erstelle ein Spiel nur mit der Kategorie „Geschlecht“</strong>. Füge den Namen oder das Datum hinzu, wenn du mehr Spannung möchtest.</li>
+    <li><strong>Teile den Link</strong> per Nachricht, in deiner Familiengruppe oder auf einer Einladung. Die Gäste antworten vom Handy aus, ohne Konto.</li>
+    <li><strong>Verfolge die Tipps</strong>: Du siehst, wie sich die Stimmen auf Junge und Mädchen verteilen, ohne dass die Teilnehmer es sehen.</li>
+    <li><strong>Trage am großen Tag die Antwort ein</strong>: Das Ergebnis erscheint auf der Enthüllungsseite, zusammen mit der Liste derer, die richtig lagen.</li>
+</ol>
+
+<h2>Du behältst die Überraschung bis zur Geburt?</h2>
+<p>Nichts zwingt dich, das Geschlecht vorher zu kennen. Das Spiel bleibt offen, solange du die Antwort nicht einträgst: Du kannst sie nach der Geburt nachtragen und gleichzeitig Tipps zu Datum, Gewicht und Größe anbieten. Für diese Kategorien findest du Ratschläge im Ratgeber zum <a href="{{ path('app_guide', {'_locale': 'de', 'slug': 'geburt-tippspiel'}) }}">Geburts-Tippspiel</a>.</p>
+
+<h2>Ideen für die Inszenierung</h2>
+<ul>
+    <li><strong>Luftballons</strong> zum Platzenlassen, gefüllt mit rosa oder blauem Konfetti.</li>
+    <li><strong>Eine Torte</strong>, deren Inneres beim ersten Stück die Farbe verrät.</li>
+    <li><strong>Eine Kiste</strong>, die alle gemeinsam öffnen, mit Countdown.</li>
+    <li><strong>Ein Videoanruf</strong>, damit auch entfernte Verwandte die Enthüllung live erleben.</li>
+</ul>
+
+<div class="guide-tip">
+    <p><strong>Besser vermeiden:</strong> Pyrotechnik im Freien. Mehrere Brände wurden schon durch Enthüllungen dieser Art verursacht. Konfetti und Luftballons sind völlig ausreichend für den Effekt, ganz ohne Risiko.</p>
+</div>
+
+<h2>Wann sollte die Abstimmung starten?</h2>
+<p>Am einfachsten öffnest du das Spiel einige Tage vor der Feier oder gleich nach der Bekanntgabe der Schwangerschaft, mit einem klaren Schlusstermin. Jeder Gast stimmt unabhängig ab: Er sieht die Tipps der anderen nicht vor der Enthüllung, sodass sich niemand von der Mehrheit beeinflussen lässt.</p>
+
+<h2>Eine Erinnerung zum Aufbewahren</h2>
+<p>Beim Abschicken seines Tipps kann jeder Gast den werdenden Eltern eine kleine Nachricht hinterlassen. Alle Stimmen und alle Nachrichten findest du an einem Ort, eine schöne Erinnerung zum späteren Nachlesen, samt den lustigsten Tipps.</p>
+
+<h2>Auch Angehörige in der Ferne sind dabei</h2>
+<p>Der größte Vorteil eines Online-Spiels: Großeltern im Ausland, Cousins und Cousinen oder Jugendfreunde machen mit wie alle anderen, über einen einfachen Link, und erfahren die Antwort zeitgleich mit dir. Wie du die Feier insgesamt organisierst, steht in unserem Ratgeber zum <a href="{{ path('app_guide', {'_locale': 'de', 'slug': 'babyparty-tippspiel'}) }}">Spiel für die Babyparty</a>.</p>
+{% endblock %}

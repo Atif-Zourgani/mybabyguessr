@@ -54,7 +54,7 @@
     </nav>
 
     <h1>{{ page.heading }}</h1>
-    <p class="guide-meta">{{ 'guide.updated'|trans }} {{ page.modified|date(page.locale == 'en' ? 'F j, Y' : 'd/m/Y') }}</p>
+    <p class="guide-meta">{{ 'guide.updated'|trans }} {{ page.modified|date({en: 'F j, Y', de: 'd.m.Y'}[page.locale] ?? 'd/m/Y') }}</p>
 
     {% block guide_content %}{% endblock %}
 

@@ -1,0 +1,42 @@
+{% extends 'guide/layout.html.twig' %}
+
+{% block guide_content %}
+<p class="guide-lead">Ein Tippspiel gehört zu den einfachsten Spielen für eine Babyparty: Jeder Gast rät, wann das Baby kommt, wie viel es wiegen wird, ob es ein Junge oder ein Mädchen wird und manchmal sogar, wie es heißt. So wird daraus ein echtes Gemeinschaftserlebnis, vor Ort wie aus der Ferne.</p>
+
+<h2>Warum ein Tippspiel so gut funktioniert</h2>
+<p>Es bindet alle ein, ohne jemandem etwas abzuverlangen: Es gibt kein Material zu kaufen, keine komplizierten Regeln, und jeder spielt in seinem eigenen Tempo. Vor allem schafft es einen roten Faden bis zur Geburt. Die Feier dauert ein paar Stunden, aber die Tipps bleiben offen: Die Gäste warten gemeinsam mit euch auf das Ergebnis, manchmal wochenlang.</p>
+
+<h2>Welche Fragen du stellen kannst</h2>
+<p>Fünf Kategorien reichen, und du kannst auch nur einige davon aktivieren:</p>
+<ul>
+    <li><strong>Das Geschlecht</strong>: Junge oder Mädchen, der große Klassiker.</li>
+    <li><strong>Der Name</strong>: als freie Antwort oder im „Hinweis-Modus“, in dem jeder Gast drei Versuche hat und nach jedem einen Hinweis bekommt (Länge des Namens, erster Buchstabe …).</li>
+    <li><strong>Datum und Uhrzeit</strong> der Geburt.</li>
+    <li><strong>Das Gewicht</strong> bei der Geburt.</li>
+    <li><strong>Die Größe</strong> bei der Geburt.</li>
+</ul>
+<p>Je weniger Fragen, desto mehr Gäste machen mit: Das Formular ist in unter einer Minute ausgefüllt. Mehr Ideen für Fragen und Regeln findest du in unserem Ratgeber zum <a href="{{ path('app_guide', {'_locale': 'de', 'slug': 'geburt-tippspiel'}) }}">Geburts-Tippspiel</a>.</p>
+
+<h2>Zettel und Stift oder Online-Spiel?</h2>
+<p>Der Zettel hat seinen Charme, aber er muss herumgereicht werden, die Antworten müssen abgetippt werden, und vor allem bleiben alle außen vor, die nicht kommen können. Ein Online-Spiel teilst du einfach per Link (Familiengruppe, Einladung, Nachricht): Jeder spielt von seinem Handy aus, ohne Konto und egal, wo er gerade ist. Die Antworten liegen an einem Ort und werden bei der Enthüllung automatisch ausgewertet.</p>
+
+<h2>Dein Spiel in 4 Schritten</h2>
+<ol>
+    <li><strong>Wähle die Kategorien</strong> und füge, wenn du magst, einen Titel und ein Foto hinzu (zum Beispiel ein Ultraschallbild).</li>
+    <li><strong>Teile den Link</strong> in deiner Familiengruppe oder auf der Einladung zur Babyparty.</li>
+    <li><strong>Lass deine Gäste tippen</strong>, vor oder während der Feier. Sie können auch eine kleine Nachricht für die werdenden Eltern hinterlassen.</li>
+    <li><strong>Trage nach der Geburt die echten Antworten ein</strong>: Die Rangliste berechnet sich von selbst, und du kannst die Gäste, die ihre E-Mail-Adresse hinterlassen haben, per E-Mail benachrichtigen.</li>
+</ol>
+
+<h2>So ermittelst du die Gewinner</h2>
+<p>Beim Geschlecht und beim Namen gewinnen alle, die richtig liegen. Bei Datum, Gewicht und Größe kommen die drei Tipps, die am nächsten liegen, aufs Siegertreppchen. Ein kleiner symbolischer Preis genügt: ein Stück Kuchen, ein Geschenk für das Baby oder einfach der Ruhm in der Familie.</p>
+
+<div class="guide-tip">
+    <p><strong>Tipp:</strong> Lege vorher fest, wann die Tipps enden (am Tag der Feier oder bei der Geburt). Du kannst das Spiel jederzeit schließen, damit niemand schummelt, der die Antwort schon kennt.</p>
+</div>
+
+<h2>Und für Angehörige, die weit weg wohnen?</h2>
+<p>Genau hier macht ein Online-Spiel den Unterschied: Großeltern im Ausland, Jugendfreunde, Kollegen … alle spielen mit ihrem Handy, in ihrer Sprache (die Website gibt es in sechs Sprachen) und erleben die Enthüllung zeitgleich mit den Gästen vor Ort. Bei einer Babyparty per Videoanruf ist es oft das einzige Spiel, das aus der Ferne genauso gut funktioniert wie vor Ort.</p>
+
+<p>Wenn deine Feier auch dazu dient, das Geschlecht des Babys zu verkünden, schau dir unsere Ideen für eine <a href="{{ path('app_guide', {'_locale': 'de', 'slug': 'gender-reveal-spiel'}) }}">Gender-Reveal-Party zum Mitmachen</a> an.</p>
+{% endblock %}

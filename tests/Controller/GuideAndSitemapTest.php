@@ -38,8 +38,10 @@ class GuideAndSitemapTest extends WebTestCase
             $slugs[$page->locale . '/' . $page->slug] = true;
         }
 
-        $this->assertCount(6, $catalog->all(), '3 guides en français et en anglais');
-        $this->assertSame([], $catalog->forLocale('es'));
+        $this->assertCount(18, $catalog->all(), '3 guides dans chacune des 6 langues');
+        foreach (['fr', 'en', 'es', 'pt', 'de', 'it'] as $locale) {
+            $this->assertCount(3, $catalog->forLocale($locale), $locale);
+        }
     }
 
     public function testEveryGuideHasEnoughContent(): void
@@ -106,10 +108,14 @@ class GuideAndSitemapTest extends WebTestCase
         $this->assertEquals([
             'fr'        => '/fr/guide/jeu-baby-shower-pronostics',
             'en'        => '/en/guide/baby-shower-guessing-game',
+            'es'        => '/es/guide/juego-baby-shower-pronosticos',
+            'pt'        => '/pt/guide/jogo-cha-de-bebe-palpites',
+            'de'        => '/de/guide/babyparty-tippspiel',
+            'it'        => '/it/guide/gioco-baby-shower-pronostici',
             'x-default' => '/fr/guide/jeu-baby-shower-pronostics',
         ], $alternates);
 
-        foreach (['/fr/guide/jeu-baby-shower-pronostics', '/en/guide/baby-shower-guessing-game'] as $path) {
+        foreach ($alternates as $path) {
             $this->client->request('GET', $path);
             $this->assertResponseIsSuccessful();
         }
@@ -125,8 +131,10 @@ class GuideAndSitemapTest extends WebTestCase
         }
 
         $this->assertSame('/en/guide/gender-reveal-guessing-game', $links['en']);
-        $this->assertSame('/es/', $links['es'], 'pas de guide en espagnol : on envoie vers l\'accueil, jamais vers une erreur 404');
-        $this->assertSame('/de/', $links['de']);
+        $this->assertSame('/es/guide/juego-revelacion-de-genero', $links['es'], 'le sélecteur mène à la traduction du guide, pas à l\'accueil');
+        $this->assertSame('/de/guide/gender-reveal-spiel', $links['de']);
+        $this->assertSame('/it/guide/gioco-gender-reveal', $links['it']);
+        $this->assertSame('/pt/guide/jogo-revelacao-de-sexo', $links['pt']);
     }
 
     public function testUnknownOrWrongLanguageAddressesAreNotFound(): void
@@ -150,7 +158,7 @@ class GuideAndSitemapTest extends WebTestCase
 
     // ── Maillage interne ─────────────────────────────────────────────────
 
-    public function testHomeAndFooterLinkToTheGuidesOnlyWhereTheyExist(): void
+    public function testHomeAndFooterLinkToTheGuidesInEveryLanguage(): void
     {
         $crawler = $this->client->request('GET', '/fr/');
         $this->assertCount(3, $crawler->filter('#guides-title ~ div a[href*="/guide/"]'));
@@ -159,9 +167,10 @@ class GuideAndSitemapTest extends WebTestCase
         $crawler = $this->client->request('GET', '/en/');
         $this->assertCount(3, $crawler->filter('#guides-title ~ div a[href*="/guide/"]'));
 
-        $crawler = $this->client->request('GET', '/es/');
-        $this->assertCount(0, $crawler->filter('a[href*="/guide/"]'));
-        $this->assertCount(0, $crawler->filter('#guides-title'));
+        foreach (['es', 'pt', 'de', 'it'] as $locale) {
+            $crawler = $this->client->request('GET', "/$locale/");
+            $this->assertCount(3, $crawler->filter('#guides-title ~ div a[href*="/guide/"]'), $locale);
+        }
     }
 
     // ── Sitemap ──────────────────────────────────────────────────────────
@@ -193,7 +202,7 @@ class GuideAndSitemapTest extends WebTestCase
     {
         $entries = $this->sitemap();
 
-        $this->assertCount(12, $entries, '6 accueils et 6 guides');
+        $this->assertCount(24, $entries, '6 accueils et 18 guides');
         foreach ($entries as $loc => $entry) {
             $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}$/', $entry['lastmod'], $loc);
             $this->assertArrayHasKey('x-default', $entry['alternates']);
