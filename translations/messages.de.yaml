@@ -361,6 +361,8 @@ games:
         error_image_type: "Format nicht akzeptiert. Verwende JPG, PNG oder WebP."
         error_image_size: "Bild zu groß. Maximal 4 MB."
         error_image_upload: "Das Bild konnte nicht hochgeladen werden (Größe oder Format vom Server abgelehnt). Dein Spiel wurde ohne Foto erstellt."
+        error_image_dimensions: "Foto zu groß (Abmessungen). Wähle ein kleineres Foto. Dein Spiel wurde ohne Foto erstellt."
+        error_image_processing: "Das Foto konnte nicht verarbeitet werden. Versuche ein anderes Foto. Dein Spiel wurde ohne Foto erstellt."
         success: "Dein Baby Guessr ist bereit! Teile den Link mit deinen Lieben."
         converting: "Wird konvertiert…"
     share:

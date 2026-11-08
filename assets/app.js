@@ -6,6 +6,61 @@ import heic2any from 'heic2any';
 
 Alpine.plugin(Focus);
 
+// ── Photo de couverture : réduction et redressement avant l'envoi ──
+// Une photo de téléphone pèse souvent 5 à 10 Mo (refusée au-delà de 4 Mo) et peut être couchée selon son EXIF.
+// On la réduit dans le navigateur ; le serveur refait de toute façon ses propres contrôles.
+const IMAGE_MAX_BYTES = 4 * 1024 * 1024;
+const IMAGE_MAX_DIMENSION = 1600; // le serveur affiche en 900 px : on garde de la marge
+
+async function loadBitmap(file) {
+    if (!window.createImageBitmap) return null;
+    try {
+        // 'from-image' applique l'orientation EXIF : l'image dessinée est dans le bon sens
+        return await createImageBitmap(file, { imageOrientation: 'from-image' });
+    } catch (_) {
+        try { return await createImageBitmap(file); } catch (_) { return null; }
+    }
+}
+
+async function prepareImage(file) {
+    if (!HTMLCanvasElement.prototype.toBlob) return file;
+
+    const bitmap = await loadBitmap(file);
+    if (!bitmap) return file;
+
+    try {
+        const ratio = Math.min(1, IMAGE_MAX_DIMENSION / bitmap.width, IMAGE_MAX_DIMENSION / bitmap.height);
+        // Déjà petite et légère : on garde l'original (le serveur gère l'orientation)
+        if (ratio === 1 && file.size <= IMAGE_MAX_BYTES) return file;
+
+        const width = Math.max(1, Math.round(bitmap.width * ratio));
+        const height = Math.max(1, Math.round(bitmap.height * ratio));
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#fff'; // fond blanc sous les zones transparentes (PNG, WebP)
+        context.fillRect(0, 0, width, height);
+        context.drawImage(bitmap, 0, 0, width, height);
+
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+        if (!blob || (blob.size >= file.size && file.size <= IMAGE_MAX_BYTES)) return file;
+
+        return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+    } catch (_) {
+        return file;
+    } finally {
+        if (bitmap.close) bitmap.close();
+    }
+}
+
+function replaceInputFile(input, file) {
+    if (!window.DataTransfer) return;
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    input.files = transfer.files;
+}
+
 Alpine.data('gameForm', () => ({
     step: 'categories',
     guessGender: false,
@@ -104,11 +159,7 @@ Alpine.data('gameForm', () => ({
                     file.name.replace(/\.(heic|heif)$/i, '.jpg'),
                     { type: 'image/jpeg' }
                 );
-                if (window.DataTransfer) {
-                    const dt = new DataTransfer();
-                    dt.items.add(processedFile);
-                    event.target.files = dt.files;
-                }
+                replaceInputFile(event.target, processedFile);
             } catch (_) {
                 this.imageConverting = false;
                 this.imageError = 'type';
@@ -124,7 +175,17 @@ Alpine.data('gameForm', () => ({
             event.target.value = '';
             return;
         }
-        if (processedFile.size > 4 * 1024 * 1024) {
+
+        // Réduction et redressement : une photo de téléphone de 8 Mo n'est plus refusée
+        this.imageConverting = true;
+        const prepared = await prepareImage(processedFile);
+        this.imageConverting = false;
+        if (prepared !== processedFile) {
+            processedFile = prepared;
+            replaceInputFile(event.target, processedFile);
+        }
+
+        if (processedFile.size > IMAGE_MAX_BYTES) {
             this.imageError = 'size';
             event.target.value = '';
             return;

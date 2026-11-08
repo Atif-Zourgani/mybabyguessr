@@ -7,6 +7,8 @@ use App\Enum\AnswerGender;
 use App\Enum\GameStatus;
 use App\Enum\NameMode;
 use App\Repository\GameRepository;
+use App\Service\GameImageException;
+use App\Service\GameImageProcessor;
 use App\Service\GameScorer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -43,7 +45,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/new', name: 'app_game_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, LoggerInterface $logger): Response
+    public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, GameImageProcessor $images): Response
     {
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('game_new', $request->request->get('_csrf_token'))) {
@@ -104,55 +106,11 @@ class GameController extends AbstractController
 
             $imageFile = $request->files->get('imageFile');
             if ($imageFile !== null) {
-                if (!$imageFile->isValid()) {
-                    $this->addFlash('error', 'games.new.error_image_upload');
-                } elseif ($imageFile->getSize() > 4 * 1024 * 1024) {
-                    $this->addFlash('error', 'games.new.error_image_size');
-                } else {
-                    try {
-                        $imageInfo = @getimagesize($imageFile->getPathname());
-                        if ($imageInfo === false || !in_array($imageInfo[2], [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP], true)) {
-                            $this->addFlash('error', 'games.new.error_image_type');
-                        } else {
-                            $src = match($imageInfo[2]) {
-                                IMAGETYPE_JPEG => imagecreatefromjpeg($imageFile->getPathname()),
-                                IMAGETYPE_PNG  => imagecreatefrompng($imageFile->getPathname()),
-                                IMAGETYPE_WEBP => imagecreatefromwebp($imageFile->getPathname()),
-                            };
-
-                            if ($src === false) {
-                                $this->addFlash('error', 'games.new.error_image_type');
-                            } else {
-                                [$origW, $origH] = [$imageInfo[0], $imageInfo[1]];
-                                if ($origW > 900 || $origH > 900) {
-                                    $ratio = min(900 / $origW, 900 / $origH);
-                                    $newW  = (int) round($origW * $ratio);
-                                    $newH  = (int) round($origH * $ratio);
-                                } else {
-                                    [$newW, $newH] = [$origW, $origH];
-                                }
-
-                                $dst = imagecreatetruecolor($newW, $newH);
-                                if ($imageInfo[2] === IMAGETYPE_PNG) {
-                                    imagefill($dst, 0, 0, imagecolorallocate($dst, 255, 255, 255));
-                                }
-                                imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
-
-                                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/games';
-                                $filename   = bin2hex(random_bytes(16)) . '.jpg';
-                                $destPath   = $uploadsDir . '/' . $filename;
-
-                                imagejpeg($dst, $destPath, 85);
-                                imagedestroy($src);
-                                imagedestroy($dst);
-                                chmod($destPath, 0644);
-
-                                $game->setImage('uploads/games/' . $filename);
-                            }
-                        }
-                    } catch (\Exception $e) {
-                        $logger->error('Image processing failed during game creation', ['error' => $e->getMessage()]);
-                    }
+                try {
+                    $game->setImage($images->process($imageFile));
+                } catch (GameImageException $e) {
+                    // Le jeu est quand même créé : le message précise qu'il l'est sans photo
+                    $this->addFlash('error', 'games.new.error_image_' . $e->reason);
                 }
             }
 
