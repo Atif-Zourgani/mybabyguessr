@@ -67,4 +67,26 @@ class ModerationLogRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    /** Nombre d'entrées antérieures à la date donnée (ce que supprimerait la purge). */
+    public function countOlderThan(\DateTimeImmutable $before): int
+    {
+        return (int) $this->createQueryBuilder('l')
+            ->select('COUNT(l.id)')
+            ->where('l.createdAt < :before')
+            ->setParameter('before', $before)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /** Supprime les entrées antérieures à la date donnée et retourne leur nombre. */
+    public function purgeOlderThan(\DateTimeImmutable $before): int
+    {
+        return (int) $this->createQueryBuilder('l')
+            ->delete()
+            ->where('l.createdAt < :before')
+            ->setParameter('before', $before)
+            ->getQuery()
+            ->execute();
+    }
 }

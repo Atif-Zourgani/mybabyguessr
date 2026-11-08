@@ -16,6 +16,7 @@ class LegalPagesTest extends WebTestCase
         $this->assertStringContainsString('Modération.', $html);
         $this->assertStringContainsString('Intérêt légitime et obligations légales de l\'hébergeur', $html);
         $this->assertStringContainsString('Les adresses email des joueurs ne sont pas affichées', $html);
+        $this->assertStringContainsString('Journal de modération</strong> : conservé 12 mois', $html);
     }
 
     public function testEnglishPrivacyPolicyMentionsModeration(): void
@@ -27,6 +28,7 @@ class LegalPagesTest extends WebTestCase
         $html = $client->getResponse()->getContent();
         $this->assertStringContainsString('Moderation.', $html);
         $this->assertStringContainsString('Legitimate interest and legal obligations of a hosting provider', $html);
+        $this->assertStringContainsString('Moderation log</strong>: retained for 12 months', $html);
     }
 
     public function testOtherLanguagesShowTheEnglishVersionWithTheFrenchNotice(): void
