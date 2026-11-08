@@ -17,6 +17,7 @@ class LegalPagesTest extends WebTestCase
         $this->assertStringContainsString('Intérêt légitime et obligations légales de l\'hébergeur', $html);
         $this->assertStringContainsString('Les adresses email des joueurs ne sont pas affichées', $html);
         $this->assertStringContainsString('Journal de modération</strong> : conservé 12 mois', $html);
+        $this->assertStringContainsString('date de dernière connexion', $html);
     }
 
     public function testEnglishPrivacyPolicyMentionsModeration(): void

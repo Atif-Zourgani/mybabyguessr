@@ -184,24 +184,74 @@ class AdminUsersTest extends DatabaseWebTestCase
 
     // ── Dernière connexion ───────────────────────────────────────────────
 
-    public function testLoggingInRecordsTheLastLoginDate(): void
+    private function loginWithForm(string $email, string $password): void
     {
-        $hasher = static::getContainer()->get('security.user_password_hasher');
-        $member = $this->createUser('member@example.test');
-        $member->setPassword($hasher->hashPassword($member, 'Secret-123'));
-        $this->em->flush();
-        $this->assertNull($member->getLastLoginAt());
-
         // Le formulaire de connexion utilise un jeton CSRF « sans état » : cookie + champ identiques
         $csrf = 'abcdefghijklmnopqrstuvwxyz012345';
         $this->client->restart(); // on repart d'un navigateur sans session
         $this->client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie('csrf-token_' . $csrf, 'csrf-token'));
-        $this->client->request('POST', '/fr/login', ['_csrf_token' => $csrf, 'email' => 'member@example.test', 'password' => 'Secret-123']);
-
+        $this->client->request('POST', '/fr/login', ['_csrf_token' => $csrf, 'email' => $email, 'password' => $password]);
         $this->assertResponseRedirects('/fr/dashboard');
+    }
+
+    private function memberWithLastLogin(?string $lastLogin): User
+    {
+        $hasher = static::getContainer()->get('security.user_password_hasher');
+        $member = $this->createUser('member@example.test');
+        $member->setPassword($hasher->hashPassword($member, 'Secret-123'));
+        $member->setLastLoginAt($lastLogin ? new \DateTimeImmutable($lastLogin) : null);
+        $this->em->flush();
+
+        return $member;
+    }
+
+    private function storedLastLogin(): ?\DateTimeImmutable
+    {
         $this->em->clear();
-        $fresh = $this->em->getRepository(User::class)->findOneBy(['email' => 'member@example.test']);
-        $this->assertNotNull($fresh->getLastLoginAt());
-        $this->assertEqualsWithDelta(time(), $fresh->getLastLoginAt()->getTimestamp(), 30);
+
+        return $this->em->getRepository(User::class)->findOneBy(['email' => 'member@example.test'])->getLastLoginAt();
+    }
+
+    public function testLoggingInRecordsTheLastLoginDate(): void
+    {
+        $this->memberWithLastLogin(null);
+
+        $this->loginWithForm('member@example.test', 'Secret-123');
+
+        $this->assertNotNull($this->storedLastLogin());
+        $this->assertEqualsWithDelta(time(), $this->storedLastLogin()->getTimestamp(), 30);
+    }
+
+    public function testAnOldLoginDateIsReplaced(): void
+    {
+        $this->memberWithLastLogin('-3 days');
+
+        $this->loginWithForm('member@example.test', 'Secret-123');
+
+        $this->assertEqualsWithDelta(time(), $this->storedLastLogin()->getTimestamp(), 30);
+    }
+
+    public function testLoginsWithinTenMinutesDoNotWriteAgain(): void
+    {
+        $recent = (new \DateTimeImmutable('-2 minutes'))->format('Y-m-d H:i:s');
+        $this->memberWithLastLogin($recent);
+
+        $this->loginWithForm('member@example.test', 'Secret-123');
+
+        $this->assertSame($recent, $this->storedLastLogin()->format('Y-m-d H:i:s'));
+    }
+
+    public function testAFailedLoginNeverTouchesTheDate(): void
+    {
+        $this->memberWithLastLogin('-3 days');
+        $before = $this->storedLastLogin()->format('Y-m-d H:i:s');
+
+        $csrf = 'abcdefghijklmnopqrstuvwxyz012345';
+        $this->client->restart();
+        $this->client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie('csrf-token_' . $csrf, 'csrf-token'));
+        $this->client->request('POST', '/fr/login', ['_csrf_token' => $csrf, 'email' => 'member@example.test', 'password' => 'mauvais']);
+
+        $this->assertResponseRedirects('/fr/login');
+        $this->assertSame($before, $this->storedLastLogin()->format('Y-m-d H:i:s'));
     }
 }
