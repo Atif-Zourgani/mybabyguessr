@@ -175,4 +175,66 @@ class AdminGamesTest extends DatabaseWebTestCase
         $this->assertCount(2, $crawler->filter('tbody tr td[data-label="Jeu"]'));
         $this->assertCount(2, $crawler->filter('form[action*="/hide"]'));
     }
+
+    // ── Aperçu de modération ─────────────────────────────────────────────
+
+    public function testPreviewShowsContentAndGuestMessagesButNoSecretsOrEmails(): void
+    {
+        $game = $this->createGame($this->owner, 'Bébé Martin');
+        $game->setGuessName(true)->setAnswerName('Prénom-Secret')->setDueDate(new \DateTimeImmutable('2027-01-15'));
+        $guess = $this->createGuess($game, 'Tante Sylvie', 'sylvie@example.test');
+        $guess->setMessage("Bravo <script>alert(1)</script>\nBisous");
+        $this->em->flush();
+
+        $this->client->request('GET', '/fr/admin/games/' . $game->getId());
+
+        $this->assertResponseIsSuccessful();
+        $html = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString('Bébé Martin', $html);
+        $this->assertStringContainsString('Tante Sylvie', $html);
+        $this->assertStringContainsString('15/01/2027', $html);
+        // Le message est affiché, mais échappé : aucune balise ne s'exécute
+        $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
+        $this->assertStringNotContainsString('<script>alert(1)', $html);
+        // Ni la réponse secrète ni l'email d'un invité
+        $this->assertStringNotContainsString('Prénom-Secret', $html);
+        $this->assertStringNotContainsString('sylvie@example.test', $html);
+    }
+
+    public function testPreviewNeedsAnAdminAndAnExistingGame(): void
+    {
+        $game = $this->createGame($this->owner, 'Privé');
+
+        $this->client->request('GET', '/fr/admin/games/99999');
+        $this->assertResponseStatusCodeSame(404);
+
+        $this->loginAs($this->owner);
+        $this->client->request('GET', '/fr/admin/games/' . $game->getId());
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testHidingFromThePreviewComesBackToThePreview(): void
+    {
+        $game = $this->createGame($this->owner, 'Photo douteuse');
+        $url  = '/fr/admin/games/' . $game->getId();
+
+        $crawler = $this->client->request('GET', $url);
+        $form    = $crawler->filter('form[action$="/hide"]')->form(['reason' => 'Photo inappropriée']);
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects($url);
+        $crawler = $this->client->followRedirect();
+        $this->assertStringContainsString('Masqué', $crawler->filter('.adm-chips')->first()->text());
+        $this->assertStringContainsString('Photo inappropriée', $crawler->text());
+        $this->assertTrue($this->reload($game)->isHidden());
+    }
+
+    public function testListLinksToThePreview(): void
+    {
+        $game = $this->createGame($this->owner, 'Lien test');
+
+        $crawler = $this->client->request('GET', '/fr/admin/games');
+
+        $this->assertSame('/fr/admin/games/' . $game->getId(), $crawler->filter('td[data-label="Jeu"] a.adm-cell-main')->attr('href'));
+    }
 }

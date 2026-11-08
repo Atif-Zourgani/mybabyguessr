@@ -23,8 +23,8 @@
                     <div class="adm-media">
                         {% if game.image %}<img class="adm-thumb" src="{{ asset(game.image) }}" alt="" loading="lazy">{% endif %}
                         <div>
-                            <div class="adm-cell-main">{{ game.displayTitle }}</div>
-                            <a class="adm-cell-sub" href="{{ path('app_game_play', {'_locale': app.request.locale, 'slug': game.slug, 'token': game.token}) }}" target="_blank" rel="noopener">Page joueur ↗</a>
+                            <a class="adm-cell-main" href="{{ path('app_admin_game_show', {'_locale': app.request.locale, 'id': game.id}) }}">{{ game.displayTitle }}</a>
+                            <div class="adm-cell-sub">Aperçu et participants</div>
                         </div>
                     </div>
                 </td>

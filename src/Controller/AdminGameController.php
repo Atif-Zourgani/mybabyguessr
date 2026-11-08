@@ -9,6 +9,7 @@ use App\Enum\GameStatus;
 use App\Enum\ModerationAction;
 use App\Repository\GameRepository;
 use App\Repository\GuessRepository;
+use App\Repository\ModerationLogRepository;
 use App\Service\ModerationLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin', name: 'app_admin_')]
 class AdminGameController extends AbstractController
 {
+    /** Nombre maximum de participants listés sur l'aperçu (les plus récents). */
+    private const PARTICIPANTS_LIMIT = 100;
+
     #[Route('/games', name: 'games', methods: ['GET'])]
     public function index(Request $request, GameRepository $games, GuessRepository $guesses): Response
     {
@@ -55,6 +59,18 @@ class AdminGameController extends AbstractController
             'totalGuesses' => $totalGuesses,
             'avgGuesses'   => $totalGames > 0 ? round($totalGuesses / $totalGames, 1) : 0,
             'catStats'     => $games->getCategoryStats(),
+        ]);
+    }
+
+    #[Route('/games/{id}', name: 'game_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function show(Game $game, GuessRepository $guesses, ModerationLogRepository $logs): Response
+    {
+        return $this->render('admin/game_show.html.twig', [
+            'game'              => $game,
+            'participants'      => $guesses->findBy(['game' => $game], ['createdAt' => 'DESC', 'id' => 'DESC'], self::PARTICIPANTS_LIMIT),
+            'participantsTotal' => $guesses->count(['game' => $game]),
+            'participantsLimit' => self::PARTICIPANTS_LIMIT,
+            'history'           => $logs->forTarget(ModerationLog::TARGET_GAME, (int) $game->getId()),
         ]);
     }
 

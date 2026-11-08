@@ -145,6 +145,11 @@ a.adm-cell-main:hover { color: var(--adm-brand); text-decoration: underline; }
 .adm-section-title { font-size: 1rem; font-weight: 700; color: var(--adm-ink); margin-bottom: .75rem; }
 .adm-cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr)); gap: .75rem; }
 
+/* ── Aperçu d'un jeu ───────────────────────────────────── */
+.adm-preview { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-start; }
+.adm-preview-image { width: 14rem; max-width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 1rem; background: rgba(196, 113, 74, .08); display: block; }
+.adm-preview-image--empty { display: flex; align-items: center; justify-content: center; font-size: .8125rem; color: var(--adm-muted); border: 1.5px dashed var(--adm-line); }
+
 /* ── Mobile : les tableaux deviennent des cartes ────────── */
 @media (max-width: 720px) {
     .adm-table thead {

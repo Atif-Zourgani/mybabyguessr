@@ -1,0 +1,123 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Admin — {{ game.displayTitle }} — MyBabyGuessr{% endblock %}
+
+{% block admin_content %}
+{% import 'admin/_macros.html.twig' as adm %}
+
+    <a class="adm-breadcrumb" href="{{ path('app_admin_games', {'_locale': app.request.locale}) }}">← Jeux</a>
+
+    <div class="adm-head">
+        <div>
+            <h1 class="adm-title">{{ game.displayTitle }}</h1>
+            <p class="adm-subtitle">
+                Créé par
+                <a class="adm-cell-main" href="{{ path('app_admin_user_show', {'_locale': app.request.locale, 'id': game.user.id}) }}">{{ game.user.firstName }} {{ game.user.lastName }}</a>
+                ({{ game.user.email }})
+            </p>
+        </div>
+        <div class="adm-chips">
+            {% if game.status.value == 'revealed' %}<span class="adm-badge adm-badge--ok">Révélé</span>
+            {% elseif game.status.value == 'closed' %}<span class="adm-badge">Fermé</span>
+            {% else %}<span class="adm-badge adm-badge--brand">Ouvert</span>{% endif %}
+            {% if game.hidden %}<span class="adm-badge adm-badge--danger">Masqué</span>{% endif %}
+        </div>
+    </div>
+
+    {# ── Ce que voient les joueurs ── #}
+    <div class="card adm-section" style="padding:1.25rem 1.5rem">
+        <h2 class="adm-section-title">Contenu du jeu</h2>
+        <div class="adm-preview">
+            {% if game.image %}
+            <a href="{{ asset(game.image) }}" target="_blank" rel="noopener" aria-label="Ouvrir la photo en grand">
+                <img class="adm-preview-image" src="{{ asset(game.image) }}" alt="Photo du jeu « {{ game.displayTitle }} »">
+            </a>
+            {% else %}
+            <div class="adm-preview-image adm-preview-image--empty">Aucune photo</div>
+            {% endif %}
+            <dl class="adm-props" style="flex:1">
+                <div><dt>Titre affiché</dt><dd>{{ game.displayTitle }}{% if not game.title %} <span class="adm-cell-sub">(titre par défaut)</span>{% endif %}</dd></div>
+                <div><dt>Adresse du jeu</dt><dd>/{{ game.slug }}</dd></div>
+                <div><dt>Date prévue</dt><dd>{{ adm.fmt_date(game.dueDate) }}</dd></div>
+                <div>
+                    <dt>Catégories</dt>
+                    <dd>
+                        <div class="adm-chips">
+                            {% if game.guessGender %}<span class="adm-badge">Sexe</span>{% endif %}
+                            {% if game.guessName %}<span class="adm-badge">Prénom{% if game.nameMode %} ({{ game.nameMode.value == 'hints' ? 'indices' : 'libre' }}){% endif %}</span>{% endif %}
+                            {% if game.guessDate %}<span class="adm-badge">Date</span>{% endif %}
+                            {% if game.guessWeight %}<span class="adm-badge">Poids</span>{% endif %}
+                            {% if game.guessHeight %}<span class="adm-badge">Taille</span>{% endif %}
+                        </div>
+                    </dd>
+                </div>
+                <div><dt>Créé le</dt><dd>{{ game.createdAt|date('d/m/Y H:i') }}</dd></div>
+                <div><dt>Participations</dt><dd>{{ participantsTotal }}</dd></div>
+                {% if game.hidden %}<div><dt>Masqué le</dt><dd>{{ game.hiddenAt|date('d/m/Y H:i') }}</dd></div>{% endif %}
+            </dl>
+        </div>
+        <p class="adm-cell-sub" style="margin-top:1rem">Les réponses secrètes (prénom, date, poids…) ne sont pas affichées ici.</p>
+    </div>
+
+    {# ── Modération ── #}
+    <div class="card adm-section" style="padding:1.25rem 1.5rem">
+        <h2 class="adm-section-title">Modération</h2>
+        {% if game.hidden %}
+            <p class="adm-subtitle" style="margin:0 0 1rem">Ce jeu est masqué : les joueurs ne peuvent plus y accéder et son créateur ne peut pas le rouvrir.</p>
+        {% endif %}
+        <form class="adm-danger-body" style="max-width:32rem" method="post"
+              action="{{ path(game.hidden ? 'app_admin_game_restore' : 'app_admin_game_hide', {'_locale': app.request.locale, 'id': game.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin_game_moderate_' ~ game.id) }}">
+            <input type="hidden" name="_return" value="{{ app.request.requestUri }}">
+            <div class="adm-field">
+                <label for="mod-reason">Motif (conservé dans le journal)</label>
+                <input id="mod-reason" name="reason" maxlength="500" placeholder="{{ game.hidden ? 'Ex. : vérifié, contenu conforme' : 'Ex. : photo ou titre inapproprié' }}">
+            </div>
+            <div>
+                {% if game.hidden %}
+                    <button type="submit" class="adm-btn adm-btn--primary">Rétablir ce jeu</button>
+                {% else %}
+                    <button type="submit" class="adm-btn adm-btn--danger">Masquer ce jeu</button>
+                {% endif %}
+            </div>
+        </form>
+
+        {% if history is not empty %}
+        <h3 class="adm-section-title" style="margin-top:1.5rem">Historique</h3>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.75rem">
+            {% for log in history %}
+            <li>
+                <span class="adm-badge adm-badge--brand">{{ adm.action_label(log.action) }}</span>
+                <span class="adm-cell-sub">{{ log.createdAt|date('d/m/Y H:i') }} · par {{ log.adminEmail }}</span>
+                {% if log.reason %}<div style="font-size:.8125rem;margin-top:.25rem">« {{ log.reason }} »</div>{% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    {# ── Texte libre saisi par les invités ── #}
+    <div class="card adm-section" style="padding:0;overflow:hidden">
+        <h2 class="adm-section-title" style="padding:1.25rem 1.5rem 0">Participants et messages</h2>
+        {% if participantsTotal > participantsLimit %}
+        <p class="adm-cell-sub" style="padding:.25rem 1.5rem 0">Les {{ participantsLimit }} plus récents sur {{ participantsTotal }}.</p>
+        {% endif %}
+        <div class="adm-table-wrap">
+            <table class="adm-table">
+                <thead>
+                    <tr><th scope="col">Joueur</th><th scope="col">Date</th><th scope="col">Message</th></tr>
+                </thead>
+                <tbody>
+                    {% for guess in participants %}
+                    <tr>
+                        <td data-label="Joueur"><span class="adm-cell-main">{{ guess.playerName }}</span></td>
+                        <td data-label="Date">{{ guess.createdAt|date('d/m/Y H:i') }}</td>
+                        <td data-label="Message">{% if guess.message %}<span style="white-space:pre-wrap;overflow-wrap:anywhere">{{ guess.message }}</span>{% else %}<span class="adm-cell-sub">—</span>{% endif %}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td data-label="" colspan="3"><div class="adm-empty" style="width:100%">Aucun participant pour le moment.</div></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

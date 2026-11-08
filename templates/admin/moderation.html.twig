@@ -49,6 +49,8 @@
                         <td data-label="Cible">
                             {% if log.targetType == 'user' and log.action.value != 'user_deleted' and log.targetId %}
                                 <a class="adm-cell-main" href="{{ path('app_admin_user_show', {'_locale': app.request.locale, 'id': log.targetId}) }}">{{ log.targetLabel }}</a>
+                            {% elseif log.targetType == 'game' and log.targetId %}
+                                <a class="adm-cell-main" href="{{ path('app_admin_game_show', {'_locale': app.request.locale, 'id': log.targetId}) }}">{{ log.targetLabel }}</a>
                             {% else %}
                                 <span class="adm-cell-main">{{ log.targetLabel }}</span>
                             {% endif %}
