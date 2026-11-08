@@ -21,8 +21,8 @@
      style="position:relative;overflow:hidden"
      x-data="{ gender: '{{ currentGender }}', loading: false }">
 
-    <img src="{{ asset('images/illustration/etoile.png') }}" alt="" aria-hidden="true" class="deco-rev deco-rev-etoile">
-    <img src="{{ asset('images/illustration/singe.png') }}"  alt="" aria-hidden="true" class="deco-rev deco-rev-singe">
+    <img src="{{ asset('images/illustration/etoile.webp') }}" alt="" aria-hidden="true" width="110" height="136" decoding="async" loading="lazy" class="deco-rev deco-rev-etoile">
+    <img src="{{ asset('images/illustration/singe.webp') }}"  alt="" aria-hidden="true" class="deco-rev deco-rev-singe">
 
     {# ── Retour ───────────────────────────────────────────────── #}
     <a href="{{ path('app_game_show', {'_locale': app.request.locale, 'token': game.token}) }}"

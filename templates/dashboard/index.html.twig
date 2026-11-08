@@ -9,7 +9,7 @@
 
     {# ── Bienvenue ────────────────────────────────────────── #}
     <div class="mb-10 sm:mb-14" style="position:relative">
-        <img src="{{ asset('images/illustration/soleil.png') }}" alt="" aria-hidden="true"
+        <img src="{{ asset('images/illustration/soleil.webp') }}" alt="" aria-hidden="true" width="283" height="198" decoding="async" loading="lazy"
              style="position:absolute;top:-8px;right:0;width:70px;opacity:0.75;pointer-events:none;z-index:0">
         <h1 class="text-3xl sm:text-4xl mb-1" style="position:relative;z-index:1">
             {{ 'dashboard.welcome'|trans }},
@@ -116,7 +116,7 @@
                            class="btn btn-primary px-10">
                             {{ 'dashboard.games.btn_create_first'|trans }}
                         </a>
-                        <img src="{{ asset('images/illustration/girafe.png') }}" alt="" aria-hidden="true"
+                        <img src="{{ asset('images/illustration/girafe.webp') }}" alt="" aria-hidden="true" width="360" height="495" decoding="async" loading="lazy"
                              style="width:72px;opacity:0.90;pointer-events:none;flex-shrink:0">
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                 <div class="p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
                      style="background-color: var(--color-cream);">
 
-                    {% set papillons = ['papillon1.png', 'papillon2.png', 'papillon3.png'] %}
+                    {% set papillons = ['papillon1.webp', 'papillon2.webp', 'papillon3.webp'] %}
                     {% for game in games %}
                     {% set papillon = papillons[loop.index0 % 3] %}
                     <div class="card-panel transition duration-200 hover:shadow-xl" style="position:relative;overflow:hidden">
@@ -212,7 +212,7 @@
     </section>
 
     <div class="flex justify-end mt-6 pr-2" style="pointer-events:none" aria-hidden="true">
-        <img src="{{ asset('images/illustration/singe.png') }}" alt=""
+        <img src="{{ asset('images/illustration/singe.webp') }}" alt=""
              style="width:80px;opacity:0.72">
     </div>
 

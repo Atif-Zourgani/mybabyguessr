@@ -2,7 +2,6 @@ import './stimulus_bootstrap.js';
 import './styles/app.css';
 import Alpine from 'alpinejs';
 import Focus from '@alpinejs/focus';
-import heic2any from 'heic2any';
 
 Alpine.plugin(Focus);
 
@@ -152,6 +151,8 @@ Alpine.data('gameForm', () => ({
         if (isHeic) {
             this.imageConverting = true;
             try {
+                // Chargé à la demande : cette bibliothèque pèse plus de 400 Ko et ne sert qu'aux photos HEIC
+                const { default: heic2any } = await import('heic2any');
                 const blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
                 const jpegBlob = Array.isArray(blob) ? blob[0] : blob;
                 processedFile = new File(

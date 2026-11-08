@@ -135,7 +135,7 @@
                             aria-label="Changer de langue / Change language"
                             class="flex items-center gap-1.5 text-sm font-bold rounded-lg px-2.5 py-1.5 transition-colors"
                             style="color:var(--color-ink);border:1px solid var(--color-line);background:var(--color-cream)">
-                        <span class="fi fi-{{ _currentFlag }}" style="width:20px;height:15px;border-radius:2px" aria-hidden="true"></span>
+                        <img src="{{ asset('images/flags/' ~ _currentFlag ~ '.svg') }}" alt="" width="20" height="15" style="width:20px;height:15px;border-radius:2px" aria-hidden="true">
                         <span class="hidden sm:inline">{{ app.request.locale|upper }}</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
@@ -162,7 +162,7 @@
                            {% if app.request.locale == lang.code %}aria-current="page"{% endif %}
                            class="flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors"
                            style="text-decoration:none;color:var(--color-ink);{% if app.request.locale == lang.code %}background:rgba(196,113,74,0.10);{% endif %}">
-                            <span class="fi fi-{{ lang.flag }}" style="width:20px;height:15px;border-radius:2px;flex-shrink:0" aria-hidden="true"></span>
+                            <img src="{{ asset('images/flags/' ~ lang.flag ~ '.svg') }}" alt="" width="20" height="15" loading="lazy" style="width:20px;height:15px;border-radius:2px;flex-shrink:0" aria-hidden="true">
                             {{ lang.label }}
                             {% if app.request.locale == lang.code %}
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none"

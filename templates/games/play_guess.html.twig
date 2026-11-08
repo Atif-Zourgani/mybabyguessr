@@ -106,7 +106,7 @@
     {# ── Illustrations par étape ──────────────────────────────── #}
 
     {# Intro : girafe + papillon #}
-    <img src="{{ asset('images/illustration/girafe.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/girafe.webp') }}" alt="" aria-hidden="true" width="360" height="495" decoding="async" loading="lazy"
          class="ply-deco ply-br"
          x-show="showIntro"
          x-transition:enter="transition ease-out duration-300"
@@ -115,7 +115,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0">
-    <img src="{{ asset('images/illustration/papillon1.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/papillon1.webp') }}" alt="" aria-hidden="true" width="172" height="125" decoding="async" loading="lazy"
          class="ply-deco ply-tr ply-lg"
          x-show="showIntro"
          x-transition:enter="transition ease-out duration-300"
@@ -126,7 +126,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Sexe : lion #}
-    <img src="{{ asset('images/illustration/lion.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/lion.webp') }}" alt="" aria-hidden="true" width="329" height="341" decoding="async" loading="lazy"
          class="ply-deco ply-br"
          x-show="!showIntro && currentStep === 'gender'"
          x-transition:enter="transition ease-out duration-300"
@@ -137,7 +137,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Prénom libre : papillon #}
-    <img src="{{ asset('images/illustration/papillon2.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/papillon2.webp') }}" alt="" aria-hidden="true" width="290" height="124" decoding="async" loading="lazy"
          class="ply-deco ply-tr ply-lg"
          x-show="!showIntro && currentStep === 'name' && !isHintsMode"
          x-transition:enter="transition ease-out duration-300"
@@ -148,7 +148,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Hints essai 1 : éléphant #}
-    <img src="{{ asset('images/illustration/elephant.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/elephant.webp') }}" alt="" aria-hidden="true" width="330" height="401" decoding="async" loading="lazy"
          class="ply-deco ply-br"
          x-show="!showIntro && currentStep === 'name' && isHintsMode && !hintsCompleted && hintsStep === 1"
          x-transition:enter="transition ease-out duration-300"
@@ -159,7 +159,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Hints essai 2 : singe #}
-    <img src="{{ asset('images/illustration/singe.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/singe.webp') }}" alt="" aria-hidden="true" width="304" height="210" decoding="async" loading="lazy"
          class="ply-deco ply-br"
          x-show="!showIntro && currentStep === 'name' && isHintsMode && !hintsCompleted && hintsStep === 2"
          x-transition:enter="transition ease-out duration-300"
@@ -170,7 +170,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Hints essai 3 : papillon #}
-    <img src="{{ asset('images/illustration/papillon3.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/papillon3.webp') }}" alt="" aria-hidden="true" width="165" height="227" decoding="async" loading="lazy"
          class="ply-deco ply-tr ply-lg"
          x-show="!showIntro && currentStep === 'name' && isHintsMode && !hintsCompleted && hintsStep === 3"
          x-transition:enter="transition ease-out duration-300"
@@ -181,7 +181,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Hints complété : soleil #}
-    <img src="{{ asset('images/illustration/soleil.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/soleil.webp') }}" alt="" aria-hidden="true" width="283" height="198" decoding="async" loading="lazy"
          class="ply-deco ply-tr"
          x-show="!showIntro && currentStep === 'name' && isHintsMode && hintsCompleted"
          x-transition:enter="transition ease-out duration-300"
@@ -192,7 +192,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Date : feuille #}
-    <img src="{{ asset('images/illustration/feuille_orange.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/feuille_orange.webp') }}" alt="" aria-hidden="true" width="127" height="93" decoding="async" loading="lazy"
          class="ply-deco ply-tr"
          style="transform:rotate(25deg)"
          x-show="!showIntro && currentStep === 'date'"
@@ -204,7 +204,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Poids : soleil #}
-    <img src="{{ asset('images/illustration/soleil.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/soleil.webp') }}" alt="" aria-hidden="true" width="283" height="198" decoding="async" loading="lazy"
          class="ply-deco ply-tr"
          x-show="!showIntro && currentStep === 'weight'"
          x-transition:enter="transition ease-out duration-300"
@@ -215,7 +215,7 @@
          x-transition:leave-end="opacity-0">
 
     {# Taille : étoile #}
-    <img src="{{ asset('images/illustration/etoile.png') }}" alt="" aria-hidden="true"
+    <img src="{{ asset('images/illustration/etoile.webp') }}" alt="" aria-hidden="true" width="110" height="136" decoding="async" loading="lazy"
          class="ply-deco ply-tr ply-lg"
          x-show="!showIntro && currentStep === 'height'"
          x-transition:enter="transition ease-out duration-300"
