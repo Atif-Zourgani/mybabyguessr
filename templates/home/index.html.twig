@@ -276,6 +276,25 @@
     </div>
 </section>
 
+{# ── Guides ───────────────────────────────────────────────────── #}
+{% set _guides = guides_for_locale(app.request.locale) %}
+{% if _guides %}
+<section aria-labelledby="guides-title" class="bg-cream py-12 sm:py-20 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+        <h2 id="guides-title" class="text-2xl sm:text-3xl text-center mb-10 sm:mb-14">{{ 'guide.section'|trans }}</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.25rem">
+            {% for g in _guides %}
+            <a href="{{ g.url }}" class="card" style="text-decoration:none;display:block;padding:1.25rem 1.5rem">
+                <h3 style="font-size:1.0625rem;font-weight:800;color:var(--color-ink);margin:0 0 0.5rem;line-height:1.35">{{ g.title }}</h3>
+                <p style="font-size:0.875rem;color:var(--color-muted);margin:0 0 0.75rem;line-height:1.6">{{ g.description }}</p>
+                <span style="font-size:0.875rem;font-weight:700;color:var(--color-brand)">{{ 'guide.read'|trans }} →</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {# ── CTA final ────────────────────────────────────────────────── #}
 <section class="bg-white py-12 sm:py-20 px-4 sm:px-6"
          style="position:relative;overflow:hidden">

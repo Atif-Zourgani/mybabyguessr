@@ -17,7 +17,11 @@ class HomeController extends AbstractController
         // Langue du navigateur parmi toutes celles du site (fr, en, es, pt, de, it), français par défaut
         $locale = $request->getPreferredLanguage($enabledLocales) ?? 'fr';
 
-        return $this->redirectToRoute('app_home', ['_locale' => $locale]);
+        $response = $this->redirectToRoute('app_home', ['_locale' => $locale]);
+        // La destination dépend de la langue du navigateur : un cache ne doit pas servir la même redirection à tous
+        $response->setVary(['Accept-Language']);
+
+        return $response;
     }
 
     #[Route('/', name: 'app_home')]

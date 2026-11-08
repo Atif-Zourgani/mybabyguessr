@@ -1,0 +1,40 @@
+{% extends 'guide/layout.html.twig' %}
+
+{% block guide_content %}
+<p class="guide-lead">Un gender reveal, c'est la révélation du sexe du bébé aux proches. Plutôt que de l'annoncer simplement, pourquoi ne pas la faire précéder d'un jeu : chacun donne son avis, puis tout le monde découvre la réponse en même temps ?</p>
+
+<h2>Un gender reveal participatif</h2>
+<p>L'idée est de transformer une annonce en moment partagé. Chaque invité vote (garçon ou fille) avant la révélation, et la réponse tombe devant tous, ou à un instant précis que vous choisissez. On rit des pronostics, on compte les voix, et on félicite ceux qui avaient vu juste. Le jeu fonctionne aussi bien pour une fête que pour une annonce à distance dans un groupe familial.</p>
+
+<h2>Comment le mettre en place</h2>
+<ol>
+    <li><strong>Créez un jeu avec la seule catégorie « sexe »</strong>. Ajoutez le prénom ou la date si vous voulez plus de suspense.</li>
+    <li><strong>Partagez le lien</strong> par message, dans votre groupe familial ou sur une invitation. Les invités répondent depuis leur téléphone, sans créer de compte.</li>
+    <li><strong>Suivez les pronostics</strong> : vous voyez la répartition garçon/fille se construire sans la montrer aux participants.</li>
+    <li><strong>Le jour J, saisissez la réponse</strong> : le résultat s'affiche sur la page de révélation, avec la liste de ceux qui avaient trouvé.</li>
+</ol>
+
+<h2>Vous gardez la surprise jusqu'à la naissance ?</h2>
+<p>Rien ne vous oblige à connaître le sexe à l'avance. Le jeu reste ouvert tant que vous n'avez pas saisi la réponse : vous pouvez la renseigner après la naissance, et proposer en même temps les pronostics de date, de poids et de taille. Pour ces catégories, nos conseils sont dans le guide du <a href="{{ path('app_guide', {'_locale': 'fr', 'slug': 'pronostic-naissance'}) }}">pronostic de naissance</a>.</p>
+
+<h2>Idées de mise en scène</h2>
+<ul>
+    <li><strong>Des ballons</strong> à percer, remplis de confettis roses ou bleus.</li>
+    <li><strong>Un gâteau</strong> dont l'intérieur révèle la couleur à la première part.</li>
+    <li><strong>Une boîte à ouvrir</strong> à plusieurs, avec un décompte.</li>
+    <li><strong>Un appel vidéo</strong> pour que les proches éloignés vivent la révélation en direct.</li>
+</ul>
+
+<div class="guide-tip">
+    <p><strong>À éviter :</strong> les effets pyrotechniques en extérieur. Plusieurs incendies ont été causés par des révélations de ce type. Des confettis et des ballons suffisent largement à faire de l'effet, sans aucun risque.</p>
+</div>
+
+<h2>Quand ouvrir les votes ?</h2>
+<p>Le plus simple est d'ouvrir le jeu quelques jours avant la fête, ou dès l'annonce de la grossesse, avec une date de clôture claire. Chaque invité vote en toute indépendance : il ne voit pas les pronostics des autres avant la révélation, personne ne peut donc se laisser influencer par la majorité.</p>
+
+<h2>Un souvenir à garder</h2>
+<p>En validant son pronostic, chaque invité peut laisser un petit message aux futurs parents. Vous retrouvez tous les votes et tous les messages au même endroit, un joli souvenir à relire plus tard, avec les pronostics les plus drôles.</p>
+
+<h2>Les proches à distance ne sont pas oubliés</h2>
+<p>Le principal avantage d'un jeu en ligne : les grands-parents à l'étranger, les cousins ou les amis d'enfance participent comme les autres, depuis un simple lien, et découvrent la réponse en même temps que vous. Pour organiser plus largement la fête, voyez notre guide du <a href="{{ path('app_guide', {'_locale': 'fr', 'slug': 'jeu-baby-shower-pronostics'}) }}">jeu de baby shower</a>.</p>
+{% endblock %}

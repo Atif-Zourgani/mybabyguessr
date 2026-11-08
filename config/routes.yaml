@@ -12,6 +12,12 @@ app_root:
     controller: App\Controller\HomeController::index
     methods: GET
 
+# Sitemap généré (accueil et guides, avec dates et alternatives de langue) : remplace l'ancien fichier statique
+app_sitemap:
+    path: /sitemap.xml
+    controller: App\Controller\SitemapController::index
+    methods: GET
+
 controllers:
     resource: ../src/Controller/
     type: attribute

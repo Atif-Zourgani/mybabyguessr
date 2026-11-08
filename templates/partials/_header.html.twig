@@ -127,6 +127,9 @@
                      @keydown.escape="open = false"
                      class="relative">
 
+                    {# Adresse de la page courante dans chaque langue (accueil de la langue si la page n'y existe pas) #}
+                    {% set _altUrls = {} %}
+                    {% for alt in language_alternates() %}{% set _altUrls = _altUrls|merge({(alt.locale): alt.url}) %}{% endfor %}
                     {% set _currentFlag = '' %}
                     {% for lang in _langs %}{% if lang.code == app.request.locale %}{% set _currentFlag = lang.flag %}{% endif %}{% endfor %}
                     <button @click="open = !open"
@@ -157,7 +160,7 @@
                          class="absolute right-0 mt-1 rounded-lg overflow-hidden"
                          style="top:100%;min-width:148px;background:var(--color-cream);border:1px solid var(--color-line);box-shadow:0 4px 20px rgba(0,0,0,0.10);z-index:50">
                         {% for lang in _langs %}
-                        <a href="{{ url(_route, _params|merge({'_locale': lang.code})) }}"
+                        <a href="{{ _altUrls[lang.code] ?? url('app_home', {'_locale': lang.code}) }}"
                            hreflang="{{ lang.code }}"
                            {% if app.request.locale == lang.code %}aria-current="page"{% endif %}
                            class="flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors"

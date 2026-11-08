@@ -439,6 +439,16 @@ check_email:
     spam: "Vous ne le trouvez pas ? Pensez à vérifier vos spams."
     resend_hint: "Lien expiré ou email non reçu ? Connectez-vous : nous pourrons vous en renvoyer un."
 
+guide:
+    home: "Accueil"
+    guides: "Guides"
+    updated: "Mis à jour le"
+    related: "Pour aller plus loin"
+    cta_title: "Prêt à lancer votre jeu ?"
+    cta_text: "Créez votre jeu de pronostics gratuitement en 2 minutes : vos invités participent depuis un simple lien, sans créer de compte."
+    section: "Guides pour organiser votre jeu"
+    read: "Lire le guide"
+
 verify_pending:
     title: "Confirmez votre adresse email"
     message: "Votre compte n'est pas encore activé. Cliquez sur le lien envoyé à l'adresse ci-dessous pour continuer."

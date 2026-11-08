@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{# Mise en page commune des guides : métadonnées, données structurées, fil d'Ariane, appel à l'action et guides liés. #}
+{% set _locales_bcp47 = {fr: 'fr-FR', en: 'en-GB', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', it: 'it-IT'} %}
+
+{% block title %}{{ page.title }}{% endblock %}
+{% block meta_description %}{{ page.description }}{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/guide.css') }}">
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ page.heading|e('js') }}",
+    "description": "{{ page.description|e('js') }}",
+    "inLanguage": "{{ _locales_bcp47[page.locale] }}",
+    "datePublished": "{{ page.published|date('Y-m-d') }}",
+    "dateModified": "{{ page.modified|date('Y-m-d') }}",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}" },
+    "image": "{{ absolute_url(asset('images/og/og-' ~ page.locale ~ '.png')) }}",
+    "author": { "@type": "Organization", "name": "MyBabyGuessr" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "MyBabyGuessr",
+      "logo": { "@type": "ImageObject", "url": "{{ absolute_url(asset('images/logo-mybabyguessr.png')) }}", "width": 612, "height": 408 }
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "{{ 'guide.home'|trans|e('js') }}", "item": "{{ url('app_home', {'_locale': page.locale}) }}" },
+      { "@type": "ListItem", "position": 2, "name": "{{ page.title|e('js') }}", "item": "{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}" }
+    ]
+  }
+]
+</script>
+{% endblock %}
+
+{% block body %}
+<article class="guide">
+
+    <nav class="guide-breadcrumb" aria-label="{{ 'guide.guides'|trans }}">
+        <a href="{{ path('app_home', {'_locale': page.locale}) }}">{{ 'guide.home'|trans }}</a>
+        <span aria-hidden="true"> › </span>
+        <span>{{ page.title }}</span>
+    </nav>
+
+    <h1>{{ page.heading }}</h1>
+    <p class="guide-meta">{{ 'guide.updated'|trans }} {{ page.modified|date(page.locale == 'en' ? 'F j, Y' : 'd/m/Y') }}</p>
+
+    {% block guide_content %}{% endblock %}
+
+    <aside class="guide-cta">
+        <h2>{{ 'guide.cta_title'|trans }}</h2>
+        <p>{{ 'guide.cta_text'|trans }}</p>
+        <a href="{{ path('app_register', {'_locale': page.locale}) }}" class="btn btn-primary">{{ 'home.cta.button'|trans }}</a>
+    </aside>
+
+    {% if related %}
+    <nav class="guide-related" aria-label="{{ 'guide.related'|trans }}">
+        <h2>{{ 'guide.related'|trans }}</h2>
+        <ul>
+            {% for other in related %}
+            <li><a href="{{ path('app_guide', {'_locale': other.locale, 'slug': other.slug}) }}">{{ other.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+
+</article>
+{% endblock %}

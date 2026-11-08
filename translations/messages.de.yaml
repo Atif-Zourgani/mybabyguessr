@@ -439,6 +439,16 @@ check_email:
     spam: "Nicht gefunden? Überprüfe deinen Spam-Ordner."
     resend_hint: "Link abgelaufen oder E-Mail nicht erhalten? Melde dich an, dann senden wir dir eine neue."
 
+guide:
+    home: "Startseite"
+    guides: "Ratgeber"
+    updated: "Aktualisiert am"
+    related: "Weiterlesen"
+    cta_title: "Bereit für dein Spiel?"
+    cta_text: "Erstelle dein Tippspiel kostenlos in 2 Minuten: Deine Gäste spielen über einen einfachen Link, ohne Konto."
+    section: "Ratgeber für dein Spiel"
+    read: "Ratgeber lesen"
+
 verify_pending:
     title: "Bestätige deine E-Mail-Adresse"
     message: "Dein Konto ist noch nicht aktiviert. Klicke auf den Link, der an die untenstehende Adresse gesendet wurde, um fortzufahren."

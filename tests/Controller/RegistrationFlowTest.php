@@ -255,5 +255,8 @@ class RegistrationFlowTest extends DatabaseWebTestCase
             $this->client->request('GET', '/');
             $this->assertResponseRedirects($expected, null, "Accept-Language: \"$header\"");
         }
+
+        // Un cache intermédiaire doit savoir que la redirection varie selon la langue du navigateur
+        $this->assertResponseHeaderSame('Vary', 'Accept-Language');
     }
 }

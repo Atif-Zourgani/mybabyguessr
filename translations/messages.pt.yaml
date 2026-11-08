@@ -439,6 +439,16 @@ check_email:
     spam: "Não o encontra? Verifique a sua pasta de spam."
     resend_hint: "Link expirado ou email não recebido? Inicie sessão e poderemos enviar-lhe um novo."
 
+guide:
+    home: "Início"
+    guides: "Guias"
+    updated: "Atualizado em"
+    related: "Continue a ler"
+    cta_title: "Pronto para criar o seu jogo?"
+    cta_text: "Crie o seu jogo gratuitamente em 2 minutos: os convidados participam através de um simples link, sem criar conta."
+    section: "Guias para organizar o seu jogo"
+    read: "Ler o guia"
+
 verify_pending:
     title: "Confirme o seu endereço de email"
     message: "A sua conta ainda não está ativada. Clique no link enviado para o endereço abaixo para continuar."

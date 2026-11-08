@@ -7,7 +7,7 @@
 
     {# ── Favicon ──────────────────────────────────────────── #}
     <link rel="icon"             href="{{ asset('images/favicon.png') }}" type="image/png">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo-mybabyguessr.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
 
     {# ── SEO ──────────────────────────────────────────────── #}
     <title>{% block title %}MyBabyGuessr{% endblock %}</title>
@@ -16,17 +16,12 @@
 
     {# ── Canonical & hreflang ─────────────────────────────── #}
     <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
-    {% if app.request.attributes.has('_route') %}
-        {% set _route  = app.request.attributes.get('_route') %}
-        {% set _params = app.request.attributes.get('_route_params') %}
-        <link rel="alternate" hreflang="fr"        href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}">
-        <link rel="alternate" hreflang="en"        href="{{ url(_route, _params|merge({'_locale': 'en'})) }}">
-        <link rel="alternate" hreflang="es"        href="{{ url(_route, _params|merge({'_locale': 'es'})) }}">
-        <link rel="alternate" hreflang="pt"        href="{{ url(_route, _params|merge({'_locale': 'pt'})) }}">
-        <link rel="alternate" hreflang="de"        href="{{ url(_route, _params|merge({'_locale': 'de'})) }}">
-        <link rel="alternate" hreflang="it"        href="{{ url(_route, _params|merge({'_locale': 'it'})) }}">
-        <link rel="alternate" hreflang="x-default" href="{{ url(_route, _params|merge({'_locale': 'fr'})) }}">
-    {% endif %}
+    {# Une alternative par langue où la page existe (les guides n'existent pas dans toutes les langues) #}
+    {% set _alternates = language_alternates() %}
+    {% for alt in _alternates|filter(a => a.exact) %}
+        <link rel="alternate" hreflang="{{ alt.locale }}" href="{{ alt.url }}">
+        {% if alt.default %}<link rel="alternate" hreflang="x-default" href="{{ alt.url }}">{% endif %}
+    {% endfor %}
 
     {# ── Open Graph ───────────────────────────────────────── #}
     {% set _og_locale     = app.request.locale == 'fr' ? 'fr_FR' : (app.request.locale == 'es' ? 'es_ES' : (app.request.locale == 'pt' ? 'pt_PT' : (app.request.locale == 'de' ? 'de_DE' : (app.request.locale == 'it' ? 'it_IT' : 'en_GB')))) %}

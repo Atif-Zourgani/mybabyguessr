@@ -439,6 +439,16 @@ check_email:
     spam: "Can't find it? Check your spam folder."
     resend_hint: "Link expired or email not received? Log in and we can send you a new one."
 
+guide:
+    home: "Home"
+    guides: "Guides"
+    updated: "Updated on"
+    related: "Keep reading"
+    cta_title: "Ready to start your game?"
+    cta_text: "Create your free guessing game in 2 minutes: your guests join from a simple link, no account needed."
+    section: "Guides to plan your game"
+    read: "Read the guide"
+
 verify_pending:
     title: "Confirm your email address"
     message: "Your account is not activated yet. Click the link sent to the address below to continue."

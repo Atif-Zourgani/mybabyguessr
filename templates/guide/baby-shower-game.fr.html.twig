@@ -1,0 +1,42 @@
+{% extends 'guide/layout.html.twig' %}
+
+{% block guide_content %}
+<p class="guide-lead">Le pronostic de naissance est l'un des jeux de baby shower les plus simples à organiser : chaque invité devine quand bébé arrivera, combien il pèsera, s'il s'agira d'un garçon ou d'une fille, et parfois même son prénom. Voici comment en faire un vrai moment de partage, sur place comme à distance.</p>
+
+<h2>Pourquoi un jeu de pronostics fonctionne si bien</h2>
+<p>Il implique tout le monde sans rien demander à personne : pas de matériel à acheter, pas de règles compliquées, et chacun joue à son rythme. Surtout, il crée un fil rouge jusqu'à la naissance. La fête dure quelques heures, mais les pronostics restent ouverts : les invités attendent le résultat avec vous, parfois pendant des semaines.</p>
+
+<h2>Les questions à poser</h2>
+<p>Cinq catégories suffisent, et vous pouvez n'en activer que quelques-unes :</p>
+<ul>
+    <li><strong>Le sexe</strong> : garçon ou fille, le grand classique.</li>
+    <li><strong>Le prénom</strong> : en réponse libre, ou en « mode indices », où chaque invité a trois essais et reçoit un indice après chacun (longueur du prénom, première lettre…).</li>
+    <li><strong>La date et l'heure</strong> de la naissance.</li>
+    <li><strong>Le poids</strong> à la naissance.</li>
+    <li><strong>La taille</strong> à la naissance.</li>
+</ul>
+<p>Moins il y a de questions, plus les invités y répondent : le formulaire se remplit en moins d'une minute. Pour des idées de questions et de règles plus détaillées, lisez notre guide sur le <a href="{{ path('app_guide', {'_locale': 'fr', 'slug': 'pronostic-naissance'}) }}">pronostic de naissance</a>.</p>
+
+<h2>Carnet papier ou jeu en ligne ?</h2>
+<p>Le carnet papier a son charme, mais il faut le faire circuler, ressaisir les réponses et, surtout, il laisse de côté les proches qui ne peuvent pas venir. Un jeu en ligne se partage par un simple lien (groupe familial, faire-part, message) : chacun joue depuis son téléphone, sans créer de compte, où qu'il se trouve. Les réponses sont rassemblées au même endroit et classées automatiquement à la révélation.</p>
+
+<h2>Organiser votre jeu en 4 étapes</h2>
+<ol>
+    <li><strong>Choisissez les catégories</strong> et ajoutez, si vous le souhaitez, un titre et une photo (une échographie, par exemple).</li>
+    <li><strong>Partagez le lien</strong> dans votre groupe de famille ou sur le faire-part du baby shower.</li>
+    <li><strong>Laissez vos invités pronostiquer</strong>, avant ou pendant la fête. Ils peuvent aussi laisser un petit message pour les futurs parents.</li>
+    <li><strong>À la naissance, saisissez les vraies réponses</strong> : le classement se calcule tout seul, et vous pouvez prévenir par email les invités qui ont laissé leur adresse.</li>
+</ol>
+
+<h2>Comment désigner les gagnants</h2>
+<p>Pour le sexe et le prénom, tous ceux qui ont trouvé sont gagnants. Pour la date, le poids et la taille, les trois pronostics les plus proches montent sur le podium. Un petit lot symbolique suffit : une part de gâteau, un cadeau pour bébé, ou simplement la gloire de la famille.</p>
+
+<div class="guide-tip">
+    <p><strong>Astuce :</strong> fixez à l'avance le moment où les pronostics se ferment (le jour de la fête, ou à la naissance). Vous pouvez fermer le jeu à tout moment pour que personne ne triche en connaissant déjà la réponse.</p>
+</div>
+
+<h2>Et pour les proches qui vivent loin ?</h2>
+<p>C'est là qu'un jeu en ligne fait la différence : grands-parents à l'étranger, amis d'enfance, collègues… tous participent depuis leur téléphone, dans leur langue (le site existe en six langues), et découvrent la révélation en même temps que les invités présents. Pour un baby shower organisé en visio, c'est souvent le seul jeu qui fonctionne aussi bien à distance que sur place.</p>
+
+<p>Si votre fête sert aussi à annoncer le sexe du bébé, voyez aussi nos idées de <a href="{{ path('app_guide', {'_locale': 'fr', 'slug': 'jeu-gender-reveal'}) }}">gender reveal participatif</a>.</p>
+{% endblock %}
