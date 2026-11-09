@@ -53,17 +53,29 @@
 </script>
 {% endblock %}
 
+{% block stylesheets %}
+<style>
+    /* Mobile : la girafe passe sous les boutons et les petites décorations quittent la zone du texte */
+    @media (max-width: 639px) {
+        .hero-section { padding-bottom: 11rem; }
+        .hero-giraffe { right: 50% !important; transform: translateX(50%); width: 96px !important; }
+        .hero-star { top: 6px !important; left: 10px !important; width: 44px !important; }
+        .hero-butterfly { top: 8px !important; right: 12px !important; width: 40px !important; }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 
 {# ── Hero ─────────────────────────────────────────────────────── #}
-<section aria-labelledby="hero-title" class="bg-cream pt-10 pb-14 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-32 px-4 sm:px-6"
+<section aria-labelledby="hero-title" class="hero-section bg-cream pt-10 pb-14 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-32 px-4 sm:px-6"
          style="position:relative;overflow:hidden">
 
-    <img src="{{ asset('images/illustration/girafe.webp') }}" alt="" aria-hidden="true" width="360" height="495" decoding="async"
+    <img class="hero-giraffe" src="{{ asset('images/illustration/girafe.webp') }}" alt="" aria-hidden="true" width="360" height="495" decoding="async"
          style="position:absolute;bottom:0;right:32px;width:110px;pointer-events:none;opacity:0.92;z-index:0">
-    <img src="{{ asset('images/illustration/etoile.webp') }}" alt="" aria-hidden="true" width="110" height="136" decoding="async"
+    <img class="hero-star" src="{{ asset('images/illustration/etoile.webp') }}" alt="" aria-hidden="true" width="110" height="136" decoding="async"
          style="position:absolute;top:24px;left:40px;width:72px;pointer-events:none;opacity:0.80;z-index:0">
-    <img src="{{ asset('images/illustration/papillon1.webp') }}" alt="" aria-hidden="true" width="172" height="125" decoding="async"
+    <img class="hero-butterfly" src="{{ asset('images/illustration/papillon1.webp') }}" alt="" aria-hidden="true" width="172" height="125" decoding="async"
          style="position:absolute;top:36px;right:16%;width:54px;pointer-events:none;opacity:0.75;z-index:0">
 
     <div class="max-w-3xl mx-auto text-center" style="position:relative;z-index:1">

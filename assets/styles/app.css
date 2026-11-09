@@ -21,7 +21,7 @@
 /* ─── Variables de design ─────────────────────────────── */
 @theme {
     --color-cream:  #F8F3EE;
-    --color-brand:  #C4714A;
+    --color-brand:  #9B5432;
     --color-accent: #7A4E3B;
     --color-ink:    #2C1F15;
     --color-muted:  #6B5D52;
@@ -144,7 +144,7 @@
     .form-input:focus {
         outline: none;
         border-color: var(--color-brand);
-        box-shadow: 0 0 0 3px rgba(196, 113, 74, 0.2);
+        box-shadow: 0 0 0 3px rgba(155, 84, 50, 0.2);
     }
 
     /* Carte */

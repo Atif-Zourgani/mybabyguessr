@@ -2,7 +2,7 @@
    CSS simple, chargé uniquement sur les pages admin (pas de recompilation Tailwind nécessaire). */
 
 .adm-page {
-    --adm-brand: var(--color-brand, #C4714A);
+    --adm-brand: var(--color-brand, #9B5432);
     --adm-ink: var(--color-ink, #2C1F15);
     --adm-muted: var(--color-muted, #6B5D52);
     --adm-line: var(--color-line, #D9CFC9);
@@ -38,7 +38,7 @@
     color: var(--color-muted, #6B5D52);
 }
 .adm-nav a[aria-current="page"] {
-    color: var(--color-brand, #C4714A);
+    color: var(--color-brand, #9B5432);
     background: rgba(196, 113, 74, .12);
 }
 /* Indice de défilement : dégradé à droite quand la barre déborde */
@@ -83,7 +83,7 @@
     color: var(--adm-ink);
 }
 .adm-field input:focus-visible, .adm-field select:focus-visible, .adm-field textarea:focus-visible,
-.adm-btn:focus-visible, .adm-sort:focus-visible, .adm-nav a:focus-visible { outline: 2px solid var(--adm-brand, #C4714A); outline-offset: 2px; }
+.adm-btn:focus-visible, .adm-sort:focus-visible, .adm-nav a:focus-visible { outline: 2px solid var(--adm-brand, #9B5432); outline-offset: 2px; }
 
 /* ── Boutons ────────────────────────────────────────────── */
 .adm-btn {
@@ -101,7 +101,7 @@
 .adm-btn--sm { min-height: 2rem; padding: .25rem .75rem; font-size: .75rem; }
 
 /* ── Badges ─────────────────────────────────────────────── */
-.adm-badge { display: inline-block; font-size: .6875rem; font-weight: 700; padding: .125rem .5rem; border-radius: 999px; background: var(--adm-line); color: var(--adm-muted); white-space: nowrap; }
+.adm-badge { display: inline-block; font-size: .6875rem; font-weight: 700; padding: .125rem .5rem; border-radius: 999px; background: var(--adm-line); color: #5E5147; white-space: nowrap; }
 .adm-badge--ok { background: rgba(39, 103, 73, .10); color: #276749; }
 .adm-badge--brand { background: rgba(196, 113, 74, .12); color: var(--adm-brand); }
 .adm-badge--danger { background: rgba(180, 35, 24, .10); color: #b42318; }

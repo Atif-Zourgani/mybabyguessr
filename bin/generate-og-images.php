@@ -92,7 +92,7 @@ foreach (['fr', 'en', 'es', 'pt', 'de', 'it'] as $locale) {
     // Bandeau de couleur et formes douces en arrière-plan
     imagefilledellipse($img, 1010, 330, 760, 760, color($img, '#F1E4DA'));
     imagefilledellipse($img, 1130, 80, 260, 260, color($img, '#F6EADF'));
-    imagefilledrectangle($img, 0, HEIGHT - 14, WIDTH, HEIGHT, color($img, '#C4714A'));
+    imagefilledrectangle($img, 0, HEIGHT - 14, WIDTH, HEIGHT, color($img, '#9B5432'));
 
     // Illustrations à droite
     paste($img, "$root/assets/images/illustration/girafe.webp", 905, 560, 470);
@@ -108,7 +108,7 @@ foreach (['fr', 'en', 'es', 'pt', 'de', 'it'] as $locale) {
 
     // Titre : le plus grand corps qui tient sur 2 lignes (3 si la langue l'exige), sans toucher au bas de l'image
     $ink   = color($img, '#2C1F15');
-    $brand = color($img, '#C4714A');
+    $brand = color($img, '#9B5432');
     $muted = color($img, '#6B5D52');
     $top   = 52 + $logoH + 80;
     $maxW  = 640;
