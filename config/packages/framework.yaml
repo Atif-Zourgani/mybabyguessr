@@ -32,3 +32,12 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+
+when@prod:
+    framework:
+        # Seuls ces noms de site sont acceptés dans l'en-tête Host. Sans cela, une requête avec un faux nom pouvait
+        # faire générer des liens vers un autre domaine (par exemple dans l'email de réinitialisation du mot de passe).
+        # Le « www » doit y rester : la redirection vers l'adresse officielle ne s'applique qu'après ce contrôle.
+        trusted_hosts:
+            - '^mybabyguessr\.com$'
+            - '^www\.mybabyguessr\.com$'
